@@ -4,25 +4,29 @@ const users = [
       id: 1,
       username: 'superAdmin',
       email: 'super@admin.com',
-      password: 'password'
+      password: 'password',
+      isSuper: true
     },
     {
       id: 2,
       username: 'groupAdmin1',
       email: 'group1@admin.com',
-      password: 'password'
+      password: 'password',
+      isSuper: false
     },
     {
       id: 3,
       username: 'groupAdmin2',
       email: 'group2@admin.com',
-      password: 'password'
+      password: 'password',
+      isSuper: false
     },
     {
       id: 4,
       username: 'user1',
       email: 'user1@email.com',
-      password: 'password'
+      password: 'password',
+      isSuper: false
     }
   ];
   
@@ -30,14 +34,10 @@ const users = [
   const roles = [
     {
       id: 1,
-      roleName: 'Super Admin'
-    },
-    {
-      id: 2,
       roleName: 'Group Admin'
     },
     {
-      id: 3,
+      id: 2,
       roleName: 'User'
     }
   ];

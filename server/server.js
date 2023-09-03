@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-const apiRoutes = require('./api/auth');
+const authRoutes = require('./api/auth');
+const groupRoutes = require('./api/group');
 const httpServer = require('http').createServer(app);
 const cors = require('cors');
 
@@ -13,7 +14,8 @@ const port = 3000;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
-app.use('/api/auth', apiRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/group', groupRoutes);
 
 io.on('connection', (socket) => {
     console.log('a user connected');

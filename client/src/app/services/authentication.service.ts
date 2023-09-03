@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, map } from 'rxjs';
+import { tap, delay } from 'rxjs/operators';
 import { User, loginCredentials } from './../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
+  isLoggedIn = false;
+  redirectUrl: string | null = null;
 
   private apiUrl = 'http://localhost:3000/api'; // In the future, this will be in an environment variable
 
@@ -18,7 +20,7 @@ export class AuthenticationService {
    * @param credentials 
    * @returns 
    */
-  login(credentials: loginCredentials): Observable<any> {
+  login(credentials: loginCredentials): Observable<boolean> {
     interface LoginResponse {
       valid: boolean;
       user: User;
@@ -28,9 +30,17 @@ export class AuthenticationService {
         if (response.valid) {
           localStorage.setItem('currentUser', JSON.stringify(response.user));
           console.log('User logged in successfully');
+          this.isLoggedIn = true;
         }
-      })
+      }),
+      delay(1000),
+      map((response: LoginResponse) => response.valid) // map the response to a boolean value
     );
+  }
+
+  logout(): void {
+    localStorage.removeItem('currentUser');
+    this.isLoggedIn = false;
   }
 
 

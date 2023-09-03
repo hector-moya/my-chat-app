@@ -3,6 +3,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { CommonModule, NgIf } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthenticationService } from '../services/authentication.service';
 
 
 @Component({
@@ -14,6 +15,8 @@ import { HttpClientModule } from '@angular/common/http';
   ]
 })
 export class AuthenticationComponent {
+
+  constructor(public authenticationService: AuthenticationService) { }
   // This property will be used to determine which form to show.
   show: 'login' | 'register' | null = null;
 

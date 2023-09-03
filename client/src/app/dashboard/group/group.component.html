@@ -1,1 +1,10 @@
-<p>group works!</p>
+<div *ngIf="groups.length > 0; else noGroups">
+    <ul>
+      <li *ngFor="let group of groups">
+        {{ group.groupName }}
+      </li>
+    </ul>
+  </div>
+  <ng-template #noGroups>
+    <p>No groups available.</p>
+  </ng-template>

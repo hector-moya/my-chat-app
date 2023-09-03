@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
       this.authenticationService.login(credentials).subscribe({
         next: (response) => {
           // Navigate to the dashboard
-          if (response.valid) {
+          if (response) {
             this.router.navigate(['/dashboard']);
           } else {
             this.errorMessage = 'Invalid credentials';

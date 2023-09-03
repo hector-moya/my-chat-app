@@ -14,8 +14,6 @@ import { ChannelComponent } from './dashboard/channel/channel.component';
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
-    GroupComponent,
     ChannelComponent,
   ],
   imports: [
@@ -23,6 +21,8 @@ import { ChannelComponent } from './dashboard/channel/channel.component';
     AuthenticationComponent,
     AppRoutingModule,
     LoginComponent,
+    DashboardComponent,
+    GroupComponent,
     AuthenticationComponent,
     RegisterComponent
   ],
