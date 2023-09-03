@@ -33,7 +33,7 @@ The chat application aims to build a text/video chat system using the MEAN stack
 
 | Feature/Component | Implemented | Notes                                                                       |
 | ----------------- | ----------- | --------------------------------------------------------------------------- |
-| Planning          | [x]         | Layer component diagram, Class Diagram for Services and ER diagram creates. |
+| Planning          | [x]         | Layer component diagram, Class Diagram for Services and ER diagram created. |
 | Documentation     | [ ]         |                                                                             |
 | User Interface    | [ ]         |                                                                             |
 | Data Storage      | [ ]         |                                                                             |
@@ -165,20 +165,20 @@ This checklist aims to guide you through the Angular implementation of the clien
 
 ### Server Implementation Checklist
 
-| Entity/Route             | Implemented | Notes |
-| ------------------------ | ----------- | ----- |
-| User Entity              | [ ]         |       |
-| Group Entity             | [ ]         |       |
-| Channel Entity           | [ ]         |       |
-| Message Entity           | [ ]         |       |
-| Role Entity              | [ ]         |       |
-| User-Group Association   | [ ]         |       |
-| User-Channel Association | [ ]         |       |
-| api/auth Routes          | [ ]         |       |
-| api/user Routes          | [ ]         |       |
-| api/group Routes         | [ ]         |       |
-| api/channel Routes       | [ ]         |       |
-| api/message Routes       | [ ]         |       |
+| Entity/Route             | Implemented | Notes                                                                        |
+| ------------------------ | ----------- | ---------------------------------------------------------------------------- |
+| User Entity              | [X]         |                                                                              |
+| Group Entity             | [X]         |                                                                              |
+| Channel Entity           | [X]         |                                                                              |
+| Message Entity           | [X]         |                                                                              |
+| Role Entity              | [X]         |                                                                              |
+| User-Group Association   | [X]         |                                                                              |
+| User-Channel Association | [X]         |                                                                              |
+| api/auth Routes          | [ ]         | For handling user authentication  and registration                           |
+| api/user Routes          | [ ]         | CRUD operations for User entity                                              |
+| api/group Routes         | [ ]         | CRUD operations for Group entity                                             |
+| api/channel Routes       | [ ]         | CRUD operations for Channel entity                                           |
+| api/message Routes       | [ ]         | CRUD operations for Message entity, and for handling real-time chat messages |
 
 ## Entity Relationship Diagram
 
