@@ -174,8 +174,8 @@ This checklist aims to guide you through the Angular implementation of the clien
 | Role Entity              | [X]         |                                                                              |
 | User-Group Association   | [X]         |                                                                              |
 | User-Channel Association | [X]         |                                                                              |
-| api/auth Routes          | [ ]         | For handling user authentication  and registration                           |
-| api/user Routes          | [ ]         | CRUD operations for User entity                                              |
+| api/auth Routes          | [X]         | For handling user authentication  and registration                           |
+| api/user Routes          | [X]         | CRUD operations for User entity                                              |
 | api/group Routes         | [ ]         | CRUD operations for Group entity                                             |
 | api/channel Routes       | [ ]         | CRUD operations for Channel entity                                           |
 | api/message Routes       | [ ]         | CRUD operations for Message entity, and for handling real-time chat messages |
