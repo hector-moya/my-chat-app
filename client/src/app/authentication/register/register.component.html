@@ -1,1 +1,15 @@
-<p>register works!</p>
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="bg-white p-6 rounded shadow-md w-1/2 mx-auto mt-2">
+    <div class="mb-4">
+        <label for="username" class="block text-sm font-medium text-gray-600">Username:</label>
+        <input type="text" formControlName="username" id="username" class="mt-1 p-2 w-full rounded border">
+    </div>
+    <div class="mb-4">
+        <label for="email" class="block text-sm font-medium text-gray-600">Email:</label>
+        <input type="email" formControlName="email" id="email" class="mt-1 p-2 w-full rounded border">
+    </div>
+    <div class="mb-4">
+        <label for="password" class="block text-sm font-medium text-gray-600">Password:</label>
+        <input type="password" formControlName="password" id="password" class="mt-1 p-2 w-full rounded border">
+    </div>
+    <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-400">Register</button>
+</form>

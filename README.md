@@ -85,9 +85,9 @@ This checklist aims to guide you through the Angular implementation of the clien
 
 | Component                    | Implemented | Notes                                                        |
 | ---------------------------- | ----------- | ------------------------------------------------------------ |
-| Authentication Component     | [ ]         | Parent for Login and Registration                            |
-| Login Component              | [ ]         | Child of Authentication component. Handles user login        |
-| Registration Component       | [ ]         | Child of Authentication component. Handles user registration |
+| Authentication Component     | [X]         | Parent for Login and Registration                            |
+| Login Component              | [X]         | Child of Authentication component. Handles user login        |
+| Registration Component       | [X]         | Child of Authentication component. Handles user registration |
 | Dashboard Component          | [ ]         | Parent component post-login                                  |
 | Group Component              | [ ]         | Child of Dashboard component. Displays user groups           |
 | Channel Component            | [ ]         | Child of Group component. Displays channels within a group   |
@@ -103,7 +103,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 
 | Interface | Implemented | Notes                     |
 | --------- | ----------- | ------------------------- |
-| IUser     | [ ]         | Defines the user model    |
+| IUser     | [X]         | Defines the user model    |
 | IGroup    | [ ]         | Defines the group model   |
 | IChannel  | [ ]         | Defines the channel model |
 | IMessage  | [ ]         | Defines the message model |
@@ -113,7 +113,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 
 | Route                | Implemented | Notes                                        |
 | -------------------- | ----------- | -------------------------------------------- |
-| Authentication Route | [ ]         | For Login and Registration                   |
+| Authentication Route | [X]         | For Login and Registration                   |
 | Dashboard Route      | [ ]         | For Dashboard, Group, and Channel components |
 | Chat Route           | [ ]         | For the Chat component                       |
 | Admin Route          | [ ]         | For all admin functionalities                |
@@ -133,7 +133,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 
 | Service                 | Implemented | Notes                      |
 | ----------------------- | ----------- | -------------------------- |
-| Authentication Service  | [ ]         | Manages authentication     |
+| Authentication Service  | [X]         | Manages authentication     |
 | Group Service           | [ ]         | Manages group operations   |
 | Channel Service         | [ ]         | Manages channel operations |
 | Chat Service            | [ ]         | Manages real-time chat     |

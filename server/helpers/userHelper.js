@@ -1,3 +1,5 @@
+const { users } =  require('../data/data');
+
 /**
  * 
  * @param {*} username 
@@ -23,3 +25,4 @@ function createUser(username, email, password) {
 
     return { user: userWithoutPassword };
 }
+module.exports = { createUser };

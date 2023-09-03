@@ -1,1 +1,16 @@
-<p>authentication works!</p>
+<div class="flex flex-col h-screen justify-center items-center bg-gray-100">
+  <h1 class="text-4xl font-bold mb-8">Welcome to the Chat App</h1>
+  <h2 class="text-2xl mb-8">Please login or register to continue</h2>
+  <div class="w-full p-4 my-4">
+    <app-login *ngIf="show === 'login'"></app-login>
+    <app-register *ngIf="show === 'register'"></app-register>
+  </div>
+  <div class="flex space-x-4">
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      <a href="#" (click)="showLogin()">Login</a>
+    </button>
+    <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+      <a href="#" (click)="showRegister()">Register</a>
+    </button>
+  </div>
+</div>
