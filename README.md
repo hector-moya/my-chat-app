@@ -5,6 +5,7 @@
 - [Chat Application Project](#chat-application-project)
   - [Table of Contents](#table-of-contents)
   - [Brief Description](#brief-description)
+  - [Implementation Checklist](#implementation-checklist)
   - [Application Overview](#application-overview)
   - [User Roles \& Permissions](#user-roles--permissions)
   - [Specific Requirements](#specific-requirements)
@@ -18,7 +19,6 @@
     - [Routes](#routes)
     - [Guards](#guards)
     - [Services](#services)
-  - [Implementation Checklist](#implementation-checklist)
   - [Server Implementation](#server-implementation)
     - [Entities and Relationships](#entities-and-relationships)
     - [Server Routes](#server-routes)
@@ -27,6 +27,17 @@
 ## Brief Description
 
 The chat application aims to build a text/video chat system using the MEAN stack (MongoDB, Express, Angular, Node) along with sockets.io and Peer.js. The chat system will allow users to communicate in real time within different groups and channels. There are three levels of permissions: Super Admin, Group Admin, and User.
+
+## Implementation Checklist
+
+| Feature/Component | Implemented | Notes                                                                       |
+| ----------------- | ----------- | --------------------------------------------------------------------------- |
+| Planning          | [x]         | Layer component diagram, Class Diagram for Services and ER diagram creates. |
+| Documentation     | [ ]         |                                                                             |
+| User Interface    | [ ]         |                                                                             |
+| Data Storage      | [ ]         |                                                                             |
+| User Login        | [ ]         |                                                                             |
+| Assign Users      | [ ]         |                                                                             |
 
 ## Application Overview
 
@@ -69,21 +80,25 @@ This checklist aims to guide you through the Angular implementation of the clien
 
 ### Components
 
-| Component                    | Implemented | Notes                                |
-| ---------------------------- | ----------- | ------------------------------------ |
-| Authentication Component     | [ ]         | Parent for Login and Registration    |
-| Login Component              | [ ]         | Handles user login                   |
-| Registration Component       | [ ]         | Handles user registration            |
-| Dashboard Component          | [ ]         | Parent component post-login          |
-| Group Component              | [ ]         | Displays user groups                 |
-| Channel Component            | [ ]         | Displays channels within a group     |
-| Chat Component               | [ ]         | Manages real-time chat               |
-| Admin Component              | [ ]         | Parent for all admin functionalities |
-| User Management Component    | [ ]         | Manages users                        |
-| Group Management Component   | [ ]         | Manages groups                       |
-| Channel Management Component | [ ]         | Manages channels                     |
+`ng g c <component-name> --inline-style --inline-template --skipTests`
+
+| Component                    | Implemented | Notes                                                        |
+| ---------------------------- | ----------- | ------------------------------------------------------------ |
+| Authentication Component     | [ ]         | Parent for Login and Registration                            |
+| Login Component              | [ ]         | Child of Authentication component. Handles user login        |
+| Registration Component       | [ ]         | Child of Authentication component. Handles user registration |
+| Dashboard Component          | [ ]         | Parent component post-login                                  |
+| Group Component              | [ ]         | Child of Dashboard component. Displays user groups           |
+| Channel Component            | [ ]         | Child of Group component. Displays channels within a group   |
+| Chat Component               | [ ]         | Manages real-time chat                                       |
+| Admin Component              | [ ]         | Parent for all admin functionalities                         |
+| User Management Component    | [ ]         | Child of Admin component. Manages users                      |
+| Group Management Component   | [ ]         | Child of Admin component. Manages groups                     |
+| Channel Management Component | [ ]         | Child of Admin component. Manages channels                   |
 
 ### Interfaces
+
+`ng g interface <interface-name> --skipTests --type=model --project=client`
 
 | Interface | Implemented | Notes                     |
 | --------- | ----------- | ------------------------- |
@@ -94,6 +109,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 
 ### Routes
 
+
 | Route                | Implemented | Notes                                        |
 | -------------------- | ----------- | -------------------------------------------- |
 | Authentication Route | [ ]         | For Login and Registration                   |
@@ -103,12 +119,16 @@ This checklist aims to guide you through the Angular implementation of the clien
 
 ### Guards
 
+`ng g guard <guard-name> --skipTests --project=client`
+
 | Guard                | Implemented | Notes                          |
 | -------------------- | ----------- | ------------------------------ |
 | Authentication Guard | [ ]         | Check if user is authenticated |
 | Role Guard           | [ ]         | Check the user role            |
 
 ### Services
+
+`ng g service <service-name> --skipTests --project=client`
 
 | Service                 | Implemented | Notes                      |
 | ----------------------- | ----------- | -------------------------- |
@@ -118,17 +138,6 @@ This checklist aims to guide you through the Angular implementation of the clien
 | Chat Service            | [ ]         | Manages real-time chat     |
 | User Management Service | [ ]         | Manages user model         |
 
-
-
-## Implementation Checklist
-
-| Feature/Component        | Implemented | Notes |
-| ------------------------ | ----------- | ----- |
-| Documentation & Planning | [ ]         |       |
-| User Interface           | [ ]         |       |
-| Data Storage             | [ ]         |       |
-| User Login               | [ ]         |       |
-| Assign Users             | [ ]         |       |
 
 ## Server Implementation
 
@@ -141,8 +150,6 @@ This checklist aims to guide you through the Angular implementation of the clien
 - **Role**: One-to-many with User.
 - **User-Group Association**: Many-to-one with User and Group.
 - **User-Channel Association**: Many-to-one with User and Channel.
-- **Message Metadata**: One-to-one with Message.
-- **Audit Logs**: Logs changes made by admins.
 
 ### Server Routes
 
@@ -161,9 +168,6 @@ This checklist aims to guide you through the Angular implementation of the clien
 - **api/message**: Route for handling real-time chat messages.
   - `GET /:channelId`: Retrieve all messages within a channel.
   - ...
-- **api/audit**: Route for audit logs.
-  - `GET /`: Retrieve all logs.
-  - ...
 
 ### Server Implementation Checklist
 
@@ -176,12 +180,44 @@ This checklist aims to guide you through the Angular implementation of the clien
 | Role Entity              | [ ]         |       |
 | User-Group Association   | [ ]         |       |
 | User-Channel Association | [ ]         |       |
-| Message Metadata         | [ ]         |       |
-| Audit Logs               | [ ]         |       |
 | api/auth Routes          | [ ]         |       |
 | api/user Routes          | [ ]         |       |
 | api/group Routes         | [ ]         |       |
 | api/channel Routes       | [ ]         |       |
 | api/message Routes       | [ ]         |       |
-| api/audit Routes         | [ ]         |       |
 
+
++-----------+       +-------------+     0..*  +-------------+     +--------+
+|   User    |*------| User-Group  |------*    |    Group    |*----| Channel |
+| id(PK)    |       | userID(FK)  |           | id(PK)      |     | id(PK)  |
+| username  |       | groupID(FK) |-----------| groupName   |     | channelName |
+| email     |       | roleID(FK)  |     0..*  +-------------+     +--------+
++-----------+       +-------------+            |                   |
+       |                                          |                   |
+       |                                          |                   |
+     1 |                                          |                 1 |
+       |                                          |                   |
+       |                                          |                   |
++-----------+       +-------------+            0..*|                 | 0..*
+|  Message  |*------| User-Channel|----------------|                 |
+| id(PK)    |       | userID(FK)  |                                   |
+| message   |       | channelID(FK)|----------------------------------|
+| userID(FK)|       +-------------+
+| channelID(FK)|
+| timestamp  |
++-----------+
+
+        +-------+
+        | Role  |
+        | id(PK)|
+        | roleName |
+        +-------+
+            |
+            |
+          0..*|
+            |
+            |
+        +-------------+
+        |  User-Group  |
+        |  roleID(FK)  |
+        +-------------+
