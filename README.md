@@ -19,10 +19,11 @@
     - [Routes](#routes)
     - [Guards](#guards)
     - [Services](#services)
+  - [Client Architecture Diagram](#client-architecture-diagram)
   - [Server Implementation](#server-implementation)
-    - [Entities and Relationships](#entities-and-relationships)
     - [Server Routes](#server-routes)
     - [Server Implementation Checklist](#server-implementation-checklist)
+  - [Entity Relationship Diagram](#entity-relationship-diagram)
 
 ## Brief Description
 
@@ -139,17 +140,10 @@ This checklist aims to guide you through the Angular implementation of the clien
 | User Management Service | [ ]         | Manages user model         |
 
 
+## Client Architecture Diagram
+![Client Architecture Diagram](./diagrams/client_architecture_diagram.png)
+
 ## Server Implementation
-
-### Entities and Relationships
-
-- **User**: One-to-many with Message, many-to-many with Group and Channel, one-to-many with Role.
-- **Group**: One-to-many with Channel.
-- **Channel**: One-to-many with Message.
-- **Message**: Many-to-one with User.
-- **Role**: One-to-many with User.
-- **User-Group Association**: Many-to-one with User and Group.
-- **User-Channel Association**: Many-to-one with User and Channel.
 
 ### Server Routes
 
@@ -186,5 +180,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 | api/channel Routes       | [ ]         |       |
 | api/message Routes       | [ ]         |       |
 
+## Entity Relationship Diagram
 
 ![ERD Diagram](./diagrams/database_ERD.png)
+
