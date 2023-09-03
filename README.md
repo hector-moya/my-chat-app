@@ -187,4 +187,4 @@ This checklist aims to guide you through the Angular implementation of the clien
 | api/message Routes       | [ ]         |       |
 
 
-![ERD Diagram](./database_ERD.png)
+![ERD Diagram](./diagrams/database_ERD.png)
