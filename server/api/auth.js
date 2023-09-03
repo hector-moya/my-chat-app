@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { users } = require('../data/data'); // Import users array from data.js
+const { createUser } = require('../helpers/userHelper');
 
 /**
  * POST /api/auth
@@ -12,17 +13,13 @@ const { users } = require('../data/data'); // Import users array from data.js
  */
 router.post('/', (req, res) => {
     const { email, password } = req.body;
+    const { user, error } = createUser(username, email, password);
 
-    // Find user in users array
-    const user = users.find(u => u.email === email && u.password === password);
-
-    if (user) {
-        const { password, ...userWithoutPassword } = user; // Destructure to remove password
-        user.valid = true;
-        res.json({ valid: true, user: userWithoutPassword });
-    } else {
-        res.json({ valid: false });
+    if (error) {
+        return res.status(400).json({ message: error });
     }
+
+    return res.status(201).json(user);
 });
 
 /**
