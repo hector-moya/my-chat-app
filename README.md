@@ -187,6 +187,8 @@ This checklist aims to guide you through the Angular implementation of the clien
 | api/message Routes       | [ ]         |       |
 
 
+
++-----------+       +-------------+            +-------------+     +--------+
 +-----------+       +-------------+     0..*  +-------------+     +--------+
 |   User    |*------| User-Group  |------*    |    Group    |*----| Channel |
 | id(PK)    |       | userID(FK)  |           | id(PK)      |     | id(PK)  |
