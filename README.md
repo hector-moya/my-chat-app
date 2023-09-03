@@ -187,39 +187,4 @@ This checklist aims to guide you through the Angular implementation of the clien
 | api/message Routes       | [ ]         |       |
 
 
-
-+-----------+       +-------------+            +-------------+     +--------+
-+-----------+       +-------------+     0..*  +-------------+     +--------+
-|   User    |*------| User-Group  |------*    |    Group    |*----| Channel |
-| id(PK)    |       | userID(FK)  |           | id(PK)      |     | id(PK)  |
-| username  |       | groupID(FK) |-----------| groupName   |     | channelName |
-| email     |       | roleID(FK)  |     0..*  +-------------+     +--------+
-+-----------+       +-------------+            |                   |
-       |                                          |                   |
-       |                                          |                   |
-     1 |                                          |                 1 |
-       |                                          |                   |
-       |                                          |                   |
-+-----------+       +-------------+            0..*|                 | 0..*
-|  Message  |*------| User-Channel|----------------|                 |
-| id(PK)    |       | userID(FK)  |                                   |
-| message   |       | channelID(FK)|----------------------------------|
-| userID(FK)|       +-------------+
-| channelID(FK)|
-| timestamp  |
-+-----------+
-
-        +-------+
-        | Role  |
-        | id(PK)|
-        | roleName |
-        +-------+
-            |
-            |
-          0..*|
-            |
-            |
-        +-------------+
-        |  User-Group  |
-        |  roleID(FK)  |
-        +-------------+
+![ERD Diagram](./database_ERD.png)
