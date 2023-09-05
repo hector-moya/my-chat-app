@@ -4,19 +4,19 @@
 
 ### Clone the repository
 
-```https://github.com/hector-moya/my-chat-app.git```
+`https://github.com/hector-moya/my-chat-app.git`
 
 ### Navigate to the project directory
 
-```cd my-chat-app```
+`cd my-chat-app`
 
 ### Install dependencies
 
-```npm run install```
+`npm run install`
 
 ### Run the application
 
-```npm run start```
+`npm run start`
 
 ## Table of Contents
 
@@ -49,14 +49,14 @@ The chat application aims to build a text/video chat system using the MEAN stack
 
 ## Implementation Checklist
 
-| Feature/Component | Implemented | Notes                                                                       |
-| ----------------- | ----------- | --------------------------------------------------------------------------- |
-| Planning          | [x]         | Layer component diagram, Class Diagram for Services and ER diagram created. |
-| Documentation     | [ ]         |                                                                             |
-| User Interface    | [ ]         |                                                                             |
-| Data Storage      | [ ]         |                                                                             |
-| User Login        | [ ]         |                                                                             |
-| Assign Users      | [ ]         |                                                                             |
+| Feature/Component | Implemented | Notes                                                                                                    |
+| ----------------- | ----------- | -------------------------------------------------------------------------------------------------------- |
+| Planning          | [x]         | Layer component diagram, Class Diagram for Services and ER diagram created.                              |
+| Documentation     | [x]         | Documenting all methods, next step is to document variables                                              |
+| User Interface    | [x]         | Basic user interface applied using TailwindCSS for all components, needs improvement in next iterations. |
+| Data Storage      | [x]         | Browser local storage used, and dummy data stored in json                                                |
+| User Login        | [x]         | User login and register new user fully implemented with guard gates                                      |
+| Assign Users      | [ ]         |                                                                                                          |
 
 ## Application Overview
 
@@ -123,11 +123,10 @@ This checklist aims to guide you through the Angular implementation of the clien
 | --------- | ----------- | ------------------------- |
 | IUser     | [X]         | Defines the user model    |
 | IGroup    | [X]         | Defines the group model   |
-| IChannel  | [ ]         | Defines the channel model |
+| IChannel  | [x]         | Defines the channel model |
 | IMessage  | [ ]         | Defines the message model |
 
 ### Routes
-
 
 | Route                | Implemented | Notes                                        |
 | -------------------- | ----------- | -------------------------------------------- |
@@ -157,8 +156,8 @@ This checklist aims to guide you through the Angular implementation of the clien
 | Chat Service            | [ ]         | Manages real-time chat     |
 | User Management Service | [ ]         | Manages user model         |
 
-
 ## Client Architecture Diagram
+
 ![Client Architecture Diagram](./diagrams/client_architecture_diagram.png)
 
 ## Server Implementation
@@ -192,7 +191,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 | Role Entity              | [X]         |                                                                              |
 | User-Group Association   | [X]         |                                                                              |
 | User-Channel Association | [X]         |                                                                              |
-| api/auth Routes          | [X]         | For handling user authentication  and registration                           |
+| api/auth Routes          | [X]         | For handling user authentication and registration                            |
 | api/user Routes          | [X]         | CRUD operations for User entity                                              |
 | api/group Routes         | [X]         | CRUD operations for Group entity                                             |
 | api/channel Routes       | [ ]         | CRUD operations for Channel entity                                           |
@@ -201,4 +200,3 @@ This checklist aims to guide you through the Angular implementation of the clien
 ## Entity Relationship Diagram
 
 ![ERD Diagram](./diagrams/database_ERD.png)
-
