@@ -1,4 +1,4 @@
-const { users } =  require('../data/data');
+const { users } =  require('../data/data.json');
 
 /**
  * 
@@ -13,16 +13,20 @@ function createUser(username, email, password) {
         return { error: 'Username or Email already in use' };
     }
 
+    // Generate a new user ID
+    const newUserId = users.length + 1;
+
     const newUser = {
-        id: users.length + 1,
+        id: newUserId,
         username,
         email,
-        password // Note: Store hashed passwords in a production application
+        password,
+        isSuper: false
     };
 
     users.push(newUser);
-    const { password: _, ...userWithoutPassword } = newUser; // Destructure to remove password
+    // const { password: _, ...userWithoutPassword } = newUser; // Destructure to remove password
 
-    return { user: userWithoutPassword };
+    return { user: newUser };
 }
 module.exports = { createUser };

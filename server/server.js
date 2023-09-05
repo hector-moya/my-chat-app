@@ -4,7 +4,6 @@ const authRoutes = require('./api/auth');
 const groupRoutes = require('./api/group');
 const httpServer = require('http').createServer(app);
 const cors = require('cors');
-
 const io = require('socket.io')(httpServer, {
     cors: { origin: '*' }
 });

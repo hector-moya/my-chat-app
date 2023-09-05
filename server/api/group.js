@@ -1,4 +1,4 @@
-const { groups, user_group } = require('../data/data'); // Import users array from data.js
+const { groups, user_group } = require('../data/data.json'); // Import users array from data.js
 const express = require('express');
 const router = express.Router();
 
