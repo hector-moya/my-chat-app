@@ -5,6 +5,9 @@
 ### Clone the repository
 
 ```https://github.com/hector-moya/my-chat-app.git```
+
+### Navigate to the project directory
+
 ```cd my-chat-app```
 
 ### Install dependencies
