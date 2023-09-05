@@ -1,10 +1,33 @@
 <div *ngIf="groups.length > 0; else noGroups">
-    <ul>
-      <li *ngFor="let group of groups">
-        {{ group.groupName }}
-      </li>
-    </ul>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- Group card -->
+    <div *ngFor="let group of groups" class="rounded overflow-hidden shadow-lg">
+      <div class="px-6 py-4">
+        <!-- Group name -->
+        <div *ngIf="editingGroupId !== group.id" class="font-bold text-xl mb-2">{{ group.groupName }}</div>
+        <div *ngIf="editingGroupId === group.id">
+          <input type="text" [(ngModel)]="group.groupName" class="font-bold text-xl mb-2">
+        </div>
+        
+        <!-- Placeholder for group image -->
+        <div class="bg-gray-300 h-32 w-full mb-4 cursor-pointer" (click)="showChannels(group)">
+          <!-- Placeholder for the image -->
+        </div>
+
+        <!-- Edit and Delete buttons -->
+        <button *ngIf="editingGroupId !== group.id && group.userRole === 2 || this.isSuper === true" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="editingGroup(group.id)">Edit</button>
+        <button *ngIf="editingGroupId === group.id && group.userRole === 2 || this.isSuper === true" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" (click)="saveGroup(group)">Save</button>
+        <button *ngIf="editingGroupId === group.id && group.userRole === 2 || this.isSuper === true" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" (click)="editingGroupId = null">Cancel</button>
+        <button *ngIf="editingGroupId !== group.id && group.userRole === 2 || this.isSuper === true" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" (click)="deleteGroup(group.id)">Delete</button>
+      </div>
+      
+      <!-- Placeholder for Channels Dropdown -->
+      <div *ngIf="group.showChannels" class="px-6 py-4">
+        <!-- Add channels here -->
+      </div>
+    </div>
   </div>
-  <ng-template #noGroups>
-    <p>No groups available.</p>
-  </ng-template>
+</div>
+<ng-template #noGroups>
+  <p>No groups available.</p>
+</ng-template>

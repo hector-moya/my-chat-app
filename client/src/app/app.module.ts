@@ -6,16 +6,14 @@ import { AppComponent } from './app.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { RegisterComponent } from './authentication/register/register.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { NgModel, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { GroupComponent } from './dashboard/group/group.component';
 import { ChannelComponent } from './dashboard/channel/channel.component';
+import { ChatComponent } from './dashboard/channel/chat/chat.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ChannelComponent,
-  ],
+  declarations: [AppComponent, ChannelComponent],
   imports: [
     BrowserModule,
     AuthenticationComponent,
@@ -24,9 +22,10 @@ import { ChannelComponent } from './dashboard/channel/channel.component';
     DashboardComponent,
     GroupComponent,
     AuthenticationComponent,
-    RegisterComponent
+    ChatComponent,
+    RegisterComponent,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

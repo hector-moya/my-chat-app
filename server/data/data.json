@@ -47,20 +47,38 @@
     {
       "id": 2,
       "groupName": "Group2"
-    }
-  ],
-  "user_channel": [
-    {
-      "userID": 1,
-      "channelID": 1
     },
     {
-      "userID": 2,
-      "channelID": 2
+      "id": 3,
+      "groupName": "Group3"
     },
     {
-      "userID": 3,
-      "channelID": 3
+      "id": 4,
+      "groupName": "Group4"
+    },
+    {
+      "id": 5,
+      "groupName": "Group5"
+    },
+    {
+      "id": 6,
+      "groupName": "Group6"
+    },
+    {
+      "id": 7,
+      "groupName": "Group7"
+    },
+    {
+      "id": 8,
+      "groupName": "Group8"
+    },
+    {
+      "id": 9,
+      "groupName": "Group9"
+    },
+    {
+      "id": 10,
+      "groupName": "Group10"
     }
   ],
   "user_group": [
@@ -78,6 +96,47 @@
       "userID": 3,
       "roleID": 3,
       "groupID": 2
+    },
+    {
+      "userID": 1,
+      "roleID": 1,
+      "groupID": 2
+    },
+    {
+      "userID": 1,
+      "roleID": 2,
+      "groupID": 3
+    },
+    {
+      "userID": 2,
+      "roleID": 3,
+      "groupID": 3
+    }
+  ],
+  "user_channel": [
+    {
+      "userID": 1,
+      "channelID": 1
+    },
+    {
+      "userID": 2,
+      "channelID": 2
+    },
+    {
+      "userID": 3,
+      "channelID": 3
+    },
+    {
+      "userID": 1,
+      "channelID": 1
+    },
+    {
+      "userID": 1,
+      "channelID": 2
+    },
+    {
+      "userID": 2,
+      "channelID": 3
     }
   ],
   "channels": [

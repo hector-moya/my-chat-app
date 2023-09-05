@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Group } from '../models/group.model';
+import { Group, UserGroup } from '../models/group.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GroupService {
-
   private apiUrl = 'http://localhost:3000/api/group'; // In the future, this will be in an environment variable
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   // Function to get all groups (not user-specific)
   getAllGroups(): Observable<Group[]> {
@@ -36,4 +35,33 @@ export class GroupService {
   deleteGroup(groupId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${groupId}`);
   }
+
+  // // Function to get user groups by user ID
+  // getUserGroupsByUserId(userId: number): Observable<UserGroup[]> {
+  //   return this.http.get<UserGroup[]>(`${this.apiUrl}/userGroups/${userId}`);
+  // }
+
+  // Function to get the user's role for a group
+  getUserRole(groupId: number, userId: number): Observable<number> {
+    return this.http.get<number>(
+      `${this.apiUrl}/userRole/${groupId}/${userId}`
+    );
+  }
+  // // Function to update a user group
+  // updateUserGroup(userGroup: UserGroup): Observable<UserGroup> {
+  //   return this.http.put<UserGroup>(
+  //     `${this.apiUrl}/userGroups/${userGroup.id}`,
+  //     userGroup
+  //   );
+  // }
+
+  // // Function to add a user group
+  // addUserGroup(userGroup: UserGroup): Observable<UserGroup> {
+  //   return this.http.post<UserGroup>(`${this.apiUrl}/userGroups`, userGroup);
+  // }
+
+  // // Function to delete a user group by ID
+  // deleteUserGroup(id: number): Observable<any> {
+  //   return this.http.delete(`${this.apiUrl}/userGroups/${id}`);
+  // }
 }
