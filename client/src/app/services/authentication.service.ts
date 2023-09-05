@@ -5,7 +5,7 @@ import { tap, delay } from 'rxjs/operators';
 import { User, loginCredentials } from './../models/user.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthenticationService {
   isLoggedIn = false;
@@ -13,29 +13,30 @@ export class AuthenticationService {
 
   private apiUrl = 'http://localhost:3000/api'; // In the future, this will be in an environment variable
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Login a user
-   * @param credentials 
-   * @returns 
+   * @param credentials
+   * @returns
    */
   login(credentials: loginCredentials): Observable<boolean> {
     interface LoginResponse {
       valid: boolean;
       user: User;
     }
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials).pipe(
-      tap((response: LoginResponse) => {
-        if (response.valid) {
-          localStorage.setItem('currentUser', JSON.stringify(response.user));
-          console.log('User logged in successfully');
-          this.isLoggedIn = true;
-        }
-      }),
-      delay(1000),
-      map((response: LoginResponse) => response.valid) // map the response to a boolean value
-    );
+    return this.http
+      .post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials)
+      .pipe(
+        tap((response: LoginResponse) => {
+          if (response.valid) {
+            localStorage.setItem('currentUser', JSON.stringify(response.user));
+            console.log('User logged in successfully');
+            this.isLoggedIn = true;
+          }
+        }),
+        map((response: LoginResponse) => response.valid) // map the response to a boolean value
+      );
   }
 
   logout(): void {
@@ -43,15 +44,25 @@ export class AuthenticationService {
     this.isLoggedIn = false;
   }
 
-
-
   /**
    * Register a user
    * @param user
    * @returns
    */
-  register(user: User): Observable<any> {
-    console.log(user);
-    return this.http.post(`${this.apiUrl}/auth/register`, user);
+  register(user: User): Observable<boolean> {
+    interface RegisterResponse {
+      valid: boolean;
+      user: User;
+    }
+    return this.http
+      .post<RegisterResponse>(`${this.apiUrl}/auth/register`, user)
+      .pipe(
+        tap((response: RegisterResponse) => {
+          if (response.valid) {
+            console.log('User registered successfully');
+          }
+        }),
+        map((response: RegisterResponse) => response.valid) // map the response to a boolean value
+      );
   }
 }

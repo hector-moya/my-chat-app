@@ -37,7 +37,7 @@ export class RegisterComponent {
       this.authenticationService.register(user).subscribe({
         next: (response) => {
           // Navigate to the dashboard
-          this.router.navigate(['/Dashboard']);
+          this.router.navigate(['/dashboard']);
         },
         error: (error) => {
           // Handle the error from the server
