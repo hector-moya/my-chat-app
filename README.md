@@ -1,5 +1,20 @@
 # Chat Application Project
 
+## Setup Environment
+
+### Clone the repository
+
+```https://github.com/hector-moya/my-chat-app.git```
+```cd my-chat-app```
+
+### Install dependencies
+
+```npm run install```
+
+### Run the application
+
+```npm run start```
+
 ## Table of Contents
 
 - [Chat Application Project](#chat-application-project)
