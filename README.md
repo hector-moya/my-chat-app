@@ -21,9 +21,23 @@
 ## Table of Contents
 
 - [Chat Application Project](#chat-application-project)
+  - [Setup Environment](#setup-environment)
+    - [Clone the repository](#clone-the-repository)
+    - [Navigate to the project directory](#navigate-to-the-project-directory)
+    - [Install dependencies](#install-dependencies)
+    - [Run the application](#run-the-application)
   - [Table of Contents](#table-of-contents)
   - [Brief Description](#brief-description)
-  - [Implementation Checklist](#implementation-checklist)
+  - [Version Control System Description](#version-control-system-description)
+    - [Commit Strategy](#commit-strategy)
+    - [Branching](#branching)
+    - [Automation](#automation)
+    - [Documentation](#documentation)
+    - [Quality Assurance](#quality-assurance)
+  - [Client-Server Interaction](#client-server-interaction)
+    - [RESTful APIs](#restful-apis)
+    - [Angular Component Updates](#angular-component-updates)
+  - [Implementation Checklist Stage 1](#implementation-checklist-stage-1)
   - [Application Overview](#application-overview)
   - [User Roles \& Permissions](#user-roles--permissions)
   - [Specific Requirements](#specific-requirements)
@@ -39,15 +53,73 @@
     - [Services](#services)
   - [Client Architecture Diagram](#client-architecture-diagram)
   - [Server Implementation](#server-implementation)
-    - [Server Routes](#server-routes)
-    - [Server Implementation Checklist](#server-implementation-checklist)
   - [Entity Relationship Diagram](#entity-relationship-diagram)
+    - [Server Routes](#server-routes)
+  - [Helper Functions](#helper-functions)
+    - [createUser(username, email, password)](#createuserusername-email-password)
+    - [Server Implementation Checklist](#server-implementation-checklist)
 
 ## Brief Description
 
 The chat application aims to build a text/video chat system using the MEAN stack (MongoDB, Express, Angular, Node) along with sockets.io and Peer.js. The chat system will allow users to communicate in real time within different groups and channels. There are three levels of permissions: Super Admin, Group Admin, and User.
 
-## Implementation Checklist
+## Version Control System Description
+
+The project follows best practices in version control using Git and is hosted on a GitHub repository. The repository is structured with a root folder that contains two main sub-folders: one for the server and one for the client. This separation ensures that the project remains organized as it scales.
+
+### Commit Strategy
+
+1. **Frequent Commits**: Commits are made approximately every hour during active development.
+2. **Milestone Commits**: Each commit corresponds to a functional milestone, ensuring that the repository always contains working code.
+3. **Informative Commit Messages**: Every commit has a meaningful message that indicates the changes or features introduced.
+
+### Branching
+
+A single `main` branch has been sufficient for the current needs. However, the project is structured in a way that would allow for feature branching and pull if needed.
+
+### Automation
+
+A custom script is utilized to automate the Git operations (`git add .`, `git commit`, and `git push`). This script runs only when a functional milestone is achieved, ensuring the integrity of the codebase.
+
+### Documentation
+
+A comprehensive README file documents the project setup, features, and implementation checklists. This README file is updated regularly to reflect the current state of the project.
+
+### Quality Assurance
+
+To further ensure the quality of the code, no broken code is committed. Each commit represents a stable build.
+## Client-Server Interaction
+
+The client and server in this chat application communicate using RESTful APIs and WebSockets for real-time updates. Below are the details of how data changes on the server-side impact the Angular components on the client-side.
+
+### RESTful APIs
+
+The server exposes several RESTful endpoints for handling operations related to authentication, users, groups, and channels.
+
+1. **Authentication**: 
+    - When a user logs in or registers through the Authentication Component, a POST request is made to the server's `/api/auth/login` or `/api/auth/register` endpoints.
+    - The server verifies the data and returns a user object, which updates the client-side state and redirects the user to the Dashboard Component.
+
+2. **User Management**:
+    - CRUD operations for users are handled through the `/api/user` endpoint.
+    - Any changes here are reflected in real-time on the User Management Component for the Super Admin.
+
+3. **Group and Channel Management**:
+    - CRUD operations for groups and channels are handled through `/api/group` and `/api/channel` endpoints.
+    - The Group and Channel Components update in real-time when data is added, modified, or deleted.
+
+### Angular Component Updates
+
+1. **Dashboard Component**: 
+    - Displays a summary of user activities and is updated whenever there is a change in groups or channels that the user is part of.
+
+2. **Group Component**: 
+    - Lists all the groups a user is part of and updates in real-time when a new group is created or an existing one is modified.
+
+3. **Channel Component**: 
+    - Lists all channels within a selected group and updates in real-time when a new channel is added or an existing one is modified.
+
+## Implementation Checklist Stage 1
 
 | Feature/Component | Implemented | Notes                                                                                                    |
 | ----------------- | ----------- | -------------------------------------------------------------------------------------------------------- |
@@ -56,7 +128,7 @@ The chat application aims to build a text/video chat system using the MEAN stack
 | User Interface    | [x]         | Basic user interface applied using TailwindCSS for all components, needs improvement in next iterations. |
 | Data Storage      | [x]         | Browser local storage used, and dummy data stored in json                                                |
 | User Login        | [x]         | User login and register new user fully implemented with guard gates                                      |
-| Assign Users      | [ ]         |                                                                                                          |
+| Assign Users      | [!]         | User assignment still needs implementation, super admin can create new users from the dashboard          |
 
 ## Application Overview
 
@@ -154,7 +226,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 | Group Service           | [X]         | Manages group operations   |
 | Channel Service         | [X]         | Manages channel operations |
 | Chat Service            | [ ]         | Manages real-time chat     |
-| User Management Service | [ ]         | Manages user model         |
+| User Management Service | [X]         | Manages user model         |
 
 ## Client Architecture Diagram
 
@@ -162,23 +234,63 @@ This checklist aims to guide you through the Angular implementation of the clien
 
 ## Server Implementation
 
+## Entity Relationship Diagram
+
+![ERD Diagram](./diagrams/database_ERD.png)
 ### Server Routes
 
 - **api/auth**: Authentication route for login and registration.
   - `POST /login`: User login.
   - `POST /register`: User registration.
+  
 - **api/user**: Route for managing user data and CRUD operations.
+  - `GET /`: Retrieve all users.
   - `GET /:id`: Retrieve user by ID.
-  - ...
-- **api/group**: Route for managing groups.
+  - `POST /`: Create a new user.
+  - `PUT /:id`: Update an existing user.
+  - `DELETE /:id`: Delete a user by ID.
+  - `PUT /promote/:id`: Promote a user to super user status.
+  
+- **api/group**: Route for managing group data and CRUD operations.
   - `GET /`: Retrieve all groups.
-  - ...
-- **api/channel**: Route for managing channels within groups.
-  - `GET /:groupId`: Retrieve all channels within a group.
-  - ...
-- **api/message**: Route for handling real-time chat messages.
-  - `GET /:channelId`: Retrieve all messages within a channel.
-  - ...
+  - `GET /byUser/:userId`: Retrieve all groups that a specific user belongs to.
+  - `GET /userRole/:groupId/:userId`: Retrieve the role of a user in a specific group.
+  - `POST /`: Add a new group.
+  - `PUT /:id`: Update an existing group.
+  - `DELETE /:id`: Delete a group and all its references.
+  - `PUT /assignAdmin/:groupId/:userId`: Assign a user as admin of a specific group.
+  
+- **api/channel**: Route for managing channel data and CRUD operations.
+  - `GET /`: Retrieve all channels.
+  - `GET /:id`: Retrieve a channel by ID.
+  - `GET /byUser/:groupId/:userId`: Retrieve all channels for a user in a specific group.
+  - `POST /`: Create a new channel.
+  - `PUT /:id`: Update an existing channel.
+  - `DELETE /:id`: Delete a channel by ID.
+
+- **api/auth**: Route for user authentication and registration.
+  - `POST /login`: Authenticate a user and return a user object if valid.
+  - `POST /register`: Register a new user and return the user object.
+
+## Helper Functions
+
+### createUser(username, email, password)
+
+This helper function is used for creating a new user.
+
+- **Parameters:**
+  - `username`: The username for the new user.
+  - `email`: The email address for the new user.
+  - `password`: The password for the new user.
+
+- **Returns:**
+  - An object containing the new user if successful.
+  - An object with an `error` property if an error occurs.
+
+- **Usage:**
+  ```javascript
+  const { user, error } = createUser('johnDoe', 'john@example.com', 'password123');
+
 
 ### Server Implementation Checklist
 
@@ -197,6 +309,3 @@ This checklist aims to guide you through the Angular implementation of the clien
 | api/channel Routes       | [X]         | CRUD operations for Channel entity                                           |
 | api/message Routes       | [ ]         | CRUD operations for Message entity, and for handling real-time chat messages |
 
-## Entity Relationship Diagram
-
-![ERD Diagram](./diagrams/database_ERD.png)
