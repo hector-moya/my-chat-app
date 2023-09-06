@@ -13,7 +13,7 @@ import { ChannelComponent } from './dashboard/channel/channel.component';
 import { ChatComponent } from './dashboard/channel/chat/chat.component';
 
 @NgModule({
-  declarations: [AppComponent, ChannelComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AuthenticationComponent,
@@ -24,6 +24,7 @@ import { ChatComponent } from './dashboard/channel/chat/chat.component';
     AuthenticationComponent,
     ChatComponent,
     RegisterComponent,
+    ChannelComponent,
   ],
   providers: [],
   bootstrap: [AppComponent],

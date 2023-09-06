@@ -116,43 +116,46 @@
   "user_channel": [
     {
       "userID": 1,
-      "channelID": 1
+      "channelID": 1,
+      "groupID": 1
     },
     {
       "userID": 2,
-      "channelID": 2
+      "channelID": 2,
+      "groupID": 2
     },
     {
       "userID": 3,
-      "channelID": 3
+      "channelID": 3,
+      "groupID": 3
     },
     {
       "userID": 1,
-      "channelID": 1
+      "channelID": 1,
+      "groupID": 1
     },
     {
       "userID": 1,
-      "channelID": 2
+      "channelID": 2,
+      "groupID": 2
     },
     {
       "userID": 2,
-      "channelID": 3
+      "channelID": 3,
+      "groupID": 3
     }
   ],
   "channels": [
     {
       "id": 1,
-      "groupID": 1,
       "channelName": "Channel1-1"
     },
     {
       "id": 2,
-      "groupID": 1,
       "channelName": "Channel1-2"
     },
     {
       "id": 3,
-      "groupID": 2,
       "channelName": "Channel2-1"
     }
   ],
@@ -162,6 +165,7 @@
       "userID": 1,
       "message": "Hello, world!",
       "channelID": 1,
+      "groupID": 1,
       "timestamp": "2021-10-01T00:00:00.000Z"
     },
     {

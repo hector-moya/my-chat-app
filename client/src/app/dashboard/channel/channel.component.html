@@ -1,1 +1,10 @@
-<p>channel works!</p>
+<div *ngIf="channels.length > 0; else noChannels">
+  <ul>
+    <li *ngFor="let channel of channels">
+      {{ channel.channelName }}
+    </li>
+  </ul>
+</div>
+<ng-template #noChannels>
+  <p>No channels available.</p>
+</ng-template>

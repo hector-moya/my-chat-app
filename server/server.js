@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const authRoutes = require('./api/auth');
 const groupRoutes = require('./api/group');
+const channelRoutes = require('./api/channel');
 const httpServer = require('http').createServer(app);
 const cors = require('cors');
 const io = require('socket.io')(httpServer, {
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(cors());
 app.use('/api/auth', authRoutes);
 app.use('/api/group', groupRoutes);
+app.use('/api/channel', channelRoutes);
 
 io.on('connection', (socket) => {
     console.log('a user connected');

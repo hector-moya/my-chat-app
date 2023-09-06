@@ -13,13 +13,13 @@ router.get("/", (req, res) => {
 
 // Get groups by user ID
 router.get("/byUser/:userId", (req, res) => {
-  console.log("hi");
+  console.log("User group array:", user_group);
   const userId = parseInt(req.params.userId, 10);
-  console.log(userId);
+  console.log('userId: ', userId);
   const userGroups = user_group
     .filter((ug) => ug.userID === userId)
     .map((ug) => ug.groupID);
-  console.log(userGroups);
+  console.log('Groups by user:', userGroups);
 
   if (userGroups.length > 0) {
     const groupsByUser = groups.filter((g) => userGroups.includes(g.id));
@@ -33,17 +33,20 @@ router.get("/byUser/:userId", (req, res) => {
 
 // Get the user's role for a group
 router.get("/userRole/:groupId/:userId", (req, res) => {
+  console.log('Inside /userRole/:groupId/:userId');
   const groupId = parseInt(req.params.groupId, 10);
   const userId = parseInt(req.params.userId, 10);
+  console.log('groupId:', groupId, 'userId:', userId);
   const userGroup = user_group.find(
     (ug) => ug.userID === userId && ug.groupID === groupId
   );
   if (userGroup) {
-    res.json(userGroup.role);
+    res.json(userGroup.roleID);
   } else {
     res.status(404).json({ message: "User group not found" });
   }
 });
+
 // Add a new group
 router.post("/", (req, res) => {
   const newGroup = {

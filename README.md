@@ -108,7 +108,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 | Registration Component       | [X]         | Child of Authentication component. Handles user registration |
 | Dashboard Component          | [X]         | Parent component post-login                                  |
 | Group Component              | [X]         | Child of Dashboard component. Displays user groups           |
-| Channel Component            | [ ]         | Child of Group component. Displays channels within a group   |
+| Channel Component            | [X]         | Child of Group component. Displays channels within a group   |
 | Chat Component               | [ ]         | Manages real-time chat                                       |
 | Admin Component              | [ ]         | Parent for all admin functionalities                         |
 | User Management Component    | [ ]         | Child of Admin component. Manages users                      |
@@ -152,7 +152,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 | ----------------------- | ----------- | -------------------------- |
 | Authentication Service  | [X]         | Manages authentication     |
 | Group Service           | [X]         | Manages group operations   |
-| Channel Service         | [ ]         | Manages channel operations |
+| Channel Service         | [X]         | Manages channel operations |
 | Chat Service            | [ ]         | Manages real-time chat     |
 | User Management Service | [ ]         | Manages user model         |
 
@@ -194,7 +194,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 | api/auth Routes          | [X]         | For handling user authentication and registration                            |
 | api/user Routes          | [X]         | CRUD operations for User entity                                              |
 | api/group Routes         | [X]         | CRUD operations for Group entity                                             |
-| api/channel Routes       | [ ]         | CRUD operations for Channel entity                                           |
+| api/channel Routes       | [X]         | CRUD operations for Channel entity                                           |
 | api/message Routes       | [ ]         | CRUD operations for Message entity, and for handling real-time chat messages |
 
 ## Entity Relationship Diagram

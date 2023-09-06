@@ -21,6 +21,10 @@ export class ChannelService {
     return this.http.get<Channel[]>(`${this.apiUrl}/byGroup/${groupId}`);
   }
 
+  getChannelsById(channelId: number): Observable<Channel[]> {
+    return this.http.get<Channel[]>(`${this.apiUrl}/${channelId}`);
+  }
+
   // Function to add a new channel
   addChannel(channel: Channel): Observable<Channel> {
     return this.http.post<Channel>(`${this.apiUrl}`, channel);
@@ -34,5 +38,10 @@ export class ChannelService {
   // Function to delete a channel by ID
   deleteChannel(channelId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${channelId}`);
+  }
+
+  // Function to get channels by group ID and user ID
+  getUserChannel(groupId: number, userId: number): Observable<Channel[]> {
+    return this.http.get<Channel[]>(`${this.apiUrl}/byUser/${groupId}/${userId}`);
   }
 }

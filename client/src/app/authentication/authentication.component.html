@@ -7,8 +7,7 @@
   </div>
   <div class="flex space-x-4">
     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-      <a href="#" (click)="showLogin()" *ngIf="!authenticationService.isLoggedIn">Login</a>
-      <a href="#" *ngIf="authenticationService.isLoggedIn">Logout</a>
+      <a href="#" (click)="showLogin()">Login</a>
     </button>
     <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
       <a href="#" (click)="showRegister()">Register</a>

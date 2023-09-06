@@ -13,7 +13,9 @@ export class AuthenticationService {
 
   private apiUrl = 'http://localhost:3000/api'; // In the future, this will be in an environment variable
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.checkIsLoggedIn();
+  }
 
   /**
    * Login a user
@@ -64,5 +66,12 @@ export class AuthenticationService {
         }),
         map((response: RegisterResponse) => response.valid) // map the response to a boolean value
       );
+  }
+
+  checkIsLoggedIn(): void {
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+      this.isLoggedIn = true;
+    }
   }
 }
