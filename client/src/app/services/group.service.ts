@@ -38,13 +38,13 @@ export class GroupService {
 
   // Function to get the user's role for a group
   getUserRole(groupId: number, userId: number): Observable<boolean> {
-    return this.http.get<number>(`${this.apiUrl}/userRole/${groupId}/${userId}`).pipe(
-      tap((roleID) => { 
-        console.log('Role ID: ', roleID)
+    return this.http.get<{ roleID: number }>(`${this.apiUrl}/userRole/${groupId}/${userId}`).pipe(
+      tap((response) => { 
+        console.log('Response: ', response)
       }),
-      map((roleID) => {
-        return roleID === 2;
-      }
-      ));
+      map((response) => {
+        return response.roleID === 2;
+      })
+    );
   }
 }

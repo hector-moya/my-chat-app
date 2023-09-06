@@ -50,8 +50,8 @@
     },
     {
       "id": 3,
-      "groupName": "Grou",
-      "showChannels": true
+      "groupName": "The Machine",
+      "showChannels": false
     },
     {
       "id": 4,
@@ -123,7 +123,7 @@
     {
       "userID": 2,
       "channelID": 2,
-      "groupID": 2
+      "groupID": 1
     },
     {
       "userID": 3,
@@ -138,7 +138,7 @@
     {
       "userID": 1,
       "channelID": 2,
-      "groupID": 2
+      "groupID": 1
     },
     {
       "userID": 2,
@@ -149,7 +149,7 @@
   "channels": [
     {
       "id": 1,
-      "channelName": "Channel1-1"
+      "channelName": "My Channel"
     },
     {
       "id": 2,
