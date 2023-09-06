@@ -57,7 +57,7 @@ router.get("/byUser/:groupId/:userId", (req, res) => {
 });
 
 // Add a new channel
-router.post('/channels', (req, res) => {
+router.post('/', (req, res) => {
     const newChannel = {
         id: channels.length + 1,
         channelName: req.body.channelName,
@@ -67,7 +67,7 @@ router.post('/channels', (req, res) => {
 });
 
 // Update an existing channel
-router.put('/channels/:id', (req, res) => {
+router.put('/:id', (req, res) => {
     const channelId = parseInt(req.params.id, 10);
     const channel = channels.find(c => c.id === channelId);
 
@@ -80,7 +80,7 @@ router.put('/channels/:id', (req, res) => {
 });
 
 // Delete a channel
-router.delete('/channels/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     const channelId = parseInt(req.params.id, 10);
     const channelIndex = channels.findIndex(c => c.id === channelId);
 

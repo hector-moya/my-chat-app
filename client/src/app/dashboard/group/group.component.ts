@@ -24,8 +24,7 @@ export class GroupComponent {
 
   constructor(
     private groupService: GroupService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private channelService: ChannelService
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   /**

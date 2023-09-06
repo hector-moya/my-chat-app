@@ -1,10 +1,10 @@
-const { groups, user_group } = require("../data/data.json"); // Import users array from data.js
+const { groups, user_group, channels, user_channel } = require("../data/data.json"); // Import users array from data.js
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 const path = require("path");
 
-const dataPath = path.join(__dirname, "..", "data.json");
+const dataPath = path.join(__dirname, "..", "./data/data.json");
 
 // Get all groups
 router.get("/", (req, res) => {
@@ -31,59 +31,152 @@ router.get("/byUser/:userId", (req, res) => {
   }
 });
 
-// Get the user's role for a group
+/**
+ * Get a group by ID
+ * 
+ * Retrieve the user's role in the group
+ */
 router.get("/userRole/:groupId/:userId", (req, res) => {
-  console.log('Inside /userRole/:groupId/:userId');
-  const groupId = parseInt(req.params.groupId, 10);
-  const userId = parseInt(req.params.userId, 10);
-  console.log('groupId:', groupId, 'userId:', userId);
-  const userGroup = user_group.find(
-    (ug) => ug.userID === userId && ug.groupID === groupId
-  );
-  if (userGroup) {
-    res.json(userGroup.roleID);
-  } else {
-    res.status(404).json({ message: "User group not found" });
+  try {
+    // Validate parameters
+    const groupId = parseInt(req.params.groupId, 10);
+    const userId = parseInt(req.params.userId, 10);
+
+    if (isNaN(groupId) || isNaN(userId)) {
+      return res.status(400).json({ message: "Invalid parameters" });
+    }
+
+    // Search for the user-group relationship
+    const userGroup = user_group.find(
+      (ug) => ug.userID === userId && ug.groupID === groupId
+    );
+
+    if (userGroup) {
+      return res.status(200).json({ roleID: userGroup.roleID });
+    } else {
+      return res.status(404).json({ message: "User group not found" });
+    }
+  } catch (error) {
+    console.error("An error occurred:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
-});
+}); //----- End of GET /userRole/:groupId/:userId
 
-// Add a new group
+
+/**
+ * Get a group by ID
+ * 
+ * This route will add a group to the groups array
+ */
 router.post("/", (req, res) => {
-  const newGroup = {
-    id: groups.length + 1,
-    groupName: req.body.groupName,
-  };
-  groups.push(newGroup);
-  res.status(201).json(newGroup);
-});
+  // Generate a new ID (assuming the last group in the list has the highest ID)
+  const newId = groups.length > 0 ? Math.max(groups.map(g => g.id)) + 1 : 1;
 
-// Update an existing group
+  // Create a new group object
+  const newGroup = {
+    id: newId,
+    ...req.body  // Spread operator to copy all properties from the request body
+  };
+
+  // Add the new group to the in-memory list
+  groups.push(newGroup);
+
+  // Read existing data
+  const existingData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+
+  // Update the groups field
+  existingData.groups = groups;
+
+  try {
+    // Write the updated data back to the file
+    fs.writeFileSync(dataPath, JSON.stringify(existingData, null, 2));
+    res.status(201).json(newGroup);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to add group." });
+  }
+}); //----- End of POST /
+
+/**
+ * Update a group
+ * 
+ * This route will update a group's details
+ */
 router.put("/:id", (req, res) => {
   const groupId = parseInt(req.params.id, 10);
-  const group = groups.find((g) => g.id === groupId);
+  const groupIndex = groups.findIndex((g) => g.id === groupId);
 
-  if (group) {
-    group.groupName = req.body.groupName;
-    res.json(group);
+  if (groupIndex !== -1) {
+    // Update the group details
+    for (const [key, value] of Object.entries(req.body)) {
+      groups[groupIndex][key] = value;
+    }
+
+    // Read existing data
+    const existingData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+
+    // Update the groups field
+    existingData.groups = groups;
+
+    console.log('Preparing to write to file:', dataPath); // Debug log
+    console.log('Data to write:', existingData); // Debug log
+
+    try {
+      // Write the updated data back to the file
+      fs.writeFileSync(dataPath, JSON.stringify(existingData, null, 2));
+      console.log('Successfully wrote to file'); // Debug log
+      res.status(200).json(groups[groupIndex]);
+    } catch (error) {
+      console.error('Failed to write to file:', error); // Debug log
+      res.status(500).json({ message: "Failed to update group." });
+    }
   } else {
     res.status(404).json({ message: "Group not found" });
   }
 });
+ //----- End of PUT /:id
 
-// Delete a group
+/**
+ * Delete a group
+ * 
+ * This route will delete a group from the groups array and remove all references to the group
+ */
 router.delete("/:id", (req, res) => {
   const groupId = parseInt(req.params.id, 10);
   const groupIndex = groups.findIndex((g) => g.id === groupId);
-  console.log("groupId:", groupId);
-  console.log("groupIndex:", groupIndex);
+
   if (groupIndex !== -1) {
+    // Remove the group
     groups.splice(groupIndex, 1);
-    fs.writeFileSync(dataPath, JSON.stringify({ groups }));
-    return true;
+
+    // Remove all references in user_group
+    const newUserGroup = user_group.filter(ug => ug.groupID !== groupId);
+
+    // TODO: Remove all channels inside the group
+    //const newChannels = channels.filter(channel => channel.groupID !== groupId);
+
+    // TODO: Remove all references in user_channel based on deleted channels
+     const newUserChannel = user_channel.filter(uc => uc.groupID !== groupId);
+
+    // Read existing data from the file
+    const existingData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+
+    // Update the data
+    existingData.groups = groups;
+    existingData.user_group = newUserGroup;
+    // existingData.channels = newChannels;
+    existingData.user_channel = newUserChannel;
+
+    try {
+      // Write the updated data back to the file
+      fs.writeFileSync(dataPath, JSON.stringify(existingData, null, 2));
+      res.status(200).json({ message: "Group and related data deleted successfully." });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete group and related data." });
+    }
   } else {
     res.status(404).json({ message: "Group not found" });
-    return false;
   }
-});
+}); //----- End of DELETE /:id
+
 
 module.exports = router;

@@ -50,7 +50,8 @@
     },
     {
       "id": 3,
-      "groupName": "Group3"
+      "groupName": "Grou",
+      "showChannels": true
     },
     {
       "id": 4,
