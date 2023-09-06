@@ -18,6 +18,10 @@
 
 `npm run start`
 
+### Super Admin Credentials
+- **email**: super@admin.com
+- **password**: 123
+
 ## Table of Contents
 
 - [Chat Application Project](#chat-application-project)
@@ -26,6 +30,7 @@
     - [Navigate to the project directory](#navigate-to-the-project-directory)
     - [Install dependencies](#install-dependencies)
     - [Run the application](#run-the-application)
+    - [Super Admin Credentials](#super-admin-credentials)
   - [Table of Contents](#table-of-contents)
   - [Brief Description](#brief-description)
   - [Version Control System Description](#version-control-system-description)

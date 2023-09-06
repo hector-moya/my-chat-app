@@ -2,9 +2,9 @@
   "users": [
     {
       "id": 1,
-      "username": "superAdmin",
+      "username": "super",
       "email": "super@admin.com",
-      "password": "password",
+      "password": "123",
       "isSuper": true
     },
     {
