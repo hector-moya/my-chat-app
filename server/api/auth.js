@@ -31,6 +31,7 @@ router.post('/login', (req, res) => {
  * @param {string} username
  * @param {string} email
  * @param {string} password
+ * @param {boolean} isSuper
  * @returns {object} user
  */
 router.post('/register', (req, res) => {
@@ -39,7 +40,6 @@ router.post('/register', (req, res) => {
     const { user, error } = createUser(username, email, password);
 
     if (error) {
-        console.log('hi');
         return res.status(400).json({ message: error });
     }
 

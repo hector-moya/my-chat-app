@@ -41,10 +41,6 @@
   ],
   "groups": [
     {
-      "id": 1,
-      "groupName": "Group1"
-    },
-    {
       "id": 2,
       "groupName": "Group2"
     },
@@ -84,16 +80,6 @@
   ],
   "user_group": [
     {
-      "userID": 1,
-      "roleID": 1,
-      "groupID": 1
-    },
-    {
-      "userID": 2,
-      "roleID": 2,
-      "groupID": 1
-    },
-    {
       "userID": 3,
       "roleID": 3,
       "groupID": 2
@@ -116,29 +102,9 @@
   ],
   "user_channel": [
     {
-      "userID": 1,
-      "channelID": 1,
-      "groupID": 1
-    },
-    {
-      "userID": 2,
-      "channelID": 2,
-      "groupID": 1
-    },
-    {
       "userID": 3,
       "channelID": 3,
       "groupID": 3
-    },
-    {
-      "userID": 1,
-      "channelID": 1,
-      "groupID": 1
-    },
-    {
-      "userID": 1,
-      "channelID": 2,
-      "groupID": 1
     },
     {
       "userID": 2,
@@ -147,14 +113,6 @@
     }
   ],
   "channels": [
-    {
-      "id": 1,
-      "channelName": "My Channel"
-    },
-    {
-      "id": 2,
-      "channelName": "Channel1-2"
-    },
     {
       "id": 3,
       "channelName": "Channel2-1"

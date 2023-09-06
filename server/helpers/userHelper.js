@@ -1,4 +1,7 @@
-const { users } =  require('../data/data.json');
+const fs = require('fs');
+const path = require('path');
+
+const dataPath = path.join(__dirname, '..', './data/data.json');
 
 /**
  * 
@@ -8,13 +11,15 @@ const { users } =  require('../data/data.json');
  * @returns 
  */
 function createUser(username, email, password) {
-    const existingUser = users.find(u => u.email === email || u.username === username);
+    const existingData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+    const existingUser = existingData.users.find(u => u.email === email || u.username === username);
+
     if (existingUser) {
         return { error: 'Username or Email already in use' };
     }
 
     // Generate a new user ID
-    const newUserId = users.length + 1;
+    const newUserId = existingData.users.length > 0 ? Math.max(existingData.users.map(u => u.id)) + 1 : 1;
 
     const newUser = {
         id: newUserId,
@@ -24,9 +29,14 @@ function createUser(username, email, password) {
         isSuper: false
     };
 
-    users.push(newUser);
-    // const { password: _, ...userWithoutPassword } = newUser; // Destructure to remove password
+    existingData.users.push(newUser);
 
-    return { user: newUser };
+    try {
+        // Write the updated data back to the file
+        fs.writeFileSync(dataPath, JSON.stringify(existingData, null, 2));
+        return { user: newUser };
+    } catch (error) {
+        return { error: 'Failed to register user.' };
+    }
 }
 module.exports = { createUser };
