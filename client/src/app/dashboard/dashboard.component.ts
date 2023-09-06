@@ -23,5 +23,9 @@ export class DashboardComponent implements OnInit {
       this.currentUser = JSON.parse(storedUser);
     }
   }
+
+  logout(): void {
+    this.authenticationService.logout();
+  }
 }
 

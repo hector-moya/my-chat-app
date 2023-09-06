@@ -11,7 +11,7 @@ import { User } from 'src/app/models/user.model';
   templateUrl: './register.component.html',
   styles: [
   ],
-  imports: [ ReactiveFormsModule, NgIf, CommonModule ]
+  imports: [ReactiveFormsModule, NgIf, CommonModule]
 })
 export class RegisterComponent {
 
@@ -22,7 +22,7 @@ export class RegisterComponent {
     private authenticationService: AuthenticationService,
     private router: Router
   ) { }
-  
+
   ngOnInit(): void {
     this.registerForm = this.fb.group({
       username: ['', Validators.required],
@@ -36,8 +36,14 @@ export class RegisterComponent {
       const user: User = this.registerForm.value;
       this.authenticationService.register(user).subscribe({
         next: (response) => {
-          // Navigate to the dashboard
-          this.router.navigate(['/dashboard']);
+          console.log(response);
+          if (response) {
+            console.log(response);
+            this.router.navigate(['/dashboard']);
+          } else {
+            // Handle the error from the server
+            console.log('Error registering user');
+          }
         },
         error: (error) => {
           // Handle the error from the server

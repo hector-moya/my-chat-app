@@ -200,6 +200,36 @@ router.delete("/:id", (req, res) => {
   }
 }); //----- End of DELETE /:id
 
+/**
+ * PUT /api/group/assignAdmin/:groupId/:userId
+ * Assign a user as admin of a group
+ */
+router.put('/assignAdmin/:groupId/:userId', (req, res) => {
+  const groupId = parseInt(req.params.groupId, 10);
+  const userId = parseInt(req.params.userId, 10);
+  
+  const userGroup = user_group.find(ug => ug.groupID === groupId && ug.userID === userId);
+
+  if (userGroup) {
+    userGroup.roleID = 2;  // Assuming 'admin' is the role ID for group admins
+
+    // Persist changes
+    const existingData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+    existingData.user_group = user_group;
+
+    try {
+      fs.writeFileSync(dataPath, JSON.stringify(existingData, null, 2));
+      res.status(200).json({ message: "User assigned as admin", userGroup });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to assign user as admin" });
+    }
+
+  } else {
+    res.status(404).json({ message: "User or group not found" });
+  }
+}); //----- End of PUT /assignAdmin/:groupId/:userId
+
+
 
 
 module.exports = router;

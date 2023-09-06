@@ -43,6 +43,7 @@ export class AuthenticationService {
 
   logout(): void {
     localStorage.removeItem('currentUser');
+    console.log('User logged out successfully');
     this.isLoggedIn = false;
   }
 
@@ -61,7 +62,8 @@ export class AuthenticationService {
       .pipe(
         tap((response: RegisterResponse) => {
           if (response.valid) {
-            console.log('User registered successfully');
+            localStorage.setItem('currentUser', JSON.stringify(response.user));
+            console.log('User registered successfully', response.user);
           }
         }),
         map((response: RegisterResponse) => response.valid) // map the response to a boolean value

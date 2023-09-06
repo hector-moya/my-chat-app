@@ -3,6 +3,7 @@ const app = express();
 const authRoutes = require('./api/auth');
 const groupRoutes = require('./api/group');
 const channelRoutes = require('./api/channel');
+const userRoutes = require('./api/user');
 const httpServer = require('http').createServer(app);
 const cors = require('cors');
 const io = require('socket.io')(httpServer, {
@@ -14,6 +15,7 @@ const port = 3000;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
+app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/group', groupRoutes);
 app.use('/api/channel', channelRoutes);

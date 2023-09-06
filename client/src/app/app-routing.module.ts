@@ -13,6 +13,8 @@ const routes: Routes = [
     component: DashboardComponent,
     canActivate: [authenticationGuard]
    },
+   // This route will redirect all other requests to the authentication page.
+   { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

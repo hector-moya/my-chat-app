@@ -35,6 +35,7 @@ router.post('/login', (req, res) => {
  * @returns {object} user
  */
 router.post('/register', (req, res) => {
+    console.log("Incoming request data:", req.body);
     const { username, email, password } = req.body;
     console.log('Hi from auth/register');
     const { user, error } = createUser(username, email, password);
@@ -43,7 +44,7 @@ router.post('/register', (req, res) => {
         return res.status(400).json({ message: error });
     }
 
-    return res.status(201).json(user);
+    return res.status(201).json( {valid: true, user});
 });
 
 module.exports = router;

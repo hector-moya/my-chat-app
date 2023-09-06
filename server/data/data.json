@@ -27,6 +27,13 @@
       "email": "user1@email.com",
       "password": "password",
       "isSuper": false
+    },
+    {
+      "id": 5,
+      "username": "Hector",
+      "email": "nokure@gmail.com",
+      "password": "password",
+      "isSuper": false
     }
   ],
   "roles": [
@@ -76,6 +83,10 @@
     {
       "id": 10,
       "groupName": "Group10"
+    },
+    {
+      "id": 0,
+      "groupName": "New group"
     }
   ],
   "user_group": [
@@ -116,6 +127,10 @@
     {
       "id": 3,
       "channelName": "Channel2-1"
+    },
+    {
+      "id": 0,
+      "channelName": "Channel 56"
     }
   ],
   "messages": [

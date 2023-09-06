@@ -13,13 +13,15 @@ const dataPath = path.join(__dirname, '..', './data/data.json');
 function createUser(username, email, password) {
     const existingData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
     const existingUser = existingData.users.find(u => u.email === email || u.username === username);
+    console.log("Existing Data:", existingData);
 
     if (existingUser) {
         return { error: 'Username or Email already in use' };
     }
 
     // Generate a new user ID
-    const newUserId = existingData.users.length > 0 ? Math.max(existingData.users.map(u => u.id)) + 1 : 1;
+    const newUserId = existingData.users.length > 0 ? Math.max(...existingData.users.map(u => u.id)) + 1 : 1;
+    console.log("New User ID:", newUserId);
 
     const newUser = {
         id: newUserId,
@@ -36,6 +38,7 @@ function createUser(username, email, password) {
         fs.writeFileSync(dataPath, JSON.stringify(existingData, null, 2));
         return { user: newUser };
     } catch (error) {
+        console.error("Error writing to file:", error);
         return { error: 'Failed to register user.' };
     }
 }

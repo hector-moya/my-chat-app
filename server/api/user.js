@@ -125,4 +125,24 @@ router.delete('/:id', (req, res) => {
     }
 }); //----- End of DELETE /:id
 
+/**
+ * PUT /api/user/promote/:id
+ * Promote a user to super user
+ */
+router.put('/promote/:id', (req, res) => {
+    const userId = parseInt(req.params.id, 10);
+    const user = users.find(u => u.id === userId);
+  
+    if (user) {
+      user.isSuper = true;
+  
+      // Persist changes
+      // ... (similar to previous examples)
+  
+      res.status(200).json({ message: "User promoted to super user", user });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  }); //----- End of PUT /promote/:id
+
 module.exports = router;
