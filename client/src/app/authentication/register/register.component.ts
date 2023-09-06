@@ -1,5 +1,5 @@
 import { CommonModule, NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { FormGroup, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ import { User } from 'src/app/models/user.model';
   imports: [ReactiveFormsModule, NgIf, CommonModule]
 })
 export class RegisterComponent {
-
+  @Output() userRegistered = new EventEmitter<boolean>();
   registerForm!: FormGroup;
 
   constructor(
@@ -39,7 +39,8 @@ export class RegisterComponent {
           console.log(response);
           if (response) {
             console.log(response);
-            this.router.navigate(['/dashboard']);
+            this.userRegistered.emit(true);
+            // this.router.navigate(['/dashboard']);
           } else {
             // Handle the error from the server
             console.log('Error registering user');

@@ -34,6 +34,20 @@
       "email": "nokure@gmail.com",
       "password": "password",
       "isSuper": false
+    },
+    {
+      "id": 6,
+      "username": "Alvaro",
+      "email": "my@sadf.com",
+      "password": "password",
+      "isSuper": false
+    },
+    {
+      "id": 7,
+      "username": "alicia",
+      "email": "alica@alicai.com",
+      "password": "password",
+      "isSuper": false
     }
   ],
   "roles": [
