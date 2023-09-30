@@ -126,14 +126,19 @@ The server exposes several RESTful endpoints for handling operations related to 
 
 ## Implementation Checklist Stage 1
 
-| Feature/Component | Implemented | Notes                                                                                                    |
-| ----------------- | ----------- | -------------------------------------------------------------------------------------------------------- |
-| Planning          | [x]         | Layer component diagram, Class Diagram for Services and ER diagram created.                              |
-| Documentation     | [x]         | Documenting all methods, next step is to document variables                                              |
-| User Interface    | [x]         | Basic user interface applied using TailwindCSS for all components, needs improvement in next iterations. |
-| Data Storage      | [x]         | Browser local storage used, and dummy data stored in json                                                |
-| User Login        | [x]         | User login and register new user fully implemented with guard gates                                      |
-| Assign Users      | [!]         | User assignment still needs implementation, super admin can create new users from the dashboard          |
+| Feature/Component           | Implemented | Notes                                                                                                    |
+| --------------------------- | ----------- | -------------------------------------------------------------------------------------------------------- |
+| Planning                    | [x]         | Layer component diagram, Class Diagram for Services and ER diagram created.                              |
+| Documentation               | [x]         | Documenting all methods, next step is to document variables                                              |
+| User Interface              | [x]         | Basic user interface applied using TailwindCSS for all components, needs improvement in next iterations. |
+| Data Storage                | [x]         | Browser local storage used, and dummy data stored in json                                                |
+| User Login                  | [x]         | User login and register new user fully implemented with guard gates                                      |
+| Assign Users                | [!]         | User assignment still needs implementation, super admin can create new users from the dashboard          |
+| Implement MongoDB           | [x]         | Replace Local storage JSON with MongoDB database                                                         |
+| Implement Socket            | [x]         | Implement socket.io for real-time chat                                                                   |
+| Implement Peer              | [x]         | Implement Peer.js for video chat                                                                         |
+| Implement Unit Tests        | [ ]         | Implement unit tests for all components, services and routes.                                            |
+| Implement Integration Tests | [ ]         | Implement integration tests for all the system.                                                          |
 
 ## Application Overview
 
