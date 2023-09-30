@@ -1,4 +1,5 @@
 module.exports = {
+
     "users": [
         {
             "id": 1,
@@ -33,7 +34,7 @@ module.exports = {
             "username": "Hector",
             "email": "nokure@gmail.com",
             "password": "password",
-            "isSuper": false
+            "isSuper": true
         },
         {
             "id": 6,
@@ -105,70 +106,72 @@ module.exports = {
     ],
     "user_group": [
         {
-            "userID": 3,
-            "roleID": 3,
-            "groupID": 2
+            "userId": 3,
+            "roleId": 3,
+            "groupId": 2
         },
         {
-            "userID": 1,
-            "roleID": 1,
-            "groupID": 2
+            "userId": 1,
+            "roleId": 1,
+            "groupId": 2
         },
         {
-            "userID": 1,
-            "roleID": 2,
-            "groupID": 3
+            "userId": 1,
+            "roleId": 2,
+            "groupId": 3
         },
         {
-            "userID": 2,
-            "roleID": 3,
-            "groupID": 3
+            "userId": 2,
+            "roleId": 3,
+            "groupId": 3
         }
     ],
     "user_channel": [
         {
-            "userID": 3,
-            "channelID": 3,
-            "groupID": 3
+            "userId": 3,
+            "channelId": 3,
+            "groupId": 3
         },
         {
-            "userID": 2,
-            "channelID": 3,
-            "groupID": 3
+            "userId": 2,
+            "channelId": 3,
+            "groupId": 3
         }
     ],
     "channels": [
         {
             "id": 3,
-            "channelName": "Channel2-1"
+            "channelName": "Channel2-1",
+            "groupId": 2
         },
         {
-            "id": 0,
-            "channelName": "Channel 56"
+            "id": 1,
+            "channelName": "Channel 56",
+            "groupId": 2
         }
     ],
     "messages": [
         {
             "id": 1,
-            "userID": 1,
+            "userId": 1,
             "message": "Hello, world!",
-            "channelID": 1,
-            "groupID": 1,
-            "timestamp": "2021-10-01T00:00:00.000Z"
+            "channelId": 3,
+            "groupId": 1,
+            "createdAt": "2021-10-01T00:00:00.000Z"
         },
         {
             "id": 2,
-            "userID": 2,
+            "userId": 2,
             "message": "Hi, this is groupAdmin1!",
-            "channelID": 2,
-            "timestamp": "2021-10-01T00:00:00.000Z"
+            "channelId": 1,
+            "createdAt": "2021-10-01T00:00:00.000Z"
         },
         {
             "id": 3,
-            "userID": 3,
+            "userId": 3,
             "message": "Hello everyone, groupAdmin2 here.",
-            "channelID": 3,
-            "timestamp": "2021-10-01T00:00:00.000Z"
+            "channelId": 3,
+            "createdAt": "2021-10-01T00:00:00.000Z"
         }
     ]
 }
