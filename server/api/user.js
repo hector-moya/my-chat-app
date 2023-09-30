@@ -1,18 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { users } = require('../data/data.json'); // Import users array from data.js
-const { createUser } = require('../helpers/userHelper');
-const fs = require('fs');
-const path = require('path');
-
-const dataPath = path.join(__dirname, '..', './data/data.json');
+const User = require('../models/User');
 
 /**
  * GET /api/user
  * Get all users
  */
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     try {
+        const users = await User.find();
         if (users && users.length > 0) {
             return res.status(200).json(users);
         } else {
@@ -28,18 +24,9 @@ router.get('/', (req, res) => {
  * GET /api/user/:id
  * Get a user by ID
  */
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
-        // Validate the user ID parameter
-        const userId = parseInt(req.params.id, 10);
-
-        if (isNaN(userId)) {
-            return res.status(400).json({ message: 'Invalid user ID parameter' });
-        }
-
-        // Find the user by ID
-        const user = users.find(u => u.id === userId);
-
+        const user = await User.findById(req.params.id);
         if (user) {
             return res.status(200).json(user);
         } else {
@@ -49,29 +36,23 @@ router.get('/:id', (req, res) => {
         console.error('An error occurred:', error);
         return res.status(500).json({ message: 'Internal Server Error' });
     }
-}); //----- End of Get a user by ID
+});
+ //----- End of Get a user by ID
 
 /**
  * POST /api/user
  * Create a new user
  */
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const { username, email, password } = req.body;
-    const { user, error } = createUser(username, email, password);
-
-    if (error) {
-        return res.status(400).json({ message: error });
-    }
-    // Read existing data
-    const existingData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
-
-    // Update the users field
-    existingData.users = users;
-
+    const newUser = new User({
+        userName: username,
+        email: email,
+        password: password
+    });
     try {
-        // Write the updated data back to the file
-        fs.writeFileSync(dataPath, JSON.stringify(existingData, null, 2));
-        res.status(201).json(user);
+        await newUser.save();
+        res.status(201).json(newUser);
     } catch (error) {
         res.status(500).json({ message: "Failed to add user." });
     }
@@ -81,24 +62,16 @@ router.post('/', (req, res) => {
  * PUT /api/user/:id
  * Update an existing user
  */
-router.put('/:id', (req, res) => {
-    const userId = parseInt(req.params.id, 10);
-    const userIndex = users.findIndex(u => u.id === userId);
-
-    if (userIndex === -1) return res.status(404).json({ message: 'User not found' });
-
-    for (const [key, value] of Object.entries(req.body)) {
-        users[userIndex][key] = value;
-    }
-
-    const existingData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
-    existingData.users = users;
-
+router.delete('/:id', async (req, res) => {
     try {
-        fs.writeFileSync(dataPath, JSON.stringify(existingData, null, 2));
-        res.json(users[userIndex]);
+        const result = await User.findByIdAndDelete(req.params.id);
+        if (result) {
+            return res.status(200).json({ message: 'User deleted successfully' });
+        } else {
+            return res.status(404).json({ message: 'User not found' });
+        }
     } catch (error) {
-        res.status(500).json({ message: 'Failed to update user.' });
+        res.status(500).json({ message: 'Failed to delete user.' });
     }
 }); //----- End of PUT /:id
 
@@ -129,20 +102,17 @@ router.delete('/:id', (req, res) => {
  * PUT /api/user/promote/:id
  * Promote a user to super user
  */
-router.put('/promote/:id', (req, res) => {
-    const userId = parseInt(req.params.id, 10);
-    const user = users.find(u => u.id === userId);
-  
-    if (user) {
-      user.isSuper = true;
-  
-      // Persist changes
-      // ... (similar to previous examples)
-  
-      res.status(200).json({ message: "User promoted to super user", user });
-    } else {
-      res.status(404).json({ message: "User not found" });
+router.put('/promote/:id', async (req, res) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, { isSuper: true }, { new: true });
+        if (updatedUser) {
+            return res.status(200).json({ message: "User promoted to super user", user: updatedUser });
+        } else {
+            return res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to promote user.' });
     }
-  }); //----- End of PUT /promote/:id
+}); //----- End of PUT /promote/:id
 
 module.exports = router;

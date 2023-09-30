@@ -1,5 +1,4 @@
-const { users } = require('../data/data.json'); // Import users array from data.js
-const { createUser } = require('../helpers/userHelper');
+const User = require('../models/User');
 const express = require('express');
 const router = express.Router();
 
@@ -11,17 +10,20 @@ const router = express.Router();
  * @returns {object} user
  * @returns {boolean} valid
  */
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    // Search for the user in the dummy data
-    const user = users.find(u => u.email === email && u.password === password);
 
-    console.log(user);
-    if (user) {
-        const { password, ...userWithoutPassword } = user; // Destructure to remove password
-        res.json({ valid: true, user: userWithoutPassword });
-    } else {
-        res.json({ valid: false });
+    try {
+        const user = await User.findOne({ email: email, password: password });
+
+        if (user) {
+            const { password, ...userWithoutPassword } = user.toObject(); 
+            res.json({ valid: true, user: userWithoutPassword });
+        } else {
+            res.json({ valid: false });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 });
 
@@ -34,17 +36,31 @@ router.post('/login', (req, res) => {
  * @param {boolean} isSuper
  * @returns {object} user
  */
-router.post('/register', (req, res) => {
-    console.log("Incoming request data:", req.body);
-    const { username, email, password } = req.body;
-    console.log('Hi from auth/register');
-    const { user, error } = createUser(username, email, password);
+router.post('/register', async (req, res) => {
+    const { username, email, password, isSuper } = req.body;
 
-    if (error) {
-        return res.status(400).json({ message: error });
+    try {
+        const existingUser = await User.findOne({ email: email });
+
+        if (existingUser) {
+            return res.status(400).json({ message: "User with this email already exists." });
+        }
+
+        const user = new User({
+            userName: username,
+            email: email,
+            password: password,
+            isSuper: isSuper || false
+        });
+
+        await user.save();
+
+        const { password: _, ...userWithoutPassword } = user.toObject();
+        res.status(201).json({ valid: true, user: userWithoutPassword });
+
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
     }
-
-    return res.status(201).json( {valid: true, user});
 });
 
 module.exports = router;
