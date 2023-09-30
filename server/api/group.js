@@ -30,10 +30,10 @@ router.get('/', async (req, res) => {
 router.get('/byUser/:userId', async (req, res) => {
   try {
       const userId = req.params.userId;
-      const userGroups = await UserGroup.find({ userID: userId });
+      const userGroups = await UserGroup.find({ userId: userId });
 
       if (userGroups.length > 0) {
-          const groupIds = userGroups.map(ug => ug.groupID);
+          const groupIds = userGroups.map(ug => ug.groupId);
           const groupsByUser = await Group.find({ _id: { $in: groupIds } });
           return res.status(200).json(groupsByUser);
       } else {
@@ -53,10 +53,10 @@ router.get('/byUser/:userId', async (req, res) => {
 router.get('/userRole/:groupId/:userId', async (req, res) => {
   try {
       const { groupId, userId } = req.params;
-      const userGroup = await UserGroup.findOne({ groupID: groupId, userID: userId });
+      const userGroup = await UserGroup.findOne({ groupId: groupId, userId: userId });
 
       if (userGroup) {
-          return res.status(200).json({ roleID: userGroup.roleID });
+          return res.status(200).json({ roleId: userGroup.roleId });
       } else {
           return res.status(404).json({ message: 'User group not found' });
       }
@@ -111,9 +111,9 @@ router.delete("/:id", async (req, res) => {
       const deletedGroup = await Group.findByIdAndDelete(req.params.id);
       if (deletedGroup) {
           // Remove related data
-          await UserGroup.deleteMany({ groupID: req.params.id });
-          await UserChannel.deleteMany({ groupID: req.params.id });
-          await Channel.deleteMany({ groupID: req.params.id });
+          await UserGroup.deleteMany({ groupId: req.params.id });
+          await UserChannel.deleteMany({ groupId: req.params.id });
+          await Channel.deleteMany({ groupId: req.params.id });
           return res.status(200).json({ message: "Group and related data deleted successfully." });
       } else {
           return res.status(404).json({ message: "Group not found" });
@@ -130,9 +130,9 @@ router.delete("/:id", async (req, res) => {
  */
 router.put('/assignAdmin/:groupId/:userId', async (req, res) => {
   try {
-      const userGroup = await UserGroup.findOne({ groupID: req.params.groupId, userID: req.params.userId });
+      const userGroup = await UserGroup.findOne({ groupId: req.params.groupId, userId: req.params.userId });
       if (userGroup) {
-          userGroup.roleID = 2;  // Assuming 'admin' is the role ID for group admins
+          userGroup.roleName = 'admin'; 
           await userGroup.save();
           return res.status(200).json({ message: "User assigned as admin", userGroup });
       } else {

@@ -54,11 +54,11 @@ module.exports = {
     "roles": [
         {
             "id": 1,
-            "roleName": "Group Admin"
+            "roleName": "admin"
         },
         {
             "id": 2,
-            "roleName": "User"
+            "roleName": "user"
         }
     ],
     "groups": [

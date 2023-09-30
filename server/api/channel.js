@@ -39,6 +39,23 @@ router.get('/:id', async (req, res) => {
 }); //----- End of Get a channel by ID
 
 /**
+ * Get channels by group ID
+ */
+router.get('/byGroup/:id', async (req, res) => {
+  try {
+    const channels = await Channel.find({ groupId: req.params.id });
+    if (channels && channels.length > 0) {
+      return res.status(200).json(channels);
+    } else {
+      return res.status(404).json({ message: 'No channels found' });
+    }
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+}); //----- End of Get channels by group ID
+
+/**
  * Get all channels for a user in a group
  * 
  * This route will return an array of all channels for a user in a group
@@ -51,7 +68,7 @@ router.get("/byUser/:groupId/:userId", async (req, res) => {
     });
 
     if (userChannels && userChannels.length > 0) {
-      const channelIds = userChannels.map(uc => uc.channelID);
+      const channelIds = userChannels.map(uc => uc.channelId);
       const channelDetails = await Channel.find({ '_id': { $in: channelIds } });
 
       return res.status(200).json(channelDetails);
