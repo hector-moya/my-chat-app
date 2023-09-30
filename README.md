@@ -42,7 +42,7 @@
   - [Client-Server Interaction](#client-server-interaction)
     - [RESTful APIs](#restful-apis)
     - [Angular Component Updates](#angular-component-updates)
-  - [Implementation Checklist Stage 1](#implementation-checklist-stage-1)
+  - [Implementation Checklist Stage 2](#implementation-checklist-stage-2)
   - [Application Overview](#application-overview)
   - [User Roles \& Permissions](#user-roles--permissions)
   - [Specific Requirements](#specific-requirements)
@@ -124,7 +124,7 @@ The server exposes several RESTful endpoints for handling operations related to 
 3. **Channel Component**: 
     - Lists all channels within a selected group and updates in real-time when a new channel is added or an existing one is modified.
 
-## Implementation Checklist Stage 1
+## Implementation Checklist Stage 2
 
 | Feature/Component           | Implemented | Notes                                                                                                    |
 | --------------------------- | ----------- | -------------------------------------------------------------------------------------------------------- |
