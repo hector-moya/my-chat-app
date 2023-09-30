@@ -17,11 +17,11 @@ export class ChannelService {
   }
 
   // Function to get channels by group ID
-  getChannelsByGroupId(groupId: number): Observable<Channel[]> {
+  getChannelsByGroupId(groupId: string): Observable<Channel[]> {
     return this.http.get<Channel[]>(`${this.apiUrl}/byGroup/${groupId}`);
   }
 
-  getChannelsById(channelId: number): Observable<Channel[]> {
+  getChannelsById(channelId: string): Observable<Channel[]> {
     return this.http.get<Channel[]>(`${this.apiUrl}/${channelId}`);
   }
 
@@ -32,16 +32,16 @@ export class ChannelService {
 
   // Function to update an existing channel
   updateChannel(channel: Channel): Observable<Channel> {
-    return this.http.put<Channel>(`${this.apiUrl}/${channel.id}`, channel);
+    return this.http.put<Channel>(`${this.apiUrl}/${channel._id}`, channel);
   }
 
   // Function to delete a channel by ID
-  deleteChannel(channelId: number): Observable<void> {
+  deleteChannel(channelId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${channelId}`);
   }
 
   // Function to get channels by group ID and user ID
-  getUserChannel(groupId: number, userId: number): Observable<Channel[]> {
+  getUserChannel(groupId: string, userId: string): Observable<Channel[]> {
     return this.http.get<Channel[]>(`${this.apiUrl}/byUser/${groupId}/${userId}`);
   }
 }

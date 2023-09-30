@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, tap } from 'rxjs';
-import { Group, UserGroup } from '../models/group.model';
+import { Group } from '../models/group.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +17,7 @@ export class GroupService {
   }
 
   // Function to get groups by user ID
-  getGroupsByUserId(userId: number): Observable<Group[]> {
+  getGroupsByUserId(userId: string): Observable<Group[]> {
     return this.http.get<Group[]>(`${this.apiUrl}/byUser/${userId}`);
   }
 
@@ -28,22 +28,23 @@ export class GroupService {
 
   // Function to update an existing group
   updateGroup(group: Group): Observable<Group> {
-    return this.http.put<Group>(`${this.apiUrl}/${group.id}`, group);
+    if (!group._id) throw new Error("Group ID is missing");
+    return this.http.put<Group>(`${this.apiUrl}/${group._id}`, group);
   }
 
   // Function to delete a group by ID
-  deleteGroup(groupId: number): Observable<void> {
+  deleteGroup(groupId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${groupId}`);
   }
 
   // Function to get the user's role for a group
-  getUserRole(groupId: number, userId: number): Observable<boolean> {
-    return this.http.get<{ roleID: number }>(`${this.apiUrl}/userRole/${groupId}/${userId}`).pipe(
+  getUserRole(groupId: string, userId: string): Observable<boolean> {
+    return this.http.get<{ roleName: string }>(`${this.apiUrl}/userRole/${groupId}/${userId}`).pipe(
       tap((response) => { 
         console.log('Response: ', response)
       }),
       map((response) => {
-        return response.roleID === 2;
+        return response.roleName === 'admin';
       })
     );
   }

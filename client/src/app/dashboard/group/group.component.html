@@ -1,47 +1,50 @@
 <div *ngIf="groups.length > 0; else noGroups" class="flex flex-col items-start mt-5">
-  <div class="border-b-2 w-full mb-10 ">
+  <div class="border-b-2 w-full mb-10 flex items-center justify-between">
     <h1 class="text-xl text-start font-bold mb-4">Your Groups</h1>
+    
+    <button *ngIf="user.isSuper" (click)="showModal()" class="pr-4">
+      <i class="fas fa-plus text-green-500 hover:text-green-700 ml-4"></i>
+    </button>
   </div>
   <!-- Groups -->
-  <div *ngFor="let group of groups">
-    <!-- Group Image & Name -->
-    <div class="flex items-center w-full mb-4">
-      <div class="flex items-center" (click)="showChannels(group)">
-        <!-- Placeholder for group image -->
-        <div class="bg-gray-300 h-10 w-10 rounded-full"></div>
-        <!-- Group name -->
-        <div *ngIf="editingGroupId !== group.id"
-          class="ml-4 font-bold hover:text-blue-800 hover:bg-blue-200 rounded-lg px-2">
-          {{ group.groupName }}
+  <div class="w-full">
+    <div *ngFor="let group of groups">
+      <!-- Group Image & Name -->
+      <div class="flex items-center w-full mb-4 justify-between">
+        <div class="flex items-center" (click)="showChannels(group)">
+          <!-- Placeholder for group image -->
+          <div class="bg-gray-300 h-10 w-10 rounded-full"></div>
+          <!-- Group name -->
+          <div *ngIf="editingGroupId !== group._id"
+            class="ml-4 font-bold hover:text-blue-800 hover:bg-blue-200 rounded-lg px-2">
+            {{ group.groupName }}
+          </div>
+          <div *ngIf="editingGroupId === group._id" class="ml-4">
+            <input type="text" [(ngModel)]="group.groupName"
+              class="border rounded px-2 py-1 w-36 focus:outline-none focus:border-blue-500 bg-white text-black" />
+          </div>
         </div>
-        <div *ngIf="editingGroupId === group.id" class="ml-4">
-          <input type="text" [(ngModel)]="group.groupName"
-            class="border rounded px-2 py-1 w-36 focus:outline-none focus:border-blue-500 bg-white text-black" />
+  
+        <!-- Edit and Delete buttons -->
+        <div *ngIf="canEdit(group)" class="flex items-center ml-4 pr-4">
+          <button *ngIf="editingGroupId !== group._id" (click)="editingGroup(group._id)">
+            <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
+          </button>
+          <button *ngIf="editingGroupId === group._id" (click)="saveGroup(group)">
+            <i class="fas fa-save text-green-500 hover:text-green-700 ml-4"></i>
+          </button>
+          <button *ngIf="editingGroupId === group._id" (click)="editingGroupId = null">
+            <i class="fas fa-times text-red-500 hover:text-red-700 ml-4"></i>
+          </button>
+          <button *ngIf="editingGroupId !== group._id" (click)="deleteGroup(group._id!)">
+            <i class="fas fa-trash text-red-500 hover:text-red-700 ml-4"></i>
+          </button>
         </div>
       </div>
-
-      <!-- Edit and Delete buttons -->
-      <div *ngIf="canEdit(group)" class="flex items-center ml-4">
-        <button *ngIf="editingGroupId !== group.id" (click)="editingGroup(group.id)">
-          <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
-        </button>
-        <button *ngIf="editingGroupId === group.id" (click)="saveGroup(group)">
-          <i class="fas fa-save text-green-500 hover:text-green-700 ml-4"></i>
-        </button>
-        <button *ngIf="editingGroupId !== group.id" (click)="showModal()">
-          <i class="fas fa-plus text-green-500 hover:text-green-700 ml-4"></i>
-        </button>
-        <button *ngIf="editingGroupId === group.id" (click)="editingGroupId = null">
-          <i class="fas fa-times text-red-500 hover:text-red-700 ml-4"></i>
-        </button>
-        <button *ngIf="editingGroupId !== group.id" (click)="deleteGroup(group.id)">
-          <i class="fas fa-trash text-red-500 hover:text-red-700 ml-4"></i>
-        </button>
+      <!-- Channels for the selected group -->
+      <div *ngIf="group.showChannels" class="pl-8 w-full">
+        <app-channel [groupId]="group._id"></app-channel>
       </div>
-    </div>
-    <!-- Channels for the selected group -->
-    <div *ngIf="group.showChannels" class="pl-8 w-full">
-      <app-channel [groupId]="group.id"></app-channel>
     </div>
   </div>
 </div>

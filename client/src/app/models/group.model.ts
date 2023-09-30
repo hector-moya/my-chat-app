@@ -1,10 +1,10 @@
 export interface Group {
-    id: number;
+    _id?: string;
     groupName: string;
 }
 
 export interface UserGroup {
-  userID: number;
-  roleID: number;
-  groupID: number;
+  userID: string;
+  roleID: string;
+  groupID: string;
 }
