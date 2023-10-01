@@ -8,13 +8,15 @@ import { ChannelComponent } from '../channel/channel.component';
 import { PermissionService } from 'src/app/services/permission.service';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user.model';
+import { ModalComponent } from 'src/app/modal/modal.component';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   standalone: true,
   selector: 'app-group',
   templateUrl: './group.component.html',
   styles: [],
-  imports: [NgFor, CommonModule, FormsModule, ChannelComponent],
+  imports: [NgFor, CommonModule, FormsModule, ChannelComponent, ModalComponent],
 })
 export class GroupComponent {
   user: any = {};
@@ -26,15 +28,16 @@ export class GroupComponent {
   showAddGroupModal: boolean = false;
   newGroupName: string = '';
   showGroupUsersModal: boolean = false;
+  emailInput: string = '';
+  userExists: boolean = false;
+  currentGroupId: string | null = null;
 
   private groupService = inject(GroupService);
   private permissionService = inject(PermissionService);
   private changeDetectorRef = inject(ChangeDetectorRef);
   private userService = inject(UserService);
+  public notificationService = inject(NotificationService);
 
-  /**
-   * Lifecycle hook that runs when the component is initialized
-   */
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('currentUser') || '{}');
     if (this.user) {
@@ -46,6 +49,10 @@ export class GroupComponent {
     }
   }
 
+  /**
+   * Function to check if the user can edit a group
+   * @param group 
+   */
   checkCanEdit(group: Group) {
     if (group._id) {
       this.groupService.getUserRole(group._id, this.user._id).subscribe({
@@ -62,6 +69,11 @@ export class GroupComponent {
     }
   }
 
+  /**
+   * Function to check if the user can edit a group
+   * @param group
+   * @returns
+   */
   canEdit(group: Group): boolean {
     return group._id ? this.permissionService.canEditGroup[group._id] || false : false;
   }
@@ -192,8 +204,17 @@ export class GroupComponent {
       });
     }
   }
+
+  // Group User Management
   
+  /**
+   * Function to show the group users modal
+   * @param groupId
+   * @returns
+   * @memberof GroupComponent
+   */
   loadGroupUsers(groupId: string): void {
+    this.currentGroupId = groupId;
     this.userService.getUsersByGroupId(groupId).subscribe({
       next: (users) => {
         this.groupUsers = users;
@@ -205,9 +226,77 @@ export class GroupComponent {
     });
   }
 
+  /**
+   * Function to close the group users modal
+   */
   closeGroupUsersModal(): void {
     this.showGroupUsersModal = false;
   }
 
+  /**
+   * Function to check if a user exists
+   */
+  checkUserExistence(): void {
+    if (this.emailInput) {
+      this.userService.getUserByEmail(this.emailInput).subscribe({
+        next: (user) => {
+          if (user) {
+            this.userExists = true;
+            this.notificationService.notify('User exists and can be added to the group.');
+          } else {
+            this.userExists = false;
+            this.notificationService.notify('User does not exist.');
+          }
+        },
+        error: (err) => {
+          console.error(err);
+          this.notificationService.notify('An error occurred. Please try again.');
+        }
+      });
+    } else {
+      this.notificationService.notify('');
+    }
+  }
+  
+  /**
+   * Function to add a user to a group
+   */
+  addUserToGroup(): void {
+    if (this.userExists && this.currentGroupId) {
+      this.userService.addUserToGroup(this.emailInput, this.currentGroupId).subscribe({
+        next: (user) => {
+          this.notificationService.notify('User added to the group successfully.');
+          this.groupUsers.push(user); // Add the user to the groupUsers array to update the view
+          this.emailInput = ''; // Clear the email input
+          
+        },
+        error: (err) => {
+          console.error(err);
+          this.notificationService.notify('Failed to add user to the group.');
+        }
+      });
+    }
+  }
+
+  /**
+   * Function to remove a user from a group
+   * @param userId
+   */
+  removeUserFromGroup(userId: string): void {
+    if (this.currentGroupId) {
+      this.userService.removeUserFromGroup(userId, this.currentGroupId).subscribe({
+        next: () => {
+          this.notificationService.notify('User removed from the group successfully.');
+          this.groupUsers = this.groupUsers.filter((user) => user._id !== userId);
+          this.changeDetectorRef.detectChanges();
+        },
+        error: (err) => {
+          console.error(err);
+          this.notificationService.notify('Failed to remove user from the group.');
+        }
+      });
+    }
+  }
+  
 
 }

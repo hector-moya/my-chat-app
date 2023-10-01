@@ -42,4 +42,19 @@ export class UserService {
     return this.http.get<User[]>(`${this.apiUrl}/byGroup/${groupId}`);
   }
 
+  // Check user by email
+  getUserByEmail(email: string): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/byEmail/${email}`);
+  }
+
+  // Add user to a group
+  addUserToGroup(email: string, groupId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/addToGroup`, { email, groupId });
+  }
+
+  // Remove user from a group
+  removeUserFromGroup(userId: string, groupId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/removeFromGroup/${userId}/${groupId}`);
+  }
+
 }
