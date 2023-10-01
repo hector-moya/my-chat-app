@@ -23,7 +23,7 @@ async function seedDatabase() {
     // Seed Users
     for (let user of dummyData.users) {
         const newUser = new User({
-            userName: user.userName,
+            userName: user.username,
             email: user.email,
             password: user.password,
             isSuper: user.isSuper

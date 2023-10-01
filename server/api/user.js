@@ -76,42 +76,20 @@ router.delete('/:id', async (req, res) => {
 }); //----- End of PUT /:id
 
 /**
- * DELETE /api/user/:id
- * Delete a user by ID
+ * PUT /api/user/updateRole/:id
+ * Update user's role
  */
-router.delete('/:id', (req, res) => {
-    const userId = parseInt(req.params.id, 10);
-    const userIndex = users.findIndex(u => u.id === userId);
-
-    if (userIndex === -1) return res.status(404).json({ message: 'User not found' });
-
-    users.splice(userIndex, 1);
-
-    const existingData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
-    existingData.users = users;
-
+router.put('/updateRole/:id', async (req, res) => {
     try {
-        fs.writeFileSync(dataPath, JSON.stringify(existingData, null, 2));
-        res.json({ message: 'User deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ message: 'Failed to delete user.' });
-    }
-}); //----- End of DELETE /:id
-
-/**
- * PUT /api/user/promote/:id
- * Promote a user to super user
- */
-router.put('/promote/:id', async (req, res) => {
-    try {
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, { isSuper: true }, { new: true });
+        const { isSuper } = req.body; // Destructure isSuper from request body
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, { isSuper }, { new: true });
         if (updatedUser) {
-            return res.status(200).json({ message: "User promoted to super user", user: updatedUser });
+            return res.status(200).json({ message: "User role updated", user: updatedUser });
         } else {
             return res.status(404).json({ message: 'User not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: 'Failed to promote user.' });
+        res.status(500).json({ message: 'Failed to update user role.' });
     }
 }); //----- End of PUT /promote/:id
 

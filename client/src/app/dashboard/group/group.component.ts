@@ -3,7 +3,6 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { GroupService } from 'src/app/services/group.service';
 import { Group } from 'src/app/models/group.model';
 import { FormsModule } from '@angular/forms';
-import { ChannelService } from 'src/app/services/channel.service';
 import { Channel } from 'src/app/models/channel.model';
 import { ChannelComponent } from '../channel/channel.component';
 import { PermissionService } from 'src/app/services/permission.service';

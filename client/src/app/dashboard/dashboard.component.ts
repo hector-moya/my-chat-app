@@ -3,13 +3,14 @@ import { GroupComponent } from './group/group.component';
 import { CommonModule, NgIf } from '@angular/common';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { RegisterComponent } from '../authentication/register/register.component';
+import { UserManagementComponent } from './user-management/user-management.component';
 
 @Component({
   standalone: true,
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styles: [],
-  imports: [GroupComponent, CommonModule, NgIf, RegisterComponent],
+  imports: [GroupComponent, CommonModule, NgIf, RegisterComponent, UserManagementComponent],
 })
 export class DashboardComponent implements OnInit {
   currentUser: any = null; // Store the current user information

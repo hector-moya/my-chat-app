@@ -68,8 +68,7 @@ module.exports = {
         },
         {
             "id": 3,
-            "groupName": "The Machine",
-            "showChannels": false
+            "groupName": "The Machine"
         },
         {
             "id": 4,
@@ -100,7 +99,7 @@ module.exports = {
             "groupName": "Group10"
         },
         {
-            "id": 0,
+            "id": 1,
             "groupName": "New group"
         }
     ],
@@ -156,7 +155,6 @@ module.exports = {
             "userId": 1,
             "message": "Hello, world!",
             "channelId": 3,
-            "groupId": 1,
             "createdAt": "2021-10-01T00:00:00.000Z"
         },
         {
