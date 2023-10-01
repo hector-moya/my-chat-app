@@ -38,7 +38,7 @@ export class UserService {
   }
 
   // Get users by group ID
-  getUsersByGroupId(groupId: string): Observable<User[]> {
+  getUsersByGroupId(groupId: string | undefined): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/byGroup/${groupId}`);
   }
 

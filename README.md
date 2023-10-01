@@ -189,9 +189,10 @@ This checklist aims to guide you through the Angular implementation of the clien
 | Login Component              | [X]         | Child of Authentication component. Handles user login                         |
 | Registration Component       | [X]         | Child of Authentication component. Handles user registration                  |
 | Dashboard Component          | [X]         | Parent component post-login                                                   |
-| Group Component              | [!]         | Child of Dashboard component. Displays groups and allows for group management |
-| Channel Component            | [!]         | Child of Group component. Displays channels and allows for channel management |
-| Channel Management Component | [ ]         | Child of Channel component. Allows for user channel management                |
+| Group Component              | [X]         | Child of Dashboard component. Displays groups and allows for group management |
+| Group Management Component   | [ ]         | Child of Group component. Allows for user group management                    |
+| Channel Component            | [X]         | Child of Group component. Displays channels and allows for channel management |
+| Channel Management Component | [X]         | Child of Channel component. Allows for user channel management                |
 | Chat Component               | [ ]         | Manages real-time chat                                                        |
 | User Management Component    | [X]         | Child of Admin component. Manages users                                       |
 | Modal Component              | [X]         | Global component. Reusable modal to display management features               |
