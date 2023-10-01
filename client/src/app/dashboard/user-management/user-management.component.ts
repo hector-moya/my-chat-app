@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { FormsModule } from '@angular/forms';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-user-management',
@@ -17,6 +18,7 @@ export class UserManagementComponent implements OnInit {
   showModal: boolean = false;
 
   private userService = inject(UserService);
+  public notificationService = inject(NotificationService);
 
   ngOnInit(): void {
     this.loadUsers();
@@ -46,6 +48,7 @@ export class UserManagementComponent implements OnInit {
           if (u._id === response.user._id) {
             return response.user;
           }
+          this.notificationService.notify('User role updated successfully!');
           return u;
         });
       },
