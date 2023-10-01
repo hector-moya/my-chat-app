@@ -3,6 +3,12 @@ const router = express.Router();
 const User = require('../models/User');
 const UserGroup = require('../models/UserGroup');
 const UserChannel = require('../models/UserChannel');
+const Role = require('../models/Role');
+
+
+// --------------------------------------------------------------------------------------------- //
+// ---------------------- User Related APIs ---------------------------------------------------- //
+// --------------------------------------------------------------------------------------------- //
 
 /**
  * GET /api/user
@@ -94,7 +100,9 @@ router.put('/updateRole/:id', async (req, res) => {
     }
 }); //----- End of PUT /promote/:id
 
-// User Group Related APIs
+// --------------------------------------------------------------------------------------------- //
+// ---------------------- User Group Related APIs ---------------------------------------------- //
+// --------------------------------------------------------------------------------------------- //
 
 /**
  * GET /api/user/byGroup/:groupId
@@ -102,17 +110,20 @@ router.put('/updateRole/:id', async (req, res) => {
  */
 router.get('/byGroup/:groupId', async (req, res) => {
     try {
-        // Step 1: Fetch the group-user associations
         const userGroupAssociations = await UserGroup.find({ groupId: req.params.groupId }).exec();
-
-        // Extract user IDs
         const userIds = userGroupAssociations.map(assoc => assoc.userId);
-
-        // Step 2: Fetch user details using the user IDs
         const users = await User.find({ '_id': { $in: userIds } }).exec();
+
+        // Map roles to users
+        users.forEach(user => {
+            const assoc = userGroupAssociations.find(a => a.userId.toString() === user._id.toString());
+            user._doc.roleId = assoc.roleId; // Attach roleId to each user
+        });
 
         if (users && users.length > 0) {
             return res.status(200).json(users);
+        } else if (users && users.length === 0) {
+            return res.status(200).json([]);
         } else {
             return res.status(404).json({ message: 'No users found for this group' });
         }
@@ -133,15 +144,31 @@ router.get('/byEmail/:email', async (req, res) => {
     }
 });
 
-// Add user to a group
+/**
+ * API to add a user to a group
+ * POST /api/user/addToGroup
+ * @param {*} email
+ */
 router.post('/addToGroup', async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
+
+        // Fetch the role's ObjectId using the roleName 'user'
+        const role = await Role.findOne({ roleName: 'user' });
+        if (!role) {
+            return res.status(404).json({ message: `Role 'user' not found.` });
+        }
+
+        console.log('user:', user, 'user._id:', user._id, 'userName:', user.userName, 'roleId:', role.roleName);
+
         const newUserGroup = new UserGroup({
             userId: user._id,
-            groupId: req.body.groupId
+            groupId: req.body.groupId,
+            roleId: role._id // Use the fetched role's ObjectId
         });
+        
         await newUserGroup.save();
+
         return res.status(200).json(user);
     } catch (error) {
         console.error('An error occurred:', error);
@@ -165,7 +192,65 @@ router.delete('/removeFromGroup/:userId/:groupId', async (req, res) => {
     }
 });
 
-// User Channel Related APIs
+/**
+ * API to update user role in a group
+ * PUT /api/user/updateRoleInGroup
+ * @param {*} userId
+ */
+router.put('/updateRoleInGroup', async (req, res) => {
+    try {
+        const { userId, groupId, roleName } = req.body;
+
+        // Get the role's ObjectId using the roleName
+        const role = await Role.findOne({ roleName: roleName });
+        if (!role) {
+            return res.status(404).json({ message: `Role ${roleName} not found.` });
+        }
+
+        const userGroup = await UserGroup.findOne({ userId, groupId });
+        if (!userGroup) {
+            return res.status(404).json({ message: 'User-Group association not found.' });
+        }
+
+        userGroup.roleId = role._id;  // Use the fetched role's ObjectId
+        await userGroup.save();
+
+        return res.status(200).json({ message: 'User role updated successfully.' });
+    } catch (error) {
+        console.error('An error occurred:', error);
+        return res.status(500).json({ message: 'Failed to update user role in the group.' });
+    }
+}); //----- End of PUT /updateRoleInGroup
+
+/**
+ * API to retrieve the role of a user in a group
+ * GET /api/user/getRoleInGroup/:userId/:groupId
+ */
+router.get('/getRoleInGroup/:groupId/:userId', async (req, res) => {
+    try {
+        const { userId, groupId } = req.params;
+        console.log('userId:', userId);
+        console.log('groupId:', groupId);
+        const userGroup = await UserGroup.findOne({ userId, groupId });
+        if (!userGroup) {
+            return res.status(404).json({ message: 'User-Group association not found.' });
+        }
+        console.log('userGroup:', userGroup);
+        const role = await Role.findById(userGroup.roleId);
+        if (!role) {
+            return res.status(404).json({ message: 'Role not found.' });
+        }
+        console.log('role:', role);
+        return res.status(200).json(role);
+    } catch (error) {
+        console.error('An error occurred:', error);
+        return res.status(500).json({ message: 'Failed to fetch user role in the group.' });
+    }
+}); //----- End of GET /getRoleInGroup
+
+// --------------------------------------------------------------------------------------------- //
+// ---------------------- User Channel Related APIs -------------------------------------------- //
+// --------------------------------------------------------------------------------------------- //
 
 /**
  * GET /api/user/byChannel/:channelId
@@ -184,6 +269,8 @@ router.get('/byChannel/:channelId', async (req, res) => {
 
         if (users && users.length > 0) {
             return res.status(200).json(users);
+        } else if (users && users.length === 0) {
+            return res.status(200).json([]);
         } else {
             return res.status(404).json({ message: 'No users found for this channel' });
         }

@@ -10,3 +10,8 @@ export interface loginCredentials {
     email: string;
     password: string;
 }
+
+export interface Role {
+    _id: string;
+    roleName: string;
+}

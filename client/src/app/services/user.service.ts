@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
-import { User } from '../models/user.model';
+import { Role, User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +55,17 @@ export class UserService {
   // Remove user from a group
   removeUserFromGroup(userId: string, groupId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/removeFromGroup/${userId}/${groupId}`);
+  }
+
+  // Get user's role in a group
+  getUserRole(groupId: string | undefined, userId: string): Observable<Role> {
+    return this.http.get<Role>(`${this.apiUrl}/getRoleInGroup/${groupId}/${userId}`);
+  }
+
+  // Update user's role in a group
+  updateUserRoleInGroup(userId: string, groupId: string | undefined, roleName: string): Observable<any> {
+    console.log('Updating user role for user:', userId, 'in group:', groupId, 'to:', roleName);
+    return this.http.put(`${this.apiUrl}/updateRoleInGroup`, { userId, groupId, roleName });
   }
 
   // Get users by channel ID

@@ -23,15 +23,22 @@
         <tr>
           <th class="py-2 px-3 border border-gray-700">Name</th>
           <th class="py-2 px-3 border border-gray-700">Email</th>
+          <th class="py-2 px-3 border border-gray-700">Role</th>
           <th class="py-2 px-3 border border-gray-700"></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of groupUsers">
-          <td class="py-2 px-3 border border-gray-700">{{ user.userName }}</td>
-          <td class="py-2 px-3 border border-gray-700">{{ user.email }}</td>
+        <tr *ngFor="let userObj of groupUsers">
+          <td class="py-2 px-3 border border-gray-700">{{ userObj.user.userName }}</td>
+          <td class="py-2 px-3 border border-gray-700">{{ userObj.user.email }}</td>
           <td class="py-2 px-3 border border-gray-700">
-            <button (click)="removeUserFromGroup(user._id)" class="text-red-400 hover:text-red-500">Remove</button>
+            <select [(ngModel)]="userObj.roleName" (change)="updateRole(userObj.user, userObj.roleName)" class="bg-gray-600 border border-gray-800 rounded p-1">
+              <option value="admin">Admin</option>
+              <option value="user">User</option>
+            </select>            
+          </td>
+          <td class="py-2 px-3 border border-gray-700">
+            <button (click)="removeUserFromGroup(userObj.user._id)" class="text-red-400 hover:text-red-500">Remove</button>
           </td>
         </tr>
       </tbody>

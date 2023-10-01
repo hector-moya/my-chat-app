@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { UserService } from 'src/app/services/user.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-group-management',
@@ -14,16 +15,17 @@ import { NotificationService } from 'src/app/services/notification.service';
   ]
 })
 export class GroupManagementComponent {
+
   @Input() currentGroupId!: string | undefined;
-  groupUsers: any[] = [];
+  groupUsers: { user: User, roleName: string }[] = [];
   emailInput: string = '';
   userExists: boolean = false;
   showModal: boolean = false;
+  roleName: string = '';
 
   private userService = inject(UserService);
   private changeDetectorRef = inject(ChangeDetectorRef);
   public notificationService = inject(NotificationService);
-  // Group User Management
 
   /**
    * Function to show the group users modal
@@ -32,16 +34,28 @@ export class GroupManagementComponent {
    * @memberof GroupComponent
    */
   loadGroupUsers(): void {
+    this.groupUsers = []; // Clear the array first
     this.userService.getUsersByGroupId(this.currentGroupId).subscribe({
-      next: (users) => {
-        this.groupUsers = users;
-        this.showModal = true;
-      },
-      error: (err) => {
-        console.error(err);
-      }
+        next: (users) => {
+            users.forEach(user => {
+                this.userService.getUserRole(this.currentGroupId, user._id).subscribe({
+                    next: (role) => {
+                        const userObj = { user: user, roleName: role.roleName };
+                        this.groupUsers.push(userObj);
+                        this.changeDetectorRef.detectChanges();
+                    }
+                });
+            });
+            this.showModal = true;
+        },
+        error: (err) => {
+            console.error(err);
+        }
     });
-  }
+}
+
+  
+
 
   /**
    * Function to close the group users modal
@@ -83,7 +97,7 @@ export class GroupManagementComponent {
       this.userService.addUserToGroup(this.emailInput, this.currentGroupId).subscribe({
         next: (user) => {
           this.notificationService.notify('User added to the group successfully.');
-          this.groupUsers.push(user); // Add the user to the groupUsers array to update the view
+          this.groupUsers.push({ user: user, roleName: 'user' }); // Add the user to the groupUsers array to update the view
           this.emailInput = ''; // Clear the email input
 
         },
@@ -104,7 +118,7 @@ export class GroupManagementComponent {
       this.userService.removeUserFromGroup(userId, this.currentGroupId).subscribe({
         next: () => {
           this.notificationService.notify('User removed from the group successfully.');
-          this.groupUsers = this.groupUsers.filter((user) => user._id !== userId);
+          this.groupUsers = this.groupUsers.filter((userObj) => userObj.user._id !== userId);
           this.changeDetectorRef.detectChanges();
         },
         error: (err) => {
@@ -113,5 +127,22 @@ export class GroupManagementComponent {
         }
       });
     }
+  }
+
+  updateRole(user: User, roleName: string): void {
+    this.userService.updateUserRoleInGroup(user._id, this.currentGroupId, roleName).subscribe({
+      next: () => {
+        this.notificationService.notify('User role updated successfully.');
+        // Update the roleName in the groupUsers array
+        const userObj = this.groupUsers.find(u => u.user._id === user._id);
+        if (userObj) {
+          userObj.roleName = roleName;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.notificationService.notify('Failed to update user role.');
+      }
+    });
   }
 }
