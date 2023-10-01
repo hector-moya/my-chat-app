@@ -119,4 +119,47 @@ router.put('/updateRole/:id', async (req, res) => {
     }
 }); //----- End of PUT /promote/:id
 
+// Get user by email
+router.get('/byEmail/:email', async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.params.email });
+        return res.status(200).json(user);
+    } catch (error) {
+        console.error('An error occurred:', error);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+// Add user to a group
+router.post('/addToGroup', async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.body.email });
+        const newUserGroup = new UserGroup({
+            userId: user._id,
+            groupId: req.body.groupId
+        });
+        await newUserGroup.save();
+        return res.status(200).json(user);
+    } catch (error) {
+        console.error('An error occurred:', error);
+        return res.status(500).json({ message: 'Failed to add user to the group.' });
+    }
+});
+
+// Remove user from a group
+router.delete('/removeFromGroup/:userId/:groupId', async (req, res) => {
+    try {
+        const { userId, groupId } = req.params;
+        const result = await UserGroup.findOneAndDelete({ userId, groupId });
+        if (result) {
+            return res.status(200).json({ message: 'User removed from the group successfully.' });
+        } else {
+            return res.status(404).json({ message: 'User not found in the group.' });
+        }
+    } catch (error) {
+        console.error('An error occurred:', error);
+        return res.status(500).json({ message: 'Failed to remove user from the group.' });
+    }
+});
+
 module.exports = router;

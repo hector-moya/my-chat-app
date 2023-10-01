@@ -135,8 +135,8 @@ The server exposes several REST endpoints for handling operations related to aut
 | User Login                  | [x]         | User login and register new user fully implemented with guard gates                                      |
 | Assign Users                | [!]         | User assignment still needs implementation, super admin can create new users from the dashboard          |
 | Implement MongoDB           | [x]         | Replace Local storage JSON with MongoDB database                                                         |
-| Implement Socket            | [x]         | Implement socket.io for real-time chat                                                                   |
-| Implement Peer              | [x]         | Implement Peer.js for video chat                                                                         |
+| Implement Socket            | [!]         | Implement socket.io for real-time chat                                                                   |
+| Implement Peer              | [!]         | Implement Peer.js for video chat                                                                         |
 | Implement Unit Tests        | [ ]         | Implement unit tests for all components, services and routes.                                            |
 | Implement Integration Tests | [ ]         | Implement integration tests for all the system.                                                          |
 
@@ -193,6 +193,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 | Channel Component         | [!]         | Child of Group component. Displays channels and allows for channel management |
 | Chat Component            | [ ]         | Manages real-time chat                                                        |
 | User Management Component | [X]         | Child of Admin component. Manages users                                       |
+| Modal Component           | [X]         | Global component. Reusable modal to display management features               |
 
 ### Interfaces
 
