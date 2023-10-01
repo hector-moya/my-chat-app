@@ -1,0 +1,43 @@
+<button (click)="loadChannelUsers()">
+    <i class="fa-solid fa-people-group text-purple-500 hover:text-purple-700"></i>
+</button>
+
+<!-- Modal to show users of a group -->
+<app-modal [showModal]="showModal" title="Manage Channel Users" (closeModal)="showModal = false">
+    <div class="flex flex-col w-1/3 justify-end mb-4">
+        <label for="emailInput" class="block text-sm font-medium text-white mb-2">Add User by Email</label>
+        <div class="relative">
+            <input type="text" id="emailInput" [(ngModel)]="emailInput" (keyup)="checkUserExistence()"
+                placeholder="Type an email address to add..."
+                class="block text-gray-800 w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+        </div>
+        <button [class.bg-gray-500]="!userExists" [class.bg-blue-500]="userExists"
+            [class.hover:bg-blue-700]="userExists" [class.cursor-not-allowed]="!userExists" [disabled]="!userExists"
+            (click)="addUserToChannel()" class="text-white p-2 rounded">
+            Add User
+        </button>
+    </div>
+    <!-- Users table -->
+    <table class="min-w-full bg-gray-600 border border-gray-700 rounded">
+        <thead>
+            <tr>
+                <th class="py-2 px-3 border border-gray-700">Name</th>
+                <th class="py-2 px-3 border border-gray-700">Email</th>
+                <th class="py-2 px-3 border border-gray-700"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of channelUsers">
+                <td class="py-2 px-3 border border-gray-700">{{ user.userName }}</td>
+                <td class="py-2 px-3 border border-gray-700">{{ user.email }}</td>
+                <td class="py-2 px-3 border border-gray-700">
+                    <button (click)="removeUserFromChannel(user._id)"
+                        class="text-red-400 hover:text-red-500">Remove</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div *ngIf="notificationService.show | async" class="bg-yellow-700 text-white p-4 mt-2 rounded mb-4">
+        {{ notificationService.message | async }}
+    </div>
+</app-modal>

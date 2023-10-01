@@ -57,4 +57,19 @@ export class UserService {
     return this.http.delete(`${this.apiUrl}/removeFromGroup/${userId}/${groupId}`);
   }
 
+  // Get users by channel ID
+  getUsersByChannelId(channelId: string | undefined): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/byChannel/${channelId}`);
+  }
+
+  // Add user to a channel
+  addUserToChannel(email: string, channelId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/addToChannel`, { email, channelId });
+  }
+
+  // Remove user from a channel
+  removeUserFromChannel(userId: string, channelId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/removeFromChannel/${userId}/${channelId}`);
+  }
+
 }

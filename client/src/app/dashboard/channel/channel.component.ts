@@ -5,6 +5,8 @@ import { Channel } from 'src/app/models/channel.model';
 import { ChannelService } from 'src/app/services/channel.service';
 import { GroupComponent } from '../group/group.component';
 import { PermissionService } from 'src/app/services/permission.service';
+import { ModalComponent } from 'src/app/modal/modal.component';
+import { ChannelManagementComponent } from './channel-management/channel-management.component';
 
 @Component({
   standalone: true,
@@ -12,7 +14,7 @@ import { PermissionService } from 'src/app/services/permission.service';
   templateUrl: './channel.component.html',
   styles: [
   ],
-  imports: [NgFor, CommonModule, FormsModule, GroupComponent]
+  imports: [NgFor, CommonModule, FormsModule, GroupComponent, ModalComponent, ChannelManagementComponent]
 })
 export class ChannelComponent implements OnInit {
   @Input() groupId!: string;

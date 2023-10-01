@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const UserGroup = require('../models/UserGroup');
+const UserChannel = require('../models/UserChannel');
 
 /**
  * GET /api/user
@@ -38,32 +39,6 @@ router.get('/:id', async (req, res) => {
         return res.status(500).json({ message: 'Internal Server Error' });
     }
 }); //----- End of Get a user by ID
-
-/**
- * GET /api/user/byGroup/:groupId
- * Get all users for a specific group
- */
-router.get('/byGroup/:groupId', async (req, res) => {
-    try {
-        // Step 1: Fetch the group-user associations
-        const userGroupAssociations = await UserGroup.find({ groupId: req.params.groupId }).exec();
-
-        // Extract user IDs
-        const userIds = userGroupAssociations.map(assoc => assoc.userId);
-
-        // Step 2: Fetch user details using the user IDs
-        const users = await User.find({ '_id': { $in: userIds } }).exec();
-
-        if (users && users.length > 0) {
-            return res.status(200).json(users);
-        } else  {
-            return res.status(404).json({ message: 'No users found for this group' });
-        }
-    } catch (error) {
-        console.error('An error occurred:', error);
-        return res.status(500).json({ message: 'Internal Server Error' });
-    }
-}); //----- End of Get all users for a specific group
 
 /**
  * POST /api/user
@@ -119,6 +94,34 @@ router.put('/updateRole/:id', async (req, res) => {
     }
 }); //----- End of PUT /promote/:id
 
+// User Group Related APIs
+
+/**
+ * GET /api/user/byGroup/:groupId
+ * Get all users for a specific group
+ */
+router.get('/byGroup/:groupId', async (req, res) => {
+    try {
+        // Step 1: Fetch the group-user associations
+        const userGroupAssociations = await UserGroup.find({ groupId: req.params.groupId }).exec();
+
+        // Extract user IDs
+        const userIds = userGroupAssociations.map(assoc => assoc.userId);
+
+        // Step 2: Fetch user details using the user IDs
+        const users = await User.find({ '_id': { $in: userIds } }).exec();
+
+        if (users && users.length > 0) {
+            return res.status(200).json(users);
+        } else {
+            return res.status(404).json({ message: 'No users found for this group' });
+        }
+    } catch (error) {
+        console.error('An error occurred:', error);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+}); //----- End of Get all users for a specific group
+
 // Get user by email
 router.get('/byEmail/:email', async (req, res) => {
     try {
@@ -159,6 +162,66 @@ router.delete('/removeFromGroup/:userId/:groupId', async (req, res) => {
     } catch (error) {
         console.error('An error occurred:', error);
         return res.status(500).json({ message: 'Failed to remove user from the group.' });
+    }
+});
+
+// User Channel Related APIs
+
+/**
+ * GET /api/user/byChannel/:channelId
+ * Get all users for a specific channel
+ */
+router.get('/byChannel/:channelId', async (req, res) => {
+    try {
+        // Step 1: Fetch the user-channel associations
+        const userChannelAssociations = await UserChannel.find({ channelId: req.params.channelId }).exec();
+
+        // Extract user IDs
+        const userIds = userChannelAssociations.map(assoc => assoc.userId);
+
+        // Step 2: Fetch user details using the user IDs
+        const users = await User.find({ '_id': { $in: userIds } }).exec();
+
+        if (users && users.length > 0) {
+            return res.status(200).json(users);
+        } else {
+            return res.status(404).json({ message: 'No users found for this channel' });
+        }
+    } catch (error) {
+        console.error('An error occurred:', error);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+// Add user to a channel
+router.post('/addToChannel', async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.body.email });
+        const newUserChannel = new UserChannel({
+            userId: user._id,
+            channelId: req.body.channelId
+        });
+        await newUserChannel.save();
+        return res.status(200).json(user);
+    } catch (error) {
+        console.error('An error occurred:', error);
+        return res.status(500).json({ message: 'Failed to add user to the channel.' });
+    }
+});
+
+// Remove user from a channel
+router.delete('/removeFromChannel/:userId/:channelId', async (req, res) => {
+    try {
+        const { userId, channelId } = req.params;
+        const result = await UserChannel.findOneAndDelete({ userId, channelId });
+        if (result) {
+            return res.status(200).json({ message: 'User removed from the channel successfully.' });
+        } else {
+            return res.status(404).json({ message: 'User not found in the channel.' });
+        }
+    } catch (error) {
+        console.error('An error occurred:', error);
+        return res.status(500).json({ message: 'Failed to remove user from the channel.' });
     }
 });
 
