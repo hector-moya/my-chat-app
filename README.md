@@ -1,27 +1,3 @@
-# Chat Application Project
-
-## Setup Environment
-
-### Clone the repository
-
-`https://github.com/hector-moya/my-chat-app.git`
-
-### Navigate to the project directory
-
-`cd my-chat-app`
-
-### Install dependencies
-
-`npm run install`
-
-### Run the application
-
-`npm run start`
-
-### Super Admin Credentials
-- **email**: super@admin.com
-- **password**: 123
-
 ## Table of Contents
 
 - [Chat Application Project](#chat-application-project)
@@ -31,7 +7,6 @@
     - [Install dependencies](#install-dependencies)
     - [Run the application](#run-the-application)
     - [Super Admin Credentials](#super-admin-credentials)
-  - [Table of Contents](#table-of-contents)
   - [Brief Description](#brief-description)
   - [Version Control System Description](#version-control-system-description)
     - [Commit Strategy](#commit-strategy)
@@ -40,7 +15,7 @@
     - [Documentation](#documentation)
     - [Quality Assurance](#quality-assurance)
   - [Client-Server Interaction](#client-server-interaction)
-    - [RESTful APIs](#restful-apis)
+    - [REST APIs](#rest-apis)
     - [Angular Component Updates](#angular-component-updates)
   - [Implementation Checklist Stage 2](#implementation-checklist-stage-2)
   - [Application Overview](#application-overview)
@@ -64,6 +39,30 @@
     - [createUser(username, email, password)](#createuserusername-email-password)
     - [Server Implementation Checklist](#server-implementation-checklist)
 
+# Chat Application Project
+
+## Setup Environment
+
+### Clone the repository
+
+`https://github.com/hector-moya/my-chat-app.git`
+
+### Navigate to the project directory
+
+`cd my-chat-app`
+
+### Install dependencies
+
+`npm run install`
+
+### Run the application
+
+`npm run start`
+
+### Super Admin Credentials
+- **email**: super@admin.com
+- **password**: 123
+- 
 ## Brief Description
 
 The chat application aims to build a text/video chat system using the MEAN stack (MongoDB, Express, Angular, Node) along with sockets.io and Peer.js. The chat system will allow users to communicate in real time within different groups and channels. There are three levels of permissions: Super Admin, Group Admin, and User.
@@ -93,13 +92,14 @@ A comprehensive README file documents the project setup, features, and implement
 ### Quality Assurance
 
 To further ensure the quality of the code, no broken code is committed. Each commit represents a stable build.
+
 ## Client-Server Interaction
 
-The client and server in this chat application communicate using RESTful APIs and WebSockets for real-time updates. Below are the details of how data changes on the server-side impact the Angular components on the client-side.
+The client and server in this chat application communicate using REST APIs and WebSockets for real-time updates. Below are the details of how data changes on the server-side impact the Angular components on the client-side.
 
-### RESTful APIs
+### REST APIs
 
-The server exposes several RESTful endpoints for handling operations related to authentication, users, groups, and channels.
+The server exposes several REST endpoints for handling operations related to authentication, users, groups, and channels.
 
 1. **Authentication**: 
     - When a user logs in or registers through the Authentication Component, a POST request is made to the server's `/api/auth/login` or `/api/auth/register` endpoints.
@@ -183,19 +183,16 @@ This checklist aims to guide you through the Angular implementation of the clien
 
 `ng g c <component-name> --inline-style --inline-template --skipTests`
 
-| Component                    | Implemented | Notes                                                        |
-| ---------------------------- | ----------- | ------------------------------------------------------------ |
-| Authentication Component     | [X]         | Parent for Login and Registration                            |
-| Login Component              | [X]         | Child of Authentication component. Handles user login        |
-| Registration Component       | [X]         | Child of Authentication component. Handles user registration |
-| Dashboard Component          | [X]         | Parent component post-login                                  |
-| Group Component              | [X]         | Child of Dashboard component. Displays user groups           |
-| Channel Component            | [X]         | Child of Group component. Displays channels within a group   |
-| Chat Component               | [ ]         | Manages real-time chat                                       |
-| Admin Component              | [ ]         | Parent for all admin functionalities                         |
-| User Management Component    | [ ]         | Child of Admin component. Manages users                      |
-| Group Management Component   | [ ]         | Child of Admin component. Manages groups                     |
-| Channel Management Component | [ ]         | Child of Admin component. Manages channels                   |
+| Component                 | Implemented | Notes                                                                         |
+| ------------------------- | ----------- | ----------------------------------------------------------------------------- |
+| Authentication Component  | [X]         | Parent for Login and Registration                                             |
+| Login Component           | [X]         | Child of Authentication component. Handles user login                         |
+| Registration Component    | [X]         | Child of Authentication component. Handles user registration                  |
+| Dashboard Component       | [X]         | Parent component post-login                                                   |
+| Group Component           | [!]         | Child of Dashboard component. Displays groups and allows for group management |
+| Channel Component         | [!]         | Child of Group component. Displays channels and allows for channel management |
+| Chat Component            | [ ]         | Manages real-time chat                                                        |
+| User Management Component | [X]         | Child of Admin component. Manages users                                       |
 
 ### Interfaces
 
@@ -215,7 +212,6 @@ This checklist aims to guide you through the Angular implementation of the clien
 | Authentication Route | [X]         | For Login and Registration                   |
 | Dashboard Route      | [X]         | For Dashboard, Group, and Channel components |
 | Chat Route           | [ ]         | For the Chat component                       |
-| Admin Route          | [ ]         | For all admin functionalities                |
 
 ### Guards
 
@@ -237,6 +233,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 | Channel Service         | [X]         | Manages channel operations |
 | Chat Service            | [ ]         | Manages real-time chat     |
 | User Management Service | [X]         | Manages user model         |
+| Notification Service    | [X]         | Manages notifications      |
 
 ## Client Architecture Diagram
 
@@ -306,11 +303,13 @@ This helper function is used for creating a new user.
 
 | Entity/Route             | Implemented | Notes                                                                        |
 | ------------------------ | ----------- | ---------------------------------------------------------------------------- |
-| User Entity              | [X]         |                                                                              |
-| Group Entity             | [X]         |                                                                              |
-| Channel Entity           | [X]         |                                                                              |
-| Message Entity           | [X]         |                                                                              |
-| Role Entity              | [X]         |                                                                              |
+| Database                 | [X]         | MongoDB database hosted on MongoDB                                           |
+| Mongoose Models          | [X]         |                                                                              |
+| User Model               | [X]         |                                                                              |
+| Group Model              | [X]         |                                                                              |
+| Channel Model            | [X]         |                                                                              |
+| Message Model            | [X]         |                                                                              |
+| Role Model               | [X]         |                                                                              |
 | User-Group Association   | [X]         |                                                                              |
 | User-Channel Association | [X]         |                                                                              |
 | api/auth Routes          | [X]         | For handling user authentication and registration                            |

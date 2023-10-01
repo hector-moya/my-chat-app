@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const UserGroup = require('../models/UserGroup');
 
 /**
  * GET /api/user
@@ -36,8 +37,33 @@ router.get('/:id', async (req, res) => {
         console.error('An error occurred:', error);
         return res.status(500).json({ message: 'Internal Server Error' });
     }
-});
- //----- End of Get a user by ID
+}); //----- End of Get a user by ID
+
+/**
+ * GET /api/user/byGroup/:groupId
+ * Get all users for a specific group
+ */
+router.get('/byGroup/:groupId', async (req, res) => {
+    try {
+        // Step 1: Fetch the group-user associations
+        const userGroupAssociations = await UserGroup.find({ groupId: req.params.groupId }).exec();
+
+        // Extract user IDs
+        const userIds = userGroupAssociations.map(assoc => assoc.userId);
+
+        // Step 2: Fetch user details using the user IDs
+        const users = await User.find({ '_id': { $in: userIds } }).exec();
+
+        if (users && users.length > 0) {
+            return res.status(200).json(users);
+        } else  {
+            return res.status(404).json({ message: 'No users found for this group' });
+        }
+    } catch (error) {
+        console.error('An error occurred:', error);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+}); //----- End of Get all users for a specific group
 
 /**
  * POST /api/user
