@@ -26,8 +26,8 @@ export class ChannelService {
   }
 
   // Function to add a new channel
-  addChannel(channel: Channel): Observable<Channel> {
-    return this.http.post<Channel>(`${this.apiUrl}`, channel);
+  addChannel(channel: Channel, groupId: string): Observable<Channel> {
+    return this.http.post<Channel>(`${this.apiUrl}/${groupId}`, channel);
   }
 
   // Function to update an existing channel

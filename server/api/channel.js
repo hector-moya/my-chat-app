@@ -1,79 +1,81 @@
-const Channel = require('../models/Channel');
-const UserChannel = require('../models/UserChannel');
-const express = require('express');
+const Channel = require("../models/Channel");
+const UserChannel = require("../models/UserChannel");
+const express = require("express");
 const router = express.Router();
 
 /**
  * Get all channels
  * This route will return an array of all channels
  */
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const allChannels = await Channel.find();
     if (allChannels && allChannels.length > 0) {
       return res.status(200).json(allChannels);
     } else {
-      return res.status(404).json({ message: 'No channels found' });
+      return res.status(404).json({ message: "No channels found" });
     }
   } catch (error) {
-    console.error('An error occurred:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    console.error("An error occurred:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 }); //----- End of GET /
 
 /**
  * Get a channel by ID
  */
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const channel = await Channel.findById(req.params.id);
     if (channel) {
       return res.status(200).json(channel);
     } else {
-      return res.status(404).json({ message: 'Channel not found' });
+      return res.status(404).json({ message: "Channel not found" });
     }
   } catch (error) {
-    console.error('An error occurred:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    console.error("An error occurred:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 }); //----- End of Get a channel by ID
 
 /**
  * Get channels by group ID
  */
-router.get('/byGroup/:id', async (req, res) => {
+router.get("/byGroup/:id", async (req, res) => {
   try {
     const channels = await Channel.find({ groupId: req.params.id });
     if (channels && channels.length > 0) {
       return res.status(200).json(channels);
     } else {
-      return res.status(404).json({ message: 'No channels found' });
+      return res.status(404).json({ message: "No channels found" });
     }
   } catch (error) {
-    console.error('An error occurred:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    console.error("An error occurred:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 }); //----- End of Get channels by group ID
 
 /**
  * Get all channels for a user in a group
- * 
+ *
  * This route will return an array of all channels for a user in a group
  */
 router.get("/byUser/:groupId/:userId", async (req, res) => {
   try {
     const userChannels = await UserChannel.find({
       userID: req.params.userId,
-      groupID: req.params.groupId
+      groupID: req.params.groupId,
     });
 
     if (userChannels && userChannels.length > 0) {
-      const channelIds = userChannels.map(uc => uc.channelId);
-      const channelDetails = await Channel.find({ '_id': { $in: channelIds } });
+      const channelIds = userChannels.map((uc) => uc.channelId);
+      const channelDetails = await Channel.find({ _id: { $in: channelIds } });
 
       return res.status(200).json(channelDetails);
     } else {
-      return res.status(404).json({ message: "No channels found for this user and group" });
+      return res
+        .status(404)
+        .json({ message: "No channels found for this user and group" });
     }
   } catch (error) {
     console.error("An error occurred:", error);
@@ -85,9 +87,13 @@ router.get("/byUser/:groupId/:userId", async (req, res) => {
  * Post a new channel
  * This route will create a new channel and add it to the channels array
  */
-router.post("/", async (req, res) => {
-  const newChannel = new Channel(req.body);
+router.post("/:groupId", async (req, res) => {
   try {
+    const newChannel = await Channel.create({
+      channelName: req.body.channelName,
+      groupId: req.params.groupId,
+    });
+    console.log("newChannel:", newChannel, "groupId:", req.params.groupId);
     await newChannel.save();
     res.status(201).json(newChannel);
   } catch (error) {
@@ -96,14 +102,17 @@ router.post("/", async (req, res) => {
   }
 }); //----- End of POST /
 
-
 /**
  * Update a channel
  * This route will update a channel's details
  */
 router.put("/:id", async (req, res) => {
   try {
-    const updatedChannel = await Channel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedChannel = await Channel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
     if (updatedChannel) {
       res.status(200).json(updatedChannel);
     } else {
@@ -114,7 +123,6 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ message: "Failed to update channel." });
   }
 }); //----- End of PUT /:id
-
 
 /**
  * Delete a channel
