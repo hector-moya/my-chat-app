@@ -1,11 +1,13 @@
 import { CommonModule, NgFor } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { GroupService } from 'src/app/services/group.service';
 import { Group } from 'src/app/models/group.model';
 import { FormsModule } from '@angular/forms';
 import { Channel } from 'src/app/models/channel.model';
 import { ChannelComponent } from '../channel/channel.component';
 import { PermissionService } from 'src/app/services/permission.service';
+import { UserService } from 'src/app/services/user.service';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   standalone: true,
@@ -17,17 +19,18 @@ import { PermissionService } from 'src/app/services/permission.service';
 export class GroupComponent {
   user: any = {};
   groups: any[] = [];
+  groupUsers: User[] = [];
   editingGroupId: string | null = null;
   isSuper: Boolean = false;
   groupChannels: { [groupId: string]: Channel[] } = {};
   showAddGroupModal: boolean = false;
   newGroupName: string = '';
+  showGroupUsersModal: boolean = false;
 
-  constructor(
-    private groupService: GroupService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private permissionService: PermissionService
-  ) { }
+  private groupService = inject(GroupService);
+  private permissionService = inject(PermissionService);
+  private changeDetectorRef = inject(ChangeDetectorRef);
+  private userService = inject(UserService);
 
   /**
    * Lifecycle hook that runs when the component is initialized
@@ -188,6 +191,22 @@ export class GroupComponent {
         }
       });
     }
+  }
+  
+  loadGroupUsers(groupId: string): void {
+    this.userService.getUsersByGroupId(groupId).subscribe({
+      next: (users) => {
+        this.groupUsers = users;
+        this.showGroupUsersModal = true;
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+  closeGroupUsersModal(): void {
+    this.showGroupUsersModal = false;
   }
 
 

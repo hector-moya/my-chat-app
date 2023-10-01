@@ -27,8 +27,11 @@
   
         <!-- Edit and Delete buttons -->
         <div *ngIf="canEdit(group)" class="flex items-center ml-4 pr-4">
+          <button (click)="loadGroupUsers(group._id)">
+            <i class="fa-solid fa-people-group text-purple-500 hover:text-purple-700"></i>
+          </button>
           <button *ngIf="editingGroupId !== group._id" (click)="editingGroup(group._id)">
-            <i class="fas fa-edit text-blue-500 hover:text-blue-700"></i>
+            <i class="fas fa-edit text-blue-500 hover:text-blue-700 ml-4"></i>
           </button>
           <button *ngIf="editingGroupId === group._id" (click)="saveGroup(group)">
             <i class="fas fa-save text-green-500 hover:text-green-700 ml-4"></i>
@@ -65,7 +68,20 @@
     </form>
   </div>
 </div>
-
+<!-- Modal to show users of a group -->
+<div *ngIf="showGroupUsersModal" class="fixed inset-0 flex items-center justify-center z-50">
+  <div class="bg-gray-500 p-8 rounded-lg w-2/3">
+    <h2 class="text-2xl mb-4 text-center">Users of Group</h2>
+    <ul>
+      <li *ngFor="let user of groupUsers">
+        {{ user.userName }} - {{ user.email }}
+      </li>
+    </ul>
+    <div class="text-right mt-4">
+      <button (click)="closeGroupUsersModal()" class="bg-red-500 text-white p-2 rounded">Close</button>
+    </div>
+  </div>
+</div>
 
 <ng-template #noGroups>
   <p>No groups available.</p>

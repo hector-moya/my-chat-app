@@ -37,4 +37,9 @@ export class UserService {
     return this.http.put(`${this.apiUrl}/updateRole/${id}`, { isSuper });
   }
 
+  // Get users by group ID
+  getUsersByGroupId(groupId: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/byGroup/${groupId}`);
+  }
+
 }
