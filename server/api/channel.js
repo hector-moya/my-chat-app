@@ -62,26 +62,35 @@ router.get("/byGroup/:id", async (req, res) => {
  */
 router.get("/byUser/:groupId/:userId", async (req, res) => {
   try {
-    const userChannels = await UserChannel.find({
-      userID: req.params.userId,
-      groupID: req.params.groupId,
-    });
-
+    // Step 1: Fetch all user-channel relations for the user
+    const userChannels = await UserChannel.find({ userId: req.params.userId });
     if (userChannels && userChannels.length > 0) {
+      // Extract channelIds from the userChannels
       const channelIds = userChannels.map((uc) => uc.channelId);
-      const channelDetails = await Channel.find({ _id: { $in: channelIds } });
+      
+      // Step 2: Fetch channel details based on extracted channelIds and the provided groupId
+      const channelDetails = await Channel.find({ 
+        _id: { $in: channelIds },
+        groupId: req.params.groupId
+      });
 
-      return res.status(200).json(channelDetails);
+      if (channelDetails && channelDetails.length > 0) {
+        return res.status(200).json(channelDetails);
+      } else {
+        return res
+          .status(404)
+          .json({ message: "No channels found for this user in the specified group" });
+      }
     } else {
       return res
         .status(404)
-        .json({ message: "No channels found for this user and group" });
+        .json({ message: "No channels found for this user" });
     }
   } catch (error) {
     console.error("An error occurred:", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
-}); //----- End of GET /byUser/:groupId/:userId
+});  //----- End of GET /byUser/:groupId/:userId
 
 /**
  * Post a new channel
@@ -93,7 +102,6 @@ router.post("/:groupId", async (req, res) => {
       channelName: req.body.channelName,
       groupId: req.params.groupId,
     });
-    console.log("newChannel:", newChannel, "groupId:", req.params.groupId);
     await newChannel.save();
     res.status(201).json(newChannel);
   } catch (error) {

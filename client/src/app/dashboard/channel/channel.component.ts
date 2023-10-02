@@ -1,5 +1,5 @@
 import { CommonModule, NgFor } from '@angular/common';
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Channel } from 'src/app/models/channel.model';
 import { ChannelService } from 'src/app/services/channel.service';
@@ -7,6 +7,7 @@ import { GroupComponent } from '../group/group.component';
 import { PermissionService } from 'src/app/services/permission.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { ChannelManagementComponent } from './channel-management/channel-management.component';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   standalone: true,
@@ -24,7 +25,11 @@ export class ChannelComponent implements OnInit {
   showAddChannelModal: boolean = false;
   newChannelName: string = ''
 
-  constructor(private channelService: ChannelService, private changeDetectorRef: ChangeDetectorRef, public permissionService: PermissionService) { }
+  private channelService = inject(ChannelService);
+  private changeDetectorRef = inject(ChangeDetectorRef);
+  private userService = inject(UserService);
+  public permissionService = inject(PermissionService);
+
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('currentUser') || '{}');
     if (this.user) {
@@ -40,6 +45,9 @@ export class ChannelComponent implements OnInit {
     this.channelService.getUserChannel(this.groupId, this.user._id).subscribe({
       next: (channels) => {
         this.channels = channels;
+        this.channels.forEach(channel => {
+          this.checkCanEditChannel(channel);
+        });
       },
       error: (err) => {
         console.log(err);
@@ -93,15 +101,16 @@ export class ChannelComponent implements OnInit {
    */
   checkCanEditChannel(channel: Channel): void {
     if (channel._id) {
-      this.channelService.getChannelsById(channel._id).subscribe({
-        next: (channels) => {
-          if (channels.length > 0) {
-            this.permissionService.updateCanEditChannel(channel._id!, true);
-          }
+      this.userService.getUserRole(this.groupId, this.user._id).subscribe({
+        next: (role) => {
+          // Assume that if role name is 'admin' then the user can edit. Adjust this condition based on your roles.
+          const canEdit = role.roleName === 'admin';
+          this.permissionService.updateCanEditChannel(channel._id!, canEdit);
         },
         error: (err) => {
-          console.log(err);
-        },
+          console.error(`Error fetching role for channel ${channel._id}:`, err);
+          this.permissionService.updateCanEditChannel(channel._id!, false);
+        }
       });
     }
   }

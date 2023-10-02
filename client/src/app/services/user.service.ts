@@ -64,7 +64,6 @@ export class UserService {
 
   // Update user's role in a group
   updateUserRoleInGroup(userId: string, groupId: string | undefined, roleName: string): Observable<any> {
-    console.log('Updating user role for user:', userId, 'in group:', groupId, 'to:', roleName);
     return this.http.put(`${this.apiUrl}/updateRoleInGroup`, { userId, groupId, roleName });
   }
 
@@ -74,8 +73,8 @@ export class UserService {
   }
 
   // Add user to a channel
-  addUserToChannel(email: string, channelId: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/addToChannel`, { email, channelId });
+  addUserToChannel(userId: string, channelId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/addToChannel`, { userId, channelId });
   }
 
   // Remove user from a channel

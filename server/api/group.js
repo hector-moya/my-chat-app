@@ -2,6 +2,7 @@ const Group = require("../models/Group");
 const UserGroup = require("../models/UserGroup");
 const Channel = require("../models/Channel");
 const UserChannel = require("../models/UserChannel");
+const Role = require("../models/Role");
 const express = require("express");
 const router = express.Router();
 
@@ -54,9 +55,10 @@ router.get('/userRole/:groupId/:userId', async (req, res) => {
   try {
       const { groupId, userId } = req.params;
       const userGroup = await UserGroup.findOne({ groupId: groupId, userId: userId });
+      const role = await Role.findById(userGroup.roleId);
 
-      if (userGroup) {
-          return res.status(200).json({ roleId: userGroup.roleId });
+      if (role) {
+          return res.status(200).json( role.roleName );
       } else {
           return res.status(404).json({ message: 'User group not found' });
       }
@@ -72,15 +74,25 @@ router.get('/userRole/:groupId/:userId', async (req, res) => {
  * This route will add a group to the groups array
  */
 router.post('/', async (req, res) => {
-  try {
-      const newGroup = new Group(req.body);
+    try {
+      const newGroup = new Group(req.body.group);
       await newGroup.save();
+  
+      // Assign the user as an admin of the created group
+      const role = await Role.findOne({ roleName: 'admin' });
+      const userGroup = new UserGroup({
+        userId: req.body.userId, // Assuming you have user info in req.user. If not, adjust this.
+        groupId: newGroup._id,
+        roleId: role._id
+      });
+      await userGroup.save();
+  
       res.status(201).json(newGroup);
-  } catch (error) {
+    } catch (error) {
       console.error('An error occurred:', error);
       res.status(500).json({ message: 'Failed to add group.' });
-  }
-}); //----- End of POST /
+    }
+  }); //----- End of POST /
 
 /**
  * Update a group

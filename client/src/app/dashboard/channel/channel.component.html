@@ -21,7 +21,7 @@
 
       <!-- Edit and Delete buttons -->
       <div *ngIf="canEdit(channel)" class="flex items-center ml-4 pr-8">
-        <app-channel-management [currentChannelId]="channel._id" ></app-channel-management>
+        <app-channel-management [currentChannelId]="channel._id" [currentGroupId]="groupId"></app-channel-management>
         <button *ngIf="editingChannelId !== channel._id" (click)="editingChannelId = channel._id!">
           <i class="fas fa-edit text-blue-500 hover:text-blue-700 ml-4"></i>
         </button>

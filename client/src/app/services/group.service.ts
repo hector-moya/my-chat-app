@@ -22,8 +22,8 @@ export class GroupService {
   }
 
   // Function to add a new group
-  addGroup(group: Group): Observable<Group> {
-    return this.http.post<Group>(`${this.apiUrl}`, group);
+  addGroup(group: Group, userId: string): Observable<Group> {
+    return this.http.post<Group>(`${this.apiUrl}`, {group, userId});
   }
 
   // Function to update an existing group
@@ -39,12 +39,12 @@ export class GroupService {
 
   // Function to get the user's role for a group
   getUserRole(groupId: string, userId: string): Observable<boolean> {
-    return this.http.get<{ roleName: string }>(`${this.apiUrl}/userRole/${groupId}/${userId}`).pipe(
+    return this.http.get<string>(`${this.apiUrl}/userRole/${groupId}/${userId}`).pipe(
       tap((response) => { 
         console.log('Response: ', response)
       }),
-      map((response) => {
-        return response.roleName === 'admin';
+      map((role) => {
+        return role === 'admin';
       })
     );
   }

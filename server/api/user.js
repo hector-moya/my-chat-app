@@ -158,9 +158,6 @@ router.post('/addToGroup', async (req, res) => {
         if (!role) {
             return res.status(404).json({ message: `Role 'user' not found.` });
         }
-
-        console.log('user:', user, 'user._id:', user._id, 'userName:', user.userName, 'roleId:', role.roleName);
-
         const newUserGroup = new UserGroup({
             userId: user._id,
             groupId: req.body.groupId,
@@ -229,18 +226,14 @@ router.put('/updateRoleInGroup', async (req, res) => {
 router.get('/getRoleInGroup/:groupId/:userId', async (req, res) => {
     try {
         const { userId, groupId } = req.params;
-        console.log('userId:', userId);
-        console.log('groupId:', groupId);
         const userGroup = await UserGroup.findOne({ userId, groupId });
         if (!userGroup) {
             return res.status(404).json({ message: 'User-Group association not found.' });
         }
-        console.log('userGroup:', userGroup);
         const role = await Role.findById(userGroup.roleId);
         if (!role) {
             return res.status(404).json({ message: 'Role not found.' });
         }
-        console.log('role:', role);
         return res.status(200).json(role);
     } catch (error) {
         console.error('An error occurred:', error);
@@ -283,9 +276,9 @@ router.get('/byChannel/:channelId', async (req, res) => {
 // Add user to a channel
 router.post('/addToChannel', async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.body.email });
+        const user = await User.findOne({ _id: req.body.userId });
         const newUserChannel = new UserChannel({
-            userId: user._id,
+            userId: req.body.userId,
             channelId: req.body.channelId
         });
         await newUserChannel.save();

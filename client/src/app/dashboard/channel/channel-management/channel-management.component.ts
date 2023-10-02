@@ -15,10 +15,13 @@ import { FormsModule } from '@angular/forms';
 })
 export class ChannelManagementComponent implements OnInit{
   @Input() currentChannelId!: string | undefined;
+  @Input() currentGroupId!: string | undefined;
   channelUsers: any[] = [];
+  groupUsers: any[] = [];
   emailInput: string = '';
   userExists: boolean = false;
   showModal: boolean = false;
+  selectedUser: string = '';
 
   private userService = inject(UserService);
   private changeDetectorRef = inject(ChangeDetectorRef);
@@ -30,6 +33,7 @@ export class ChannelManagementComponent implements OnInit{
   
   // Load the users of a channel
   loadChannelUsers(): void {
+    this.loadGroupUsers();
     this.userService.getUsersByChannelId(this.currentChannelId).subscribe({
       next: (users) => {
         this.channelUsers = users;
@@ -40,6 +44,18 @@ export class ChannelManagementComponent implements OnInit{
       }
     });
   }
+
+  loadGroupUsers(): void {
+    this.userService.getUsersByGroupId(this.currentGroupId).subscribe({
+      next: (users) => {
+        this.groupUsers = users;
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+  
 
   // Check if a user exists by email
   checkUserExistence(): void {
@@ -66,12 +82,12 @@ export class ChannelManagementComponent implements OnInit{
 
   // Add a user to a channel
   addUserToChannel(): void {
-    if (this.userExists && this.currentChannelId) {
-      this.userService.addUserToChannel(this.emailInput, this.currentChannelId).subscribe({
+    if (this.selectedUser && this.currentChannelId) {
+      this.userService.addUserToChannel(this.selectedUser, this.currentChannelId).subscribe({
         next: (user) => {
           this.notificationService.notify('User added to the channel successfully.');
           this.channelUsers.push(user);
-          this.emailInput = '';
+          this.selectedUser = '';
         },
         error: (err) => {
           console.error(err);
