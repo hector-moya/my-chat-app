@@ -1,28 +1,33 @@
 <div class="h-screen flex flex-col">
   <!-- Header Section -->
-  <div class="bg-gray-800 text-white p-4 flex justify-between items-center">
+  <div class="bg-gray-800 text-white px-5 py-5 flex justify-between items-center border-b-2">
     <!-- Welcome Message and User Info -->
-    <div class="flex items-center mt-4">
-      <div class="w-12 h-12 rounded-full bg-gray-300 mr-4"></div>
-      <div>
+    <div class="font-semibold text-2xl">My Chat App</div>
+    <div class="w-1/2">
+    </div>
+
+    <button id="dropdownInformationButton" data-dropdown-toggle="dropdownInformation"
+      class="text-white focus:ring-4 focus:outline-none font-medium rounded-full text-sm px-4 py-2.5 text-center inline-flex items-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800" type="button"
+      (click)="showMenu = !showMenu">
+      {{ currentUser.userName.charAt(0) }}
+    </button>
+    <div id="dropdownInformation" [ngClass]="{'hidden': !showMenu}"
+      class="z-10 hidden divide-y rounded-lg shadow w-44 bg-gray-700 divide-gray-600">
+      <div class="px-4 py-3 text-sm text-white">
         <p class="text-md">{{ currentUser.userName }}</p>
         <p class="text-sm italic">{{ currentUser.email}}</p>
       </div>
-    </div>
-    <div class="flex items-center justify-center">
-      <h1 class="text-2xl text-center">My Chat App</h1>
-    </div>
-
-    <!-- Management and Logout -->
-    <div class="flex items-center">
-      <app-user-management  *ngIf="currentUser.isSuper"></app-user-management>
-      <button *ngIf="currentUser.isSuper" (click)="showAddUserForm()"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4">
-        Add User
-      </button>
-      <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-        <a href="#" *ngIf="authenticationService.isLoggedIn" (click)="logout()">Logout</a>
-      </button>
+      <ul class="py-2 text-sm text-gray-200" aria-labelledby="dropdownInformationButton">
+        <li>
+          <app-user-management *ngIf="currentUser.isSuper"></app-user-management>
+        </li>
+        <li>
+          <button *ngIf="currentUser.isSuper" (click)="showAddUserForm()" class="text-left w-full block px-4 py-2 hover:bg-gray-600 hover:text-white">Add User</button>
+        </li>
+        <li>
+          <button *ngIf="authenticationService.isLoggedIn" (click)="logout()" class="text-left w-full block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white">Logout</button>
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -37,15 +42,15 @@
     <!-- Chat Section -->
     <div class="bg-gray-700 text-white w-4/5 p-4">
       <ng-container *ngIf="currentChannelId; else noChannelSelected">
-          <app-chat [currentChannelId]="currentChannelId"></app-chat>
+        <app-chat [currentChannelId]="currentChannelId"></app-chat>
       </ng-container>
-      
+
       <ng-template #noChannelSelected>
-          <div class="select-channel-message">
-              Please select a channel to start chatting.
-          </div>
+        <div class="select-channel-message">
+          Please select a channel to start chatting.
+        </div>
       </ng-template>
-  </div>
+    </div>
   </div>
 </div>
 <!-- Add User Modal -->

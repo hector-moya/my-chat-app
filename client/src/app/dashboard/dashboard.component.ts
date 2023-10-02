@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   groups: any[] = []; // This should come from your group service.
   showAddUserModal: boolean = false;
   currentChannelId: string | undefined;
+  showMenu: boolean = false;
 
   public authenticationService = inject(AuthenticationService);
   private channelService = inject(ChannelService);
