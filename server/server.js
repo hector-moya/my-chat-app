@@ -40,9 +40,15 @@ mongoose.connect('mongodb://localhost:27017/chat-app', { useNewUrlParser: true, 
 io.on('connection', (socket) => {
     console.log('a user connected');
 
-    socket.on('message', (message) => {
-        console.log(message);
-        io.emit('message', `${socket.id.substr(0, 2)} said: ${message}`);
+    // When a user chooses a channel, join them to a room named after the channel ID
+    socket.on('join_room', (channelId) => {
+        socket.join(channelId);
+    });
+
+    // When a user sends a message, broadcast it only to users in the channel's room
+    socket.on('message', (data) => {
+        console.log(data.message);
+        io.to(data.channelId).emit('new_message', data.message);  // Only send to users in the channel's room
     });
 
     socket.on('disconnect', () => {
