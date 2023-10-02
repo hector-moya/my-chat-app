@@ -1,4 +1,4 @@
-<div class="h-screen flex flex-col">
+<div class="min-h-screen flex flex-col shadow-lg rounded-lg">
   <!-- Header Section -->
   <div class="bg-gray-800 text-white px-5 py-5 flex justify-between items-center border-b-2">
     <!-- Welcome Message and User Info -->
@@ -7,8 +7,8 @@
     </div>
 
     <button id="dropdownInformationButton" data-dropdown-toggle="dropdownInformation"
-      class="text-white focus:ring-4 focus:outline-none font-medium rounded-full text-sm px-4 py-2.5 text-center inline-flex items-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800" type="button"
-      (click)="showMenu = !showMenu">
+      class="text-white focus:ring-4 focus:outline-none font-medium rounded-full text-sm px-4 py-2.5 text-center inline-flex items-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
+      type="button" (click)="showMenu = !showMenu">
       {{ currentUser.userName.charAt(0) }}
     </button>
     <div id="dropdownInformation" [ngClass]="{'hidden': !showMenu}"
@@ -22,34 +22,52 @@
           <app-user-management *ngIf="currentUser.isSuper"></app-user-management>
         </li>
         <li>
-          <button *ngIf="currentUser.isSuper" (click)="showAddUserForm()" class="text-left w-full block px-4 py-2 hover:bg-gray-600 hover:text-white">Add User</button>
+          <button *ngIf="currentUser.isSuper" (click)="showAddUserForm()"
+            class="text-left w-full block px-4 py-2 hover:bg-gray-600 hover:text-white">Add User</button>
         </li>
         <li>
-          <button *ngIf="authenticationService.isLoggedIn" (click)="logout()" class="text-left w-full block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white">Logout</button>
+          <button *ngIf="authenticationService.isLoggedIn" (click)="logout()"
+            class="text-left w-full block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white">Logout</button>
         </li>
       </ul>
     </div>
   </div>
 
   <!-- Main Content Section -->
-  <div class="flex flex-1">
+  <div class="flex flex-row justify-between flex-1">
     <!-- Groups and Channels -->
-    <div class="bg-gray-900 text-white w-1/5 p-4 overflow-y-auto">
+    <div class="bg-gray-900 text-white flex flex-col w-2/5 border-r-2 overflow-y-auto">
       <!-- Groups Component-->
       <app-group (channelSelected)="onChannelSelected($event)"></app-group>
     </div>
 
     <!-- Chat Section -->
-    <div class="bg-gray-700 text-white w-4/5 p-4">
+    <div class="bg-gray-900 text-white w-full px-5">
       <ng-container *ngIf="currentChannelId; else noChannelSelected">
         <app-chat [currentChannelId]="currentChannelId"></app-chat>
       </ng-container>
 
       <ng-template #noChannelSelected>
-        <div class="select-channel-message">
-          Please select a channel to start chatting.
+        <div class="flex flex-col mt-5">
+          <div class="flex justify-end mb-4">
+            <div class="mr-2 py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white">
+              Please select a channel to start chatting.
+            </div>
+          </div>
         </div>
       </ng-template>
+    </div>
+
+    <!-- Group/Channel Description -->
+    <div class="bg-gray-900 text-white w-2/5 border-l-2 px-5">
+      <div class="flex flex-col">
+        <div class="font-semibold text-xl py-4">MEAN Stack Group</div>
+        <img src="https://source.unsplash.com/L2cxSuKWbpo/600x600" class="object-cover rounded-xl h-64" alt="" />
+        <div class="font-semibold py-4">Created 02 Oct 2023</div>
+        <div class="font-light">
+          Keep Working! Keep Learning! Keep Growing! Keep Sharing! Keep Building!
+        </div>
+      </div>
     </div>
   </div>
 </div>

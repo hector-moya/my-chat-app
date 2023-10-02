@@ -5,7 +5,6 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { RegisterComponent } from '../authentication/register/register.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { ChatComponent } from './channel/chat/chat.component';
-import { ChannelService } from '../services/channel.service';
 
 @Component({
   standalone: true,
@@ -22,7 +21,6 @@ export class DashboardComponent implements OnInit {
   showMenu: boolean = false;
 
   public authenticationService = inject(AuthenticationService);
-  private channelService = inject(ChannelService);
 
 
   ngOnInit(): void {
@@ -34,7 +32,9 @@ export class DashboardComponent implements OnInit {
   }
 
   onChannelSelected(channelId: string): void {
+    console.log('Dashboard Channel Id: ', channelId);
     this.currentChannelId = channelId;
+    console.log('Dashboard Current Channel Id: ', this.currentChannelId);
   }
 
   logout(): void {
