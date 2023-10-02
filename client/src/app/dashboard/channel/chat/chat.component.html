@@ -1,1 +1,20 @@
-<p>chat works!</p>
+<div class="chat-container">
+    <!-- Chat Header -->
+    <div class="chat-header">
+        Chatting in: {{ channelName }}
+    </div>
+
+    <!-- Chat messages -->
+    <div class="chat-messages">
+        <div *ngFor="let message of messages" class="chat-message">
+            <span class="message-content">{{ message.message }}</span>
+            <span class="message-time">{{ message.createdAt | date:'shortTime' }}</span>
+        </div>
+    </div>
+
+    <!-- Message input field and send button -->
+    <div class="chat-input-container">
+        <input type="text" [(ngModel)]="newMessage" placeholder="Type your message here..." />
+        <button (click)="postMessage()">Send</button>
+    </div>
+</div>

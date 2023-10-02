@@ -5,8 +5,8 @@
     <div class="flex items-center mt-4">
       <div class="w-12 h-12 rounded-full bg-gray-300 mr-4"></div>
       <div>
-        <p class="text-md">{{ currentUser.username }}</p>
-        <p class="text-sm italic">Role: coming soon</p>
+        <p class="text-md">{{ currentUser.userName }}</p>
+        <p class="text-sm italic">{{ currentUser.email}}</p>
       </div>
     </div>
     <div class="flex items-center justify-center">
@@ -15,7 +15,7 @@
 
     <!-- Management and Logout -->
     <div class="flex items-center">
-      <app-user-management></app-user-management>
+      <app-user-management  *ngIf="currentUser.isSuper"></app-user-management>
       <button *ngIf="currentUser.isSuper" (click)="showAddUserForm()"
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4">
         Add User
@@ -28,16 +28,24 @@
 
   <!-- Main Content Section -->
   <div class="flex flex-1">
-    <!-- Groups and Channels (1/3) -->
+    <!-- Groups and Channels -->
     <div class="bg-gray-900 text-white w-1/5 p-4 overflow-y-auto">
-      <!-- Groups and Channels Component here -->
-      <app-group></app-group>
+      <!-- Groups Component-->
+      <app-group (channelSelected)="onChannelSelected($event)"></app-group>
     </div>
 
-    <!-- Chat Section (2/3) -->
+    <!-- Chat Section -->
     <div class="bg-gray-700 text-white w-4/5 p-4">
-      <!-- Chat Component will go here -->
-    </div>
+      <ng-container *ngIf="currentChannelId; else noChannelSelected">
+          <app-chat [currentChannelId]="currentChannelId"></app-chat>
+      </ng-container>
+      
+      <ng-template #noChannelSelected>
+          <div class="select-channel-message">
+              Please select a channel to start chatting.
+          </div>
+      </ng-template>
+  </div>
   </div>
 </div>
 <!-- Add User Modal -->

@@ -1,5 +1,5 @@
 import { CommonModule, NgFor } from '@angular/common';
-import { ChangeDetectorRef, Component, Input, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Channel } from 'src/app/models/channel.model';
 import { ChannelService } from 'src/app/services/channel.service';
@@ -19,6 +19,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class ChannelComponent implements OnInit {
   @Input() groupId!: string;
+  @Output() channelSelected = new EventEmitter<string>();
   user: any;
   channels: Channel[] = [];
   editingChannelId: string | null = null;
@@ -121,8 +122,8 @@ export class ChannelComponent implements OnInit {
   }
 
 
-  openChat(id: string): void {
-    console.log(`Here we will put the code to open the chat for channel: ${id}`);
+  openChat(channelId: string): void {
+    this.channelSelected.emit(channelId);
   }
 
 

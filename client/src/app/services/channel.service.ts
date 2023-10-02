@@ -21,8 +21,8 @@ export class ChannelService {
     return this.http.get<Channel[]>(`${this.apiUrl}/byGroup/${groupId}`);
   }
 
-  getChannelsById(channelId: string): Observable<Channel[]> {
-    return this.http.get<Channel[]>(`${this.apiUrl}/${channelId}`);
+  getChannelById(channelId: string): Observable<Channel> {
+    return this.http.get<Channel>(`${this.apiUrl}/${channelId}`);
   }
 
   // Function to add a new channel

@@ -44,7 +44,7 @@
       </div>
       <!-- Channels for the selected group -->
       <div *ngIf="group.showChannels" class="pl-8 w-full">
-        <app-channel [groupId]="group._id"></app-channel>
+        <app-channel [groupId]="group._id" (channelSelected)="channelSelected.emit($event)"></app-channel>
       </div>
     </div>
   </div>

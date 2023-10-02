@@ -1,5 +1,5 @@
 import { CommonModule, NgFor } from '@angular/common';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Output, inject } from '@angular/core';
 import { GroupService } from 'src/app/services/group.service';
 import { Group } from 'src/app/models/group.model';
 import { FormsModule } from '@angular/forms';
@@ -20,6 +20,7 @@ import { UserService } from 'src/app/services/user.service';
   imports: [NgFor, CommonModule, FormsModule, ChannelComponent, ModalComponent, GroupManagementComponent],
 })
 export class GroupComponent {
+  @Output() channelSelected = new EventEmitter<string>();
   user: any = {};
   groups: any[] = [];
   groupUsers: User[] = [];
