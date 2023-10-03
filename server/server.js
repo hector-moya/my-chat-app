@@ -15,6 +15,7 @@ const authRoutes = require('./api/auth');
 const groupRoutes = require('./api/group');
 const channelRoutes = require('./api/channel');
 const userRoutes = require('./api/user');
+const messageRoutes = require('./api/message')(io);
 
 const port = 3000;
 
@@ -27,6 +28,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/group', groupRoutes);
 app.use('/api/channel', channelRoutes);
+app.use('/api/message', messageRoutes);
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/chat-app', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -42,13 +44,14 @@ io.on('connection', (socket) => {
 
     // When a user chooses a channel, join them to a room named after the channel ID
     socket.on('join_room', (channelId) => {
+        console.log(`User joined channel ${channelId}`);
         socket.join(channelId);
     });
 
     // When a user sends a message, broadcast it only to users in the channel's room
     socket.on('message', (data) => {
-        console.log(data.message);
         io.to(data.channelId).emit('new_message', data.message);  // Only send to users in the channel's room
+        console.log(data.message, 'for room', data.channelId);
     });
 
     socket.on('disconnect', () => {
