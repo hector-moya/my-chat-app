@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { User } from 'src/app/models/user.model';
+import { User } from 'src/app/interfaces/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from 'src/app/services/notification.service';

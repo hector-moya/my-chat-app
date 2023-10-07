@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { UserService } from 'src/app/services/user.service';
 import { NotificationService } from 'src/app/services/notification.service';
-import { User } from 'src/app/models/user.model';
+import { User } from 'src/app/interfaces/user.model';
 
 @Component({
   selector: 'app-group-management',

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { io } from 'socket.io-client';
-import { Message } from '../models/message.model';
+import { Message } from '../interfaces/message.model';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -10,13 +10,11 @@ import { HttpClient } from '@angular/common/http';
 export class ChatService {
 
 
-  public message$: BehaviorSubject<string> = new BehaviorSubject<string>('');
-
   private apiUrl = 'http://localhost:3000/api/message';
 
   private socket = io('http://localhost:3000');
 
-  private newMessageSubject = new Subject<Message>();
+  private newMessageSubject: Subject<Message> = new Subject<Message>();
 
   constructor(private http: HttpClient) { }
 
@@ -24,24 +22,18 @@ export class ChatService {
     this.socket.emit('join_room', channelId);
   }
 
-  public sendMessage(channelId: string, message: string) {
-    this.socket.emit('message', { channelId, message });
+  public sendMessage(channelId: string, message: string, user: any) {
+    this.socket.emit('message', { channelId, message, user });
   }
-
-  public getNewMessage = () => {
-    this.socket.on('new_message', (message) => {
-      this.message$.next(message);
-    });
-    return this.message$.asObservable();
-  };
 
   public leaveRoom(channelId: string) {
     this.socket.emit('leave_room', channelId);
   }
 
   listenForNewMessages(): Observable<Message> {
-    this.socket.on('new_message', (message: Message) => {
-      this.newMessageSubject.next(message);
+    this.socket.on('new_message', (data: any) => {
+      console.log('User Id: ', data.userId, 'Message Id: ', data._id,'User Obj: ', data.user,'Message: ',data.message, 'channelId: ',data.channelId, 'created: ',data.createdAt);
+      this.newMessageSubject.next(data);
     });
 
     return this.newMessageSubject.asObservable();

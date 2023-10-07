@@ -1,7 +1,7 @@
 import { CommonModule, NgFor } from '@angular/common';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Channel } from 'src/app/models/channel.model';
+import { Channel } from 'src/app/interfaces/channel.model';
 import { ChannelService } from 'src/app/services/channel.service';
 import { GroupComponent } from '../group/group.component';
 import { PermissionService } from 'src/app/services/permission.service';

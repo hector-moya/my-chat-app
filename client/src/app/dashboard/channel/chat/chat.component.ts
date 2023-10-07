@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, SimpleChanges, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { Message } from 'src/app/models/message.model';
-import { ChannelService } from 'src/app/services/channel.service';
+import { Message } from 'src/app/interfaces/message.model';
 import { ChatService } from 'src/app/services/chat.service';
-import { UserService } from 'src/app/services/user.service';
+import { User } from 'src/app/interfaces/user.model';
 
 @Component({
   standalone: true,
@@ -21,12 +19,9 @@ export class ChatComponent implements OnInit {
   messages: Message[] = [];
   newMessage: string = '';
   channelName: string | null = null;
-  private previousChannelId?: string;
 
   private chatService = inject(ChatService);
-  private channelService = inject(ChannelService);
-  private userService = inject(UserService);
-  private currentSocketSubscription?: Subscription;
+  private changeDetector = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('currentUser') || '{}');
@@ -37,32 +32,22 @@ export class ChatComponent implements OnInit {
         this.messages = messages;
       });
     }
-
     // Listen for new messages
     this.chatService.listenForNewMessages().subscribe(newMsg => {
-      this.messages.push(newMsg);
+        this.messages.push(newMsg);
+        this.changeDetector.detectChanges();
     });
   }
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes['currentChannelId'] && changes['currentChannelId'].currentValue) {
-  //     if (this.previousChannelId) {
-  //       this.chatService.leaveRoom(this.previousChannelId);
-  //       if (this.currentSocketSubscription) {
-  //         this.currentSocketSubscription.unsubscribe();
-  //       }
-  //     }
-  //     this.previousChannelId = this.currentChannelId; // Store the current channelId as previous for the next cycle
   
-  //     this.chatService.joinRoom(this.currentChannelId!);
-  
-  //     // ... rest of your code ...
-  
-  //     this.currentSocketSubscription = this.chatService.listenForNewMessages().subscribe(newMsg => {
-  //       this.messages.push(newMsg);
-  //     });
-  //   }
-  // }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['currentChannelId']) {
+      this.changeDetector.detectChanges();
+      this.chatService.joinRoom(this.currentChannelId!);
+      this.chatService.getMessagesByChannel(this.currentChannelId!).subscribe(messages => {
+        this.messages = messages;
+      });
+    }
+  }
 
   postMessage(event: Event) {
     event.preventDefault();
@@ -74,33 +59,31 @@ export class ChatComponent implements OnInit {
         createdAt: new Date()
       };
 
-      this.chatService.sendMessage(this.currentChannelId!, this.newMessage);
 
-      this.chatService.postMessage(message).subscribe(res => {
-        // The response will be the saved message with its ID, so you can push it to the messages array
-        this.messages.push(res);
+      this.chatService.postMessage(message).subscribe(() => {
+        this.chatService.sendMessage(this.currentChannelId!, this.newMessage, this.user);
         this.newMessage = '';  // Clear the input
       });
     }
   }
 
   getUserName(message: Message): string {
-    if (typeof message.userId === 'string') {
-      return '';
+    const user = 'user' in message ? message.user : message.userId;
+    if ((user as User).userName) {
+      let userName = (user as User).userName;
+      return userName;
     }
-    return message.userId.userName;
+    return 'User Name';
+    ;
   }
 
   getUserEmail(message: Message): string {
-    if (typeof message.userId === 'string') {
-      
-      //find user by id
-      this.userService.getUserById(message.userId).subscribe(user => {
-        return user.email;
-      });
-      return '';
+    const user = 'user' in message ? message.user : message.userId;
+    if ((user as User).email) {
+      let userEmail = (user as User).email;
+      return userEmail;
     }
-    return message.userId.email;
+    return 'User Email';
   }
 
 }

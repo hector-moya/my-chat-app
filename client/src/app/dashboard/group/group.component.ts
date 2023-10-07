@@ -1,12 +1,12 @@
 import { CommonModule, NgFor } from '@angular/common';
 import { ChangeDetectorRef, Component, EventEmitter, Output, inject } from '@angular/core';
 import { GroupService } from 'src/app/services/group.service';
-import { Group } from 'src/app/models/group.model';
+import { Group } from 'src/app/interfaces/group.model';
 import { FormsModule } from '@angular/forms';
-import { Channel } from 'src/app/models/channel.model';
+import { Channel } from 'src/app/interfaces/channel.model';
 import { ChannelComponent } from '../channel/channel.component';
 import { PermissionService } from 'src/app/services/permission.service';
-import { User } from 'src/app/models/user.model';
+import { User } from 'src/app/interfaces/user.model';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { NotificationService } from 'src/app/services/notification.service';
 import { GroupManagementComponent } from './group-management/group-management.component';

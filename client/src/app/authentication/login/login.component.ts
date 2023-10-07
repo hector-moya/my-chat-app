@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { loginCredentials } from 'src/app/models/user.model';
+import { loginCredentials } from 'src/app/interfaces/user.model';
 import { CommonModule, NgIf } from '@angular/common';
 
 @Component({

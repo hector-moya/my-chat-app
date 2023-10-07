@@ -11,9 +11,9 @@ module.exports = (io) => {
                 createdAt: new Date()
             });
             await newMessage.save();
-            io.to(req.body.channelId).emit('new_message', newMessage);  // Broadcast the new message only to the relevant channel
-            res.status(201).json(newMessage);
-            io.to(req.body.channelId).emit('new_message', newMessage); 
+            // const populatedMessage = await Message.populate(newMessage, { path: 'userId' });
+            // io.to(req.body.channelId).emit('new_message', populatedMessage); 
+            res.status(201).json('Successfully posted');
         } catch (error) {
             console.error('An error occurred:', error);
             res.status(500).json({ message: 'Failed to post message.' });

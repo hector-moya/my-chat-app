@@ -1,7 +1,7 @@
-<div class="flex flex-col h-full">
+<div class="flex flex-col h-[90vh]">
 
     <!--Message Section -->
-    <div class="grow mt-5 overflow-y-auto">
+    <div class="grow mt-5 overflow-y-scroll">
         <!-- User messages -->
         <div *ngFor="let message of messages">
             <div [ngClass]="{'justify-end': getUserEmail(message) === user.email, 'justify-start': getUserEmail(message) !== user.email}"
@@ -9,9 +9,8 @@
                 <img *ngIf="getUserEmail(message) !== user.email" src="https://source.unsplash.com/vpOeXr5wmR4/600x600" class="object-cover h-8 w-8 rounded-full" alt="" />
                 <div [ngClass]="{ 'mt-4 mr-2 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl': getUserEmail(message) === user.email, 'ml-2 bg-gray-400 rounded-br-3xl rounded-tr-3xl rounded-tl-xl': getUserEmail(message) !== user.email}"
                 class="py-3 px-4 text-white">
-                    {{ getUserName(message) }}
-                    {{ message.message }}
-                    <span>{{ message.createdAt | date:'shortTime' }}</span>
+                    <p>{{ message.message }}</p>
+                    <span class="text-xs italic">{{ getUserName(message) }} {{ message.createdAt | date:'shortTime' }}</span>
                 </div>
                 <img *ngIf="getUserEmail(message) === user.email" src="https://source.unsplash.com/vpOeXr5wmR4/600x600" class="object-cover h-8 w-8 rounded-full" alt="" />
             </div>

@@ -3,7 +3,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { FormGroup, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { User } from 'src/app/models/user.model';
+import { User } from 'src/app/interfaces/user.model';
 
 @Component({
   standalone: true,

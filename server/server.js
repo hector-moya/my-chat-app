@@ -6,6 +6,7 @@ const httpServer = require('http').createServer(app);
 const io = require('socket.io')(httpServer, {
     cors: { origin: '*' }
 });
+const setupSocketHandling = require('./socket/socketHandler');
 
 // Import seed function
 const seedDatabase = require('./data/seed');
@@ -38,26 +39,7 @@ mongoose.connect('mongodb://localhost:27017/chat-app', { useNewUrlParser: true, 
     })
     .catch(err => console.error('Could not connect to MongoDB...', err));
 
-// Socket.io Configuration
-io.on('connection', (socket) => {
-    console.log('a user connected');
-
-    // When a user chooses a channel, join them to a room named after the channel ID
-    socket.on('join_room', (channelId) => {
-        console.log(`User joined channel ${channelId}`);
-        socket.join(channelId);
-    });
-
-    // When a user sends a message, broadcast it only to users in the channel's room
-    socket.on('message', (data) => {
-        io.to(data.channelId).emit('new_message', data.message);  // Only send to users in the channel's room
-        console.log(data.message, 'for room', data.channelId);
-    });
-
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
-});
+setupSocketHandling(io);
 
 // Start the server
 httpServer.listen(port, () => console.log(`Server running on port ${port}`));
