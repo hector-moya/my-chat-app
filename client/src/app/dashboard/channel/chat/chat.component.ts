@@ -27,6 +27,7 @@ export class ChatComponent implements OnInit {
     this.user = JSON.parse(localStorage.getItem('currentUser') || '{}');
     // Load existing messages
     if (this.currentChannelId) {
+      this.chatService.leaveRoom(this.currentChannelId!);
       this.chatService.joinRoom(this.currentChannelId);
       this.chatService.getMessagesByChannel(this.currentChannelId).subscribe(messages => {
         this.messages = messages;
@@ -42,6 +43,7 @@ export class ChatComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentChannelId']) {
       this.changeDetector.detectChanges();
+      this.chatService.leaveRoom(this.currentChannelId!);
       this.chatService.joinRoom(this.currentChannelId!);
       this.chatService.getMessagesByChannel(this.currentChannelId!).subscribe(messages => {
         this.messages = messages;
