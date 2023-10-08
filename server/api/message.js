@@ -1,5 +1,7 @@
 const Message = require('../models/Message');
 const express = require('express');
+const upload = require('../middleware/multer');
+const path = require('path');
 const router = express.Router();
 
 module.exports = (io) => {
@@ -11,8 +13,6 @@ module.exports = (io) => {
                 createdAt: new Date()
             });
             await newMessage.save();
-            // const populatedMessage = await Message.populate(newMessage, { path: 'userId' });
-            // io.to(req.body.channelId).emit('new_message', populatedMessage); 
             res.status(201).json('Successfully posted');
         } catch (error) {
             console.error('An error occurred:', error);
@@ -29,6 +29,38 @@ module.exports = (io) => {
         } catch (error) {
             console.error('An error occurred:', error);
             res.status(500).json({ message: 'Failed to get messages.' });
+        }
+    });
+
+    // POST a new image message
+    router.post('/upload', upload.single('file'), async (req, res) => {
+        try {
+            const file = req.file;
+            const { id, userId } = req.query;
+            
+            if (!id || !userId) {
+                res.status(400).json({ message: 'Missing required parameters' });
+                return;
+            }
+            const imageUrl = `/storage/messages/${id}/${file.filename}`;  // Construct the image URL
+            console.log('Image name ', file.filename);
+            
+            // Create a new message document
+            const newMessage = new Message({
+                message: file.originalname,
+                imageUrl,
+                userId,
+                channelId: id,
+                createdAt: new Date()
+            });
+
+            await newMessage.save();
+            
+            res.status(201).json({ message: newMessage.message, imageUrl: newMessage.imageUrl, createdAt: newMessage.createdAt });
+
+        } catch (error) {
+            console.error('An error occurred:', error);
+            res.status(500).json({ message: 'Failed to upload file and create message.' });
         }
     });
 

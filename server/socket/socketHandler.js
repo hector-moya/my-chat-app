@@ -14,9 +14,13 @@ module.exports = function(io) {
                 ...data,
                 createdAt: new Date()
             };
-            io.to(data.channelId).emit('new_message', messageWithDate);  // Only send to users in the channel's room
-            console.log(data);
+            io.to(data.channelId).emit('new_message', messageWithDate);
         });
+
+        socket.on('new_image_message', (data) => {
+            io.to(data.channelId).emit('new_image_message', data);
+            console.log('new_image_message', data);
+          });
 
         socket.on('disconnect', () => {
             console.log('user disconnected');

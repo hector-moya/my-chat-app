@@ -2,11 +2,14 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 const httpServer = require('http').createServer(app);
 const io = require('socket.io')(httpServer, {
     cors: { origin: '*' }
 });
 const setupSocketHandling = require('./socket/socketHandler');
+
+const upload = require('./middleware/multer');
 
 // Import seed function
 const seedDatabase = require('./data/seed');
@@ -21,8 +24,9 @@ const messageRoutes = require('./api/message')(io);
 const port = 3000;
 
 // Middlewares
-app.use(express.json()); // Built-in middleware in Express, replaces bodyParser.json()
+app.use(express.json());
 app.use(cors());
+app.use('/storage', express.static(path.join(__dirname, 'storage')));
 
 // API Endpoints
 app.use('/api/user', userRoutes);

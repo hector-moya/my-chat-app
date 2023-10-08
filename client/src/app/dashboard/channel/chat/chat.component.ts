@@ -5,14 +5,14 @@ import { Message } from 'src/app/interfaces/message.model';
 import { ChatService } from 'src/app/services/chat.service';
 import { User } from 'src/app/interfaces/user.model';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
-import { UploadWidgetResult } from '@bytescale/upload-widget';
-import { UploadWidgetModule } from "@bytescale/upload-widget-angular";
+import { ModalComponent } from 'src/app/modal/modal.component';
+import { HttpClient } from '@angular/common/http';
 @Component({
   standalone: true,
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
-  imports: [FormsModule, CommonModule, PickerComponent, UploadWidgetModule]
+  imports: [FormsModule, CommonModule, PickerComponent, ModalComponent]
 
 })
 
@@ -24,16 +24,17 @@ export class ChatComponent implements OnInit {
   channelName: string | null = null;
   emojimessage = '';
   showEmojiPicker = false;
-
-  uploadedFileUrl: string | null = null;
-  options = {
-    apiKey: 'free', // Get API keys from: www.bytescale.com
-    multi: false,
-  };
+  showImageModal: boolean = false;
 
   private chatService = inject(ChatService);
   private changeDetector = inject(ChangeDetectorRef);
+  private http = inject(HttpClient);
 
+  // Function to show the add channel modal
+  showModal(): void {
+    console.log('Showing add channel form');
+    this.showImageModal = true;
+  }
   /**
    * On init, get the current user from local storage
    * If there is a current channel id, join the channel and get the messages
@@ -53,8 +54,13 @@ export class ChatComponent implements OnInit {
     }
     // Listen for new messages
     this.chatService.listenForNewMessages().subscribe(newMsg => {
-        this.messages.push(newMsg);
-        this.changeDetector.detectChanges();
+      this.messages.push(newMsg);
+      this.changeDetector.detectChanges();
+    });
+    
+    this.chatService.onNewImageMessage().subscribe((data: any) => {
+      this.messages.push(data);
+      this.changeDetector.detectChanges();
     });
   }
 
@@ -107,7 +113,7 @@ export class ChatComponent implements OnInit {
       let userName = (user as User).userName;
       return userName;
     }
-    return 'User Name';
+    return 'No User Name';
     ;
   }
 
@@ -122,9 +128,20 @@ export class ChatComponent implements OnInit {
       let userEmail = (user as User).email;
       return userEmail;
     }
-    return 'User Email';
+    return 'No User Email';
   }
 
+  /**
+   * Gets image url from the message
+   * @param message
+   * @returns
+   */
+  getImageUrl(message: Message): string {
+    if (message.imageUrl) {
+      return message.imageUrl;
+    }
+    return 'No Image Url';
+  }
   /**
    * Emoji Picker
    * Hides the emoji picker when the user clicks outside of the picker
@@ -142,7 +159,7 @@ export class ChatComponent implements OnInit {
     console.log(this.showEmojiPicker);
     this.showEmojiPicker = !this.showEmojiPicker;
   }
-  
+
   /**
    * Emoji Picker
    * Adds the selected emoji to the message
@@ -152,14 +169,24 @@ export class ChatComponent implements OnInit {
     const text = `${this.newMessage}${event.emoji.native}`;
     this.newMessage = text;
   }
-  
-  /**
-   * Upload Widget
-   * Handles the upload widget's onComplete event
-   * @param files 
-   */
-  onComplete = (files: UploadWidgetResult[]) => {
-    this.uploadedFileUrl = files[0]?.fileUrl;
-  };
+
+  uploadImage(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target && target.files && target.files.length > 0) {
+      const file = target.files[0];
+      
+      if (this.currentChannelId && this.user._id) {
+        this.chatService.uploadImage(this.currentChannelId, this.user, file).subscribe((response: any) => {
+          console.log(response.message);
+          if (response.message) {
+            this.showImageModal = false;
+          }
+        });
+      }
+    } else {
+      console.error('No file selected or event target is null');
+    }
+  }
+
 
 }

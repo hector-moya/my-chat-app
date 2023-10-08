@@ -26,6 +26,14 @@ export class ChatService {
     this.socket.emit('message', { channelId, message, user });
   }
 
+  public onNewImageMessage(): Observable<any> {
+    return new Observable(observer => {
+      this.socket.on('new_image_message', (data: any) => {
+        observer.next(data);
+      });
+    });
+  }
+
   public leaveRoom(channelId: string) {
     this.socket.emit('leave_room', channelId);
   }
@@ -48,4 +56,26 @@ export class ChatService {
     return this.http.get<Message[]>(`${this.apiUrl}/byChannel/${channelId}`);
   }
 
+  uploadImage(channelId: string, user: any, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    const url = `${this.apiUrl}/upload?contentType=messages&id=${channelId}&userId=${user._id}`;
+    return new Observable(observer => {
+      this.http.post(url, formData).subscribe({
+        next: (response: any) => {
+          console.log(response.message);
+          if (response.message) {
+            // If the image upload is successful, emit a new_image_message event to the socket server
+            this.socket.emit('new_image_message', { channelId, message: response.message, user, imageUrl: response.imageUrl });
+            observer.next(response);
+          } else {
+            observer.error('Failed to upload image');
+          }
+        },
+        error: (error: any) => {
+          observer.error(error);
+        }
+      })
+    });
+  }
 }

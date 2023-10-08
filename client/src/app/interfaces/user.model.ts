@@ -1,6 +1,7 @@
 export interface User {
     _id: string;
     userName: string;
+    imageUrl?: string;
     email: string;
     password: string;
     isSuper: boolean;
