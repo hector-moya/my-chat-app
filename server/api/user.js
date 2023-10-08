@@ -4,6 +4,7 @@ const User = require('../models/User');
 const UserGroup = require('../models/UserGroup');
 const UserChannel = require('../models/UserChannel');
 const Role = require('../models/Role');
+const upload = require('../middleware/multer');
 
 
 // --------------------------------------------------------------------------------------------- //
@@ -100,6 +101,40 @@ router.put('/updateRole/:id', async (req, res) => {
     }
 }); //----- End of PUT /promote/:id
 
+
+/**
+ * PUT /api/user/updateProfile/:id
+ * Update user's name, email, password, bio, and profile picture
+ * @param {*} id
+ * @param {*} userName
+ * @param {*} email
+ * @param {*} password
+ * @param {*} bio
+ * @param {*} profilePicture
+ */
+router.put('/updateProfile/:id', upload.single('image'), async (req, res) => {
+    try {
+        const { userName, email, password, bio } = JSON.parse(req.body.user);
+        const profilePicture = req.file ? `/storage/users/${req.params.id}/${req.file.filename}` : undefined;
+        console.log('profilePicture', profilePicture);
+
+        const updateFields = { userName, email, password, bio };
+        if (profilePicture) {
+            updateFields.imageUrl = profilePicture;  // Changed from updateFields.profilePicture
+        }
+        console.log('updateFields', updateFields);
+
+        const updateUser = await User.findByIdAndUpdate(req.params.id, updateFields, { new: true });
+        if (updateUser) {
+            return res.status(200).json({ message: "User profile updated", user: updateUser });
+        } else {
+            return res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update user profile.' });
+    }
+}); //----- End of PUT /updateProfile/:id
+
 // --------------------------------------------------------------------------------------------- //
 // ---------------------- User Group Related APIs ---------------------------------------------- //
 // --------------------------------------------------------------------------------------------- //
@@ -163,7 +198,7 @@ router.post('/addToGroup', async (req, res) => {
             groupId: req.body.groupId,
             roleId: role._id // Use the fetched role's ObjectId
         });
-        
+
         await newUserGroup.save();
 
         return res.status(200).json(user);

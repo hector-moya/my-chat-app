@@ -17,9 +17,13 @@ module.exports = function(io) {
             io.to(data.channelId).emit('new_message', messageWithDate);
         });
 
-        socket.on('new_image_message', (data) => {
-            io.to(data.channelId).emit('new_image_message', data);
-            console.log('new_image_message', data);
+        socket.on('new_image_message', (data) => {            
+            const messageWithDate = {
+                ...data,
+                createdAt: new Date()
+            };
+            io.to(data.channelId).emit('new_image_message', messageWithDate);
+            console.log('new_image_message', messageWithDate);
           });
 
         socket.on('disconnect', () => {

@@ -1,7 +1,6 @@
 const Message = require('../models/Message');
 const express = require('express');
 const upload = require('../middleware/multer');
-const path = require('path');
 const router = express.Router();
 
 module.exports = (io) => {
