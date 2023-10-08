@@ -18,12 +18,18 @@ export class ChatService {
 
   constructor(private http: HttpClient) { }
 
-  public joinRoom(channelId: string) {
-    this.socket.emit('join_room', channelId);
+  public joinRoom(channelId: string, user: any) {
+    this.socket.emit('join_room', channelId, user._id, user.userName);
   }
 
-  public sendMessage(channelId: string, message: string, user: any) {
-    this.socket.emit('message', { channelId, message, user });
+  public leaveRoom(channelId: string, user: any) {
+    console.log('leaving room');
+    this.socket.emit('leave_room', channelId, user._id, user.userName);
+    console.log('left room');
+  }
+
+  public sendMessage(channelId: string, message: string, user: any, type:string) {
+    this.socket.emit('message', { channelId, message, user, type });
   }
 
   public onNewImageMessage(): Observable<any> {
@@ -34,18 +40,13 @@ export class ChatService {
     });
   }
 
-  public leaveRoom(channelId: string) {
-    this.socket.emit('leave_room', channelId);
-  }
-
   listenForNewMessages(): Observable<Message> {
     this.socket.on('new_message', (data: any) => {
-      console.log('User Id: ', data.userId, 'Message Id: ', data._id,'User Obj: ', data.user,'Message: ',data.message, 'channelId: ',data.channelId, 'created: ',data.createdAt);
       this.newMessageSubject.next(data);
     });
 
     return this.newMessageSubject.asObservable();
-   
+
   }
 
   postMessage(message: Message): Observable<Message> {
@@ -76,6 +77,41 @@ export class ChatService {
           observer.error(error);
         }
       })
+    });
+  }
+
+  getPeersInChannel(channelId: string): Observable<any> {
+    return new Observable(observer => {
+      this.socket.emit('get_peers', channelId);  // Request the list of peers
+      this.socket.on('peers_in_channel', (data: any) => {
+        observer.next(data);
+      });
+    });
+  }
+
+  onNewPeer(): Observable<string> {
+    return new Observable(observer => {
+      this.socket.on('new_peer', (peerId: string) => {
+        observer.next(peerId);
+      });
+    });
+  }
+  
+  onUserJoined(): Observable<any> {
+    return new Observable(observer => {
+      this.socket.on('user_joined', (userData: any) => {
+        console.log('User joined', userData);
+        observer.next(userData);
+      });
+    });
+  }
+  
+  onUserLeft(): Observable<any> {
+    return new Observable(observer => {
+      this.socket.on('user_left', (userData: any) => {
+        console.log('User left: ', userData);
+        observer.next(userData);
+      });
     });
   }
 }

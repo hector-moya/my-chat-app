@@ -12,6 +12,11 @@ const MessageSchema = new mongoose.Schema({
         ref: 'Channel',
     },
     createdAt: Date,
+    type: {
+        type: String,
+        enum: ['user', 'system'],  // Define the allowed values
+        default: 'user'  // Default to 'user' for normal messages
+      },
 });
 
 module.exports = mongoose.model('Message', MessageSchema);

@@ -7,5 +7,6 @@ export interface Message {
     imageUrl?: string;
     message: string;
     channelId: string;
+    type?: string;
     createdAt: Date;
 }

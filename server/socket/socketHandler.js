@@ -1,14 +1,37 @@
+const peersByChannel = {};
 module.exports = function(io) {
     io.on('connection', (socket) => {
         console.log('a user connected');
 
         // When a user chooses a channel, join them to a room named after the channel ID
-        socket.on('join_room', (channelId) => {
-            console.log(`User joined channel ${channelId}`);
+        socket.on('join_room', (channelId, userId, userName) => {
             socket.join(channelId);
+            const message = {
+                message: `${userName} joined channel}`,
+                channelId,
+                userId,
+                userName,
+                createdAt: new Date(),
+                type: 'system'
+            };
+            io.to(channelId).emit('user_joined', message);
+            console.log(`${userName} joined channel ${channelId} and type is ${message.type}`);
         });
 
-        // When a user sends a message, broadcast it only to users in the channel's room
+        socket.on('leave_room', (channelId, userId, userName) => {
+            socket.leave(channelId);
+            const message = {
+                message: `${userName} left channel`,
+                channelId,
+                userId,
+                userName,
+                createdAt: new Date(),
+                type: 'system'
+            };
+            io.to(channelId).emit('user_left', message);
+            console.log(`${userName} left channel ${channelId} and type is ${message.type}`);
+        });
+
         socket.on('message', (data) => {
             const messageWithDate = {
                 ...data,
@@ -28,6 +51,10 @@ module.exports = function(io) {
 
         socket.on('disconnect', () => {
             console.log('user disconnected');
+            // Cleanup: remove this peer from all channels
+            for (let channelId in peersByChannel) {
+                peersByChannel[channelId] = peersByChannel[channelId].filter(id => id !== socket.id);
+            }
         });
     });
 };
