@@ -10,6 +10,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { GroupComponent } from './dashboard/group/group.component';
 import { ChannelComponent } from './dashboard/channel/channel.component';
 import { ChatComponent } from './dashboard/channel/chat/chat.component';
+import { PickerComponent} from '@ctrl/ngx-emoji-mart';
+import { UploadWidgetModule } from "@bytescale/upload-widget-angular";
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,6 +27,8 @@ import { ChatComponent } from './dashboard/channel/chat/chat.component';
     ChatComponent,
     RegisterComponent,
     ChannelComponent,
+    PickerComponent,
+    UploadWidgetModule
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -128,13 +128,11 @@ module.exports = {
     "user_channel": [
         {
             "userId": 3,
-            "channelId": 3,
-            "groupId": 3
+            "channelId": 3
         },
         {
             "userId": 2,
-            "channelId": 3,
-            "groupId": 3
+            "channelId": 3
         }
     ],
     "channels": [
