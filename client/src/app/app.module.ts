@@ -10,8 +10,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { GroupComponent } from './dashboard/group/group.component';
 import { ChannelComponent } from './dashboard/channel/channel.component';
 import { ChatComponent } from './dashboard/channel/chat/chat.component';
-import { PickerComponent} from '@ctrl/ngx-emoji-mart';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { UploadWidgetModule } from "@bytescale/upload-widget-angular";
+import { UserDetailsComponent } from './dashboard/user-details/user-details.component';
 
 
 @NgModule({
@@ -28,9 +29,10 @@ import { UploadWidgetModule } from "@bytescale/upload-widget-angular";
     RegisterComponent,
     ChannelComponent,
     PickerComponent,
-    UploadWidgetModule
+    UploadWidgetModule, 
+    UserDetailsComponent
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

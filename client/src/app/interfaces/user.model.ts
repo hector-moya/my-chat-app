@@ -4,6 +4,7 @@ export interface User {
     imageUrl?: string;
     email: string;
     password: string;
+    bio?: string;
     isSuper: boolean;
 }
 
@@ -15,4 +16,9 @@ export interface loginCredentials {
 export interface Role {
     _id: string;
     roleName: string;
+}
+
+export interface UpdateResponse {
+    message: string;
+    user: User;
 }

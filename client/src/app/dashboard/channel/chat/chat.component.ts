@@ -6,7 +6,6 @@ import { ChatService } from 'src/app/services/chat.service';
 import { User } from 'src/app/interfaces/user.model';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { ModalComponent } from 'src/app/modal/modal.component';
-import { HttpClient } from '@angular/common/http';
 @Component({
   standalone: true,
   selector: 'app-chat',
@@ -28,13 +27,7 @@ export class ChatComponent implements OnInit {
 
   private chatService = inject(ChatService);
   private changeDetector = inject(ChangeDetectorRef);
-  private http = inject(HttpClient);
 
-  // Function to show the add channel modal
-  showModal(): void {
-    console.log('Showing add channel form');
-    this.showImageModal = true;
-  }
   /**
    * On init, get the current user from local storage
    * If there is a current channel id, join the channel and get the messages

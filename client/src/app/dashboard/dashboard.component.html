@@ -1,4 +1,4 @@
-<div class="min-h-screen flex flex-col shadow-lg rounded-lg overflow-y-hidden">
+<div class="min-h-screen overflow-y-hidden">
   <!-- Header Section -->
   <div class="bg-gray-800 text-white px-5 py-5 flex justify-between items-center border-b-2">
     <!-- Welcome Message and User Info -->
@@ -6,10 +6,8 @@
     <div class="w-1/2">
     </div>
 
-    <button id="dropdownInformationButton" data-dropdown-toggle="dropdownInformation"
-      class="text-white focus:ring-4 focus:outline-none font-medium rounded-full text-sm px-4 py-2.5 text-center inline-flex items-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
-      type="button" (click)="showMenu = !showMenu">
-      {{ currentUser.userName.charAt(0) }}
+    <button id="dropdownInformationButton" data-dropdown-toggle="dropdownInformation" type="button" (click)="showMenu = !showMenu">
+      <img [src]="'http://localhost:3000' + currentUser.imageUrl" alt="User Image" class="object-contain w-16 h-16 rounded-full mr-2 p-1 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
     </button>
     <div id="dropdownInformation" [ngClass]="{'hidden': !showMenu}"
       class="z-10 hidden divide-y rounded-lg shadow w-44 bg-gray-700 divide-gray-600">
@@ -19,10 +17,16 @@
       </div>
       <ul class="py-2 text-sm text-gray-200" aria-labelledby="dropdownInformationButton">
         <li>
-          <app-user-management *ngIf="currentUser.isSuper"></app-user-management>
+          <button (click)="showUserManagementModal = true" class="text-left w-full block px-4 py-2 hover:bg-gray-600 hover:text-white">
+            User Details
+            </button>
         </li>
         <li>
-          <button *ngIf="currentUser.isSuper" (click)="showAddUserForm()"
+          <button *ngIf="currentUser.isSuper" (click)="showManageUsersModal = true"
+            class="text-left w-full block px-4 py-2 hover:bg-gray-600 hover:text-white">Manage Users</button>
+        </li>
+        <li>
+          <button *ngIf="currentUser.isSuper" (click)="showAddUserModal = true"
             class="text-left w-full block px-4 py-2 hover:bg-gray-600 hover:text-white">Add User</button>
         </li>
         <li>
@@ -71,11 +75,14 @@
     </div>
   </div>
 </div>
-<!-- Add User Modal -->
-<div *ngIf="showAddUserModal" class="fixed inset-0 flex items-center justify-center z-50">
-  <div class="bg-white p-8 rounded-lg w-1/3">
-    <h2 class="text-2xl mb-4">Add New User</h2>
-    <button (click)="showAddUserModal = false" class="text-red-500 mb-4">Close</button>
-    <app-register (userRegistered)="showAddUserModal = false"></app-register> <!-- Embed the registration component -->
-  </div>
-</div>
+
+<app-modal #userModal [showModal]="showUserManagementModal" title="User Details" (closeModal)="showUserManagementModal = false">
+  <app-user-details [modal]="userModal"></app-user-details>
+</app-modal>
+<app-modal [showModal]="showAddUserModal" title="Add New User" (closeModal)="showAddUserModal = false">
+  <app-register (userRegistered)="showAddUserModal = false"></app-register>
+</app-modal>
+<!-- Manage Users Modal -->
+<app-modal [showModal]="showManageUsersModal" title="Manage Users" (closeModal)="showManageUsersModal = false">
+  <app-user-management></app-user-management>
+</app-modal>

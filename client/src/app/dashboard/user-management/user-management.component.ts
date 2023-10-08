@@ -4,18 +4,18 @@ import { User } from 'src/app/interfaces/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from 'src/app/services/notification.service';
+import { ModalComponent } from 'src/app/modal/modal.component';
 
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalComponent],
   templateUrl: './user-management.component.html',
   styles: [
   ]
 })
 export class UserManagementComponent implements OnInit {
   users: User[] = [];
-  showModal: boolean = false;
 
   private userService = inject(UserService);
   public notificationService = inject(NotificationService);
@@ -33,10 +33,6 @@ export class UserManagementComponent implements OnInit {
         console.error(err);
       }
     });
-  }
-
-  toggleModal(): void {
-    this.showModal = !this.showModal;
   }
 
   updateRole(user: User): void {

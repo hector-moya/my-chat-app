@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, tap } from 'rxjs';
-import { Role, User } from '../interfaces/user.model';
+import { Observable } from 'rxjs';
+import { Role, UpdateResponse, User } from '../interfaces/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +36,12 @@ export class UserService {
   updateUserRole(id: string, isSuper: boolean): Observable<any> {
     return this.http.put(`${this.apiUrl}/updateRole/${id}`, { isSuper });
   }
+  
+  // Update user's profile
+  updateUser(id: string, user: FormData): Observable<UpdateResponse> {
+    const url = `${this.apiUrl}/updateProfile/${id}?contentType=users&id=${id}`;
+    return this.http.put<UpdateResponse>(url, user);
+}
 
   // Get users by group ID
   getUsersByGroupId(groupId: string | undefined): Observable<User[]> {
