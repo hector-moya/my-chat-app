@@ -10,21 +10,26 @@ const router = express.Router();
  * @returns {object} user
  * @returns {boolean} valid
  */
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
 
-    try {
-        const user = await User.findOne({ email: email, password: password });
+  try {
+    const user = await User.findOne({ email: email, password: password });
 
-        if (user) {
-            const { password, ...userWithoutPassword } = user.toObject(); 
-            res.json({ valid: true, user: userWithoutPassword });
-        } else {
-            res.json({ valid: false });
-        }
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+    if (user) {
+      if (user.status === "pending") {
+        return res
+          .status(403)
+          .json({ valid: false, message: "Your account is pending approval." });
+      }
+      const { password, ...userWithoutPassword } = user.toObject();
+      res.json({ valid: true, user: userWithoutPassword });
+    } else {
+      res.json({ valid: false, message: "Invalid credentials." });
     }
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
 
 /**
@@ -33,11 +38,11 @@ router.post('/login', async (req, res) => {
  * @param {string} username
  * @param {string} email
  * @param {string} password
- * @param {boolean} isSuper
+ * @param {boolean} status
  * @returns {object} user
  */
 router.post('/register', async (req, res) => {
-    const { username, email, password, isSuper } = req.body;
+    const { username, email, password } = req.body;
 
     try {
         const existingUser = await User.findOne({ email: email });
@@ -49,8 +54,7 @@ router.post('/register', async (req, res) => {
         const user = new User({
             userName: username,
             email: email,
-            password: password,
-            isSuper: isSuper || false
+            password: password
         });
 
         await user.save();

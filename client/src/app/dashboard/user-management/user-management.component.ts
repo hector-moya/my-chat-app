@@ -35,9 +35,9 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  updateRole(user: User): void {
+  updateStatus(user: User, ): void {
     // Call UserService method to update the user's role
-    this.userService.updateUserRole(user._id, user.isSuper).subscribe({
+    this.userService.updateUserRole(user._id, user.status).subscribe({
       next: (response) => {
         // Update the user in the list of users
         this.users = this.users.map((u) => {
@@ -51,7 +51,7 @@ export class UserManagementComponent implements OnInit {
       error: (err) => {
         console.error("Failed to update user role:", err);
         // Revert the dropdown change in case of error
-        user.isSuper = !user.isSuper;
+        user.status = user.status;
       }
     });
   }

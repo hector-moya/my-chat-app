@@ -9,26 +9,23 @@ import { CommonModule, NgIf } from '@angular/common';
   standalone: true,
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styles: [
-  ],
-  imports: [ReactiveFormsModule, NgIf, CommonModule]
+  styles: [],
+  imports: [ReactiveFormsModule, NgIf, CommonModule],
 })
 export class LoginComponent implements OnInit {
-
   loginForm!: FormGroup;
   errorMessage: string | null = null;
 
-  constructor
-    (
-      private fb: FormBuilder,
-      private authenticationService: AuthenticationService,
-      private router: Router
-    ) { }
+  constructor(
+    private fb: FormBuilder,
+    private authenticationService: AuthenticationService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
@@ -37,20 +34,16 @@ export class LoginComponent implements OnInit {
       const credentials: loginCredentials = this.loginForm.value;
       this.authenticationService.login(credentials).subscribe({
         next: (response) => {
-          // Navigate to the dashboard
-          if (response) {
+          if (response.valid) {
             this.router.navigate(['/dashboard']);
           } else {
-            this.errorMessage = 'Invalid credentials';
+            this.errorMessage = response.message || 'Invalid credentials';
           }
         },
         error: (error) => {
-          // Handle the error from the server
-          this.errorMessage = 'An error occurred';
-        }
+          this.errorMessage = error.error.message || 'An error occurred';
+        },
       });
     }
   }
-
-
 }

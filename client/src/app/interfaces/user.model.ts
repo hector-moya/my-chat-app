@@ -1,11 +1,11 @@
 export interface User {
-    _id: string;
-    userName: string;
-    imageUrl?: string;
-    email: string;
-    password: string;
-    bio?: string;
-    isSuper: boolean;
+  _id: string;
+  userName: string;
+  imageUrl?: string;
+  email: string;
+  password: string;
+  bio?: string;
+  status: 'pending' | 'user' | 'super';
 }
 
 export interface loginCredentials {

@@ -15,6 +15,7 @@ import { User } from 'src/app/interfaces/user.model';
 })
 export class RegisterComponent {
   @Output() userRegistered = new EventEmitter<boolean>();
+  @Output() registrationSuccess = new EventEmitter<boolean>(); 
   registerForm!: FormGroup;
 
   constructor(
@@ -40,6 +41,7 @@ export class RegisterComponent {
           if (response) {
             console.log(response);
             this.userRegistered.emit(true);
+            this.registrationSuccess.emit();
             // this.router.navigate(['/dashboard']);
           } else {
             // Handle the error from the server

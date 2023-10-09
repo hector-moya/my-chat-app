@@ -17,7 +17,14 @@ import { UserService } from 'src/app/services/user.service';
   selector: 'app-group',
   templateUrl: './group.component.html',
   styles: [],
-  imports: [NgFor, CommonModule, FormsModule, ChannelComponent, ModalComponent, GroupManagementComponent],
+  imports: [
+    NgFor,
+    CommonModule,
+    FormsModule,
+    ChannelComponent,
+    ModalComponent,
+    GroupManagementComponent,
+  ],
 })
 export class GroupComponent {
   @Output() channelSelected = new EventEmitter<string>();
@@ -25,7 +32,7 @@ export class GroupComponent {
   groups: any[] = [];
   groupUsers: User[] = [];
   editingGroupId: string | null = null;
-  isSuper: Boolean = false;
+  userStatus: string = 'pending';
   groupChannels: { [groupId: string]: Channel[] } = {};
   showAddGroupModal: boolean = false;
   newGroupName: string = '';
@@ -43,7 +50,7 @@ export class GroupComponent {
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('currentUser') || '{}');
     if (this.user) {
-      if (this.user.isSuper) {
+      if (this.user.status === 'super') {
         this.getAllGroups();
       } else {
         this.getGroups();
@@ -53,21 +60,21 @@ export class GroupComponent {
 
   /**
    * Function to check if the user can edit a group
-   * @param group 
+   * @param group
    */
   checkCanEdit(group: Group) {
     if (group._id) {
       this.groupService.getUserRole(group._id, this.user._id).subscribe({
         next: (role) => {
           console.log('Role:', role);
-          const canEdit = role || this.user.isSuper;
+          const canEdit = role || this.user.status === 'super';
           this.permissionService.updateCanEditGroup(group._id!, canEdit);
         },
         error: (err) => {
           if (group._id) {
             this.permissionService.updateCanEditGroup(group._id, false);
           }
-        }
+        },
       });
     }
   }
@@ -78,7 +85,9 @@ export class GroupComponent {
    * @returns
    */
   canEdit(group: Group): boolean {
-    return group._id ? this.permissionService.canEditGroup[group._id] || false : false;
+    return group._id
+      ? this.permissionService.canEditGroup[group._id] || false
+      : false;
   }
 
   /**
@@ -90,7 +99,7 @@ export class GroupComponent {
     this.groupService.getGroupsByUserId(this.user._id).subscribe({
       next: (groups) => {
         this.groups = groups;
-  
+
         // Fetch role and update permissions for each group
         this.groups.forEach((group) => {
           if (group._id) {
@@ -100,19 +109,21 @@ export class GroupComponent {
                 this.permissionService.updateCanEditGroup(group._id, canEdit);
               },
               error: (err) => {
-                console.error(`Error fetching role for group ${group._id}:`, err);
+                console.error(
+                  `Error fetching role for group ${group._id}:`,
+                  err
+                );
                 this.permissionService.updateCanEditGroup(group._id, false);
-              }
+              },
             });
           }
         });
       },
       error: (err) => {
         console.log(err);
-      }
+      },
     });
   }
-  
 
   /**
    * Function to add a new group
@@ -155,7 +166,6 @@ export class GroupComponent {
       },
     });
   }
-
 
   /**
    * Function to show the channels for a group
@@ -203,7 +213,7 @@ export class GroupComponent {
           this.groups.push(group); // Update the local groups array
 
           // If the user is a super user, directly update the permissions
-          if (this.user.isSuper && group._id) {
+          if (this.user.status === 'super' && group._id) {
             this.permissionService.updateCanEditGroup(group._id, true);
           } else {
             this.checkCanEdit(group);
@@ -217,9 +227,8 @@ export class GroupComponent {
         },
         error: (error) => {
           console.log('Error adding new group:', error);
-        }
+        },
       });
     }
-  } 
-
+  }
 }

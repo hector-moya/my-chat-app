@@ -30,6 +30,13 @@ export class AuthenticationComponent {
   /**
    * This method is called when the user clicks the "Register" button.
    */
+  onRegisterSuccess() {
+    this.show = 'login';
+  }
+
+  /**
+   * This method is called when the user clicks the "Register" button.
+   */
   showRegister() {
     this.show = 'register';
   }

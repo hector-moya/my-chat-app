@@ -34,7 +34,7 @@ export class ChannelComponent implements OnInit {
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('currentUser') || '{}');
     if (this.user) {
-      if (this.user.isSuper) {
+      if (this.user.status === 'super') {
         this.getAllChannels();
       } else {
         this.loadChannels();
@@ -157,7 +157,7 @@ export class ChannelComponent implements OnInit {
       this.channelService.addChannel(newChannel, this.groupId).subscribe({
         next: (channel) => {
           this.channels.push(channel); // Update the local channels array
-          if (this.user.isSuper && channel._id) {
+          if (this.user.status === 'super' && channel._id) {
             this.permissionService.updateCanEditChannel(channel._id, true);
           } else {
             this.checkCanEditChannel(channel);

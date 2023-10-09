@@ -20,7 +20,7 @@ export class UserDetailsComponent implements OnInit {
     userName: '',
     email: '',
     password: '',
-    isSuper: false,
+    status: 'pending',
     imageUrl: '',
     bio: ''
   };

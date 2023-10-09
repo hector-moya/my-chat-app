@@ -22,14 +22,14 @@ async function seedDatabase() {
 
     // Seed Users
     for (let user of dummyData.users) {
-        const newUser = new User({
-            userName: user.username,
-            email: user.email,
-            password: user.password,
-            isSuper: user.isSuper
-        });
-        await newUser.save();
-        userIds[user.id] = newUser._id;
+      const newUser = new User({
+        userName: user.username,
+        email: user.email,
+        password: user.password,
+        status: user.status,
+      });
+      await newUser.save();
+      userIds[user.id] = newUser._id;
     }
     console.log("User IDs mapping:", userIds);
 

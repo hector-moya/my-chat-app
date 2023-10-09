@@ -22,11 +22,11 @@
             </button>
         </li>
         <li>
-          <button *ngIf="currentUser.isSuper" (click)="showManageUsersModal = true"
+          <button *ngIf="currentUser.status === 'super'" (click)="showManageUsersModal = true"
             class="text-left w-full block px-4 py-2 hover:bg-gray-600 hover:text-white">Manage Users</button>
         </li>
         <li>
-          <button *ngIf="currentUser.isSuper" (click)="showAddUserModal = true"
+          <button *ngIf="currentUser.status === 'super'" (click)="showAddUserModal = true"
             class="text-left w-full block px-4 py-2 hover:bg-gray-600 hover:text-white">Add User</button>
         </li>
         <li>

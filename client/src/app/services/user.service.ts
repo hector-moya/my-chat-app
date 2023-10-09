@@ -33,8 +33,8 @@ export class UserService {
   }
 
   // Update user's role
-  updateUserRole(id: string, isSuper: boolean): Observable<any> {
-    return this.http.put(`${this.apiUrl}/updateRole/${id}`, { isSuper });
+  updateUserRole(id: string, status: 'pending' | 'user' | 'super'): Observable<any> {
+    return this.http.put(`${this.apiUrl}/updateRole/${id}`, { status });
   }
   
   // Update user's profile

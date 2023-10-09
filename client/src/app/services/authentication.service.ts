@@ -22,23 +22,16 @@ export class AuthenticationService {
    * @param credentials
    * @returns
    */
-  login(credentials: loginCredentials): Observable<boolean> {
-    interface LoginResponse {
-      valid: boolean;
-      user: User;
-    }
-    return this.http
-      .post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials)
-      .pipe(
-        tap((response: LoginResponse) => {
-          if (response.valid) {
-            localStorage.setItem('currentUser', JSON.stringify(response.user));
-            console.log('User logged in successfully');
-            this.isLoggedIn = true;
-          }
-        }),
-        map((response: LoginResponse) => response.valid) // map the response to a boolean value
-      );
+  login(credentials: loginCredentials): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/login`, credentials).pipe(
+      tap((response: any) => {
+        if (response.valid) {
+          localStorage.setItem('currentUser', JSON.stringify(response.user));
+          console.log('User logged in successfully');
+          this.isLoggedIn = true;
+        }
+      })
+    );
   }
 
   logout(): void {

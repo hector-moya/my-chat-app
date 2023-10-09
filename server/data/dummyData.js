@@ -6,49 +6,49 @@ module.exports = {
             "username": "super",
             "email": "super@admin.com",
             "password": "123",
-            "isSuper": true
+            "status": "super"
         },
         {
             "id": 2,
             "username": "groupAdmin1",
             "email": "group1@admin.com",
             "password": "password",
-            "isSuper": false
+            "status": "user"
         },
         {
             "id": 3,
             "username": "groupAdmin2",
             "email": "group2@admin.com",
             "password": "password",
-            "isSuper": false
+            "status": "user"
         },
         {
             "id": 4,
             "username": "user1",
             "email": "user1@email.com",
             "password": "password",
-            "isSuper": false
+            "status": "user"
         },
         {
             "id": 5,
             "username": "Hector",
             "email": "nokure@gmail.com",
             "password": "password",
-            "isSuper": true
+            "status": "super"
         },
         {
             "id": 6,
             "username": "Alvaro",
             "email": "my@sadf.com",
             "password": "password",
-            "isSuper": false
+            "status": "user"
         },
         {
             "id": 7,
             "username": "alicia",
             "email": "alica@alicai.com",
             "password": "password",
-            "isSuper": false
+            "status": "user"
         }
     ],
     "roles": [

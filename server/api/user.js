@@ -87,18 +87,27 @@ router.delete('/:id', async (req, res) => {
  * PUT /api/user/updateRole/:id
  * Update user's role
  */
-router.put('/updateRole/:id', async (req, res) => {
-    try {
-        const { isSuper } = req.body; // Destructure isSuper from request body
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, { isSuper }, { new: true });
-        if (updatedUser) {
-            return res.status(200).json({ message: "User role updated", user: updatedUser });
-        } else {
-            return res.status(404).json({ message: 'User not found' });
-        }
-    } catch (error) {
-        res.status(500).json({ message: 'Failed to update user role.' });
+router.put("/updateRole/:id", async (req, res) => {
+  try {
+    const { status } = req.body; // Destructure status from request body
+    if (!["pending", "user", "super"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status." });
     }
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+    if (updatedUser) {
+      return res
+        .status(200)
+        .json({ message: "User role updated", user: updatedUser });
+    } else {
+      return res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update user role." });
+  }
 }); //----- End of PUT /promote/:id
 
 
