@@ -1,6 +1,6 @@
 <!-- Video Call Button -->
 
-<button type="button" (click)="startVideoCall()" 
+<button type="button" (click)="startVideoCall()"
     class="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
         <path fill="currentColor"
@@ -9,11 +9,47 @@
 </button>
 
 <app-modal [showModal]="showVideoChat" title="Video" (closeModal)="showVideoChat = false">
-    <button type="button" (click)="endVideoCall()">
-        End Call
-    </button>
-    
-    <!-- Video elements to display local and remote streams -->
-    <video #localVideo [srcObject]="myStream" autoplay></video>
-    <div id="remoteVideos"></div>
+    <div class="flex flex-col h-full">
+        <!-- Video elements to display local and remote streams -->
+        <div class="flex-grow flex items-center justify-center bg-gray-100 rounded-lg p-4">
+            <video #localVideo [srcObject]="myStream" autoplay class="rounded-lg shadow-lg"></video>
+            <div id="remoteVideos" class="flex flex-wrap gap-4"></div>
+        </div>
+
+        <!-- Bottom menu -->
+        <div class="flex justify-between items-center p-4 bg-gray-200 mt-4 rounded-lg border-t border-gray-300">
+            <button type="button" (click)="toggleMicrophone()"
+                class="flex items-center gap-2 p-2 rounded-lg text-gray-500 hover:bg-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3m7 9c0 3.53-2.61 6.44-6 6.93V21h-2v-3.07c-3.39-.49-6-3.4-6-6.93h2a5 5 0 0 0 5 5a5 5 0 0 0 5-5h2Z" />
+                </svg>
+            </button>
+
+            <button type="button" (click)="toggleCamera()"
+                class="flex items-center gap-2 p-2 rounded-lg text-gray-500 hover:bg-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <circle cx="256" cy="272" r="64" fill="currentColor" />
+                    <path fill="currentColor"
+                        d="M456 144h-83c-3 0-6.72-1.94-9.62-5L336.1 96.2C325 80 320 80 302 80h-92c-18 0-24 0-34.07 16.21L148.62 139c-2.22 2.42-5.34 5-8.62 5v-16a8 8 0 0 0-8-8H92a8 8 0 0 0-8 8v16H56a24 24 0 0 0-24 24v240a24 24 0 0 0 24 24h400a24 24 0 0 0 24-24V168a24 24 0 0 0-24-24ZM260.51 367.9a96 96 0 1 1 91.39-91.39a96.11 96.11 0 0 1-91.39 91.39Z" />
+                </svg>
+            </button>
+
+            <button type="button" (click)="startScreenShare()"
+                class="flex items-center gap-2 p-2 rounded-lg text-gray-500 hover:bg-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M8 14h2v-2q0-.425.288-.713T11 11h2v2l3-3l-3-3v2h-2q-1.25 0-2.125.875T8 12v2Zm-6 7q-.425 0-.713-.288T1 20q0-.425.288-.713T2 19h20q.425 0 .713.288T23 20q0 .425-.288.713T22 21H2Zm2-3q-.825 0-1.413-.588T2 16V5q0-.825.588-1.413T4 3h16q.825 0 1.413.588T22 5v11q0 .825-.588 1.413T20 18H4Z" />
+                </svg>
+            </button>
+
+            <button type="button" (click)="endVideoCall()"
+                class="flex items-center gap-2 p-2 rounded-lg text-gray-500 hover:bg-red-300 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="m14.827 9.7l.138-.754a2.266 2.266 0 0 0-.71-2.063C12.883 5.623 10.74 4.996 7.825 5c-2.91.004-4.988.636-6.234 1.895c-.528.533-.72 1.324-.505 2.075l.216.754c.202.704.884 1.175 1.594 1.1l1.424-.149a1.35 1.35 0 0 0 1.2-1.125l.274-1.604A5.49 5.49 0 0 1 7.99 7.43c.787-.024 1.508.103 2.162.382l.442 1.714a1.53 1.53 0 0 0 1.315 1.14l1.432.144a1.354 1.354 0 0 0 1.485-1.11Z" />
+                </svg>
+            </button>
+        </div>
+    </div>
 </app-modal>

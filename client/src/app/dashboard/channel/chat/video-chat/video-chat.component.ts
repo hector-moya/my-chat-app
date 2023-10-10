@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChatService } from 'src/app/services/chat.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
@@ -17,6 +17,7 @@ export class VideoChatComponent implements OnInit {
   showVideoChat: boolean = false;
 
   private chatService = inject(ChatService);
+  private changeDetector = inject(ChangeDetectorRef);
 
 
   ngOnInit(): void {
@@ -43,5 +44,35 @@ export class VideoChatComponent implements OnInit {
 
   endVideoCall(): void {
     this.chatService.leaveVideoRoom(this.currentChannelId || '');
+    this.chatService.closePeerConnection();
+    this.showVideoChat = false;    
+  }
+
+  startScreenShare(): void {
+    this.chatService.getScreenMedia().then(screenStream => {
+      // Assume replaceStream is a method on ChatService that replaces the user's video stream
+      this.chatService.replaceStream(this.currentChannelId || '', screenStream);
+      this.changeDetector.detectChanges();
+    }).catch(err => {
+      console.error('Error accessing screen.', err);
+    });
+  }
+
+  toggleCamera(): void {
+    if (this.myStream) {
+      const videoTracks = this.myStream.getVideoTracks();
+      for (const track of videoTracks) {
+        track.enabled = !track.enabled;
+      }
+    }
+  }
+
+  toggleMicrophone(): void {
+    if (this.myStream) {
+      const audioTracks = this.myStream.getAudioTracks();
+      for (const track of audioTracks) {
+        track.enabled = !track.enabled;
+      }
+    }
   }
 }
