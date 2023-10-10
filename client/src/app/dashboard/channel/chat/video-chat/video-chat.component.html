@@ -1,11 +1,19 @@
 <!-- Video Call Button -->
-<button (click)="startVideoCall()" type="button"
-    class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
-    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M5.5 9L4 6.5 1 12l3 5.5L5.5 15H9m3 0h4.5l1.5 1.5L23 12l-3-5.5-1.5 1.5H15" />
+
+<button type="button" (click)="startVideoCall()" 
+    class="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path fill="currentColor"
+            d="M6.455 19L2 22.5V4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H6.455ZM14 10.25V8H7v6h7v-2.25L17 14V8l-3 2.25Z" />
     </svg>
-    Video Call
 </button>
+
+<app-modal [showModal]="showVideoChat" title="Video" (closeModal)="showVideoChat = false">
+    <button type="button" (click)="endVideoCall()">
+        End Call
+    </button>
+    
+    <!-- Video elements to display local and remote streams -->
+    <video #localVideo [srcObject]="myStream" autoplay></video>
+    <div id="remoteVideos"></div>
+</app-modal>

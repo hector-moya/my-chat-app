@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PeerJS Test</title>
+    <script src="https://unpkg.com/peerjs@1/dist/peerjs.min.js"></script>
+</head>
+<body>
+
+    <script>
+        // Create a new Peer instance
+        const peer = new Peer({
+            host: 'localhost',
+            port: 3000,
+            path: '/peerjs/myapp',
+            secure: false  // Set to false since you're likely not using HTTPS in localhost
+        });
+    
+        // Listen for the 'open' event, which indicates that the connection to the PeerJS server has been established
+        peer.on('open', id => {
+            console.log('Peer connection established. Your peer ID is:', id);
+        });
+    
+        // Error handling
+        peer.on('error', err => {
+            console.error('Error:', err);
+        });
+    </script>
+    
+
+</body>
+</html>

@@ -39,9 +39,7 @@ export class DashboardComponent implements OnInit {
   }
 
   onChannelSelected(channelId: string): void {
-    console.log('Dashboard Channel Id: ', channelId);
     this.currentChannelId = channelId;
-    console.log('Dashboard Current Channel Id: ', this.currentChannelId);
   }
 
   logout(): void {

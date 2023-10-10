@@ -7,9 +7,8 @@ const httpServer = require('http').createServer(app);
 const io = require('socket.io')(httpServer, {
     cors: { origin: '*' }
 });
-const setupSocketHandling = require('./socket/socketHandler');
-
-const upload = require('./middleware/multer');
+const setupSocketHandling = require('./middleware/socketHandler');
+const setupPeerServer = require('./middleware/peerServer');
 
 // Import seed function
 const seedDatabase = require('./data/seed');
@@ -34,6 +33,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/group', groupRoutes);
 app.use('/api/channel', channelRoutes);
 app.use('/api/message', messageRoutes);
+
+// PeerJS server
+const peerServer = setupPeerServer(httpServer);
+app.use('/peerjs', peerServer);
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/chat-app', { useNewUrlParser: true, useUnifiedTopology: true })

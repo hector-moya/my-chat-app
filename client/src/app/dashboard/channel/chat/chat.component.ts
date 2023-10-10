@@ -11,7 +11,7 @@ import { VideoChatComponent } from './video-chat/video-chat.component';
   standalone: true,
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss'],
+  styleUrls: [],
   imports: [FormsModule, CommonModule, PickerComponent, ModalComponent, VideoChatComponent]
 
 })
@@ -103,7 +103,6 @@ export class ChatComponent implements OnInit {
     });
 
     this.chatService.onUserJoined().subscribe(userData => {
-      console.log('on user join: ' , userData);
       this.createMessage(`${userData.userName} joined the channel.`, 'system');
     });
 
@@ -184,7 +183,6 @@ export class ChatComponent implements OnInit {
    * Hides the emoji picker when the user clicks outside of the picker
    */
   onFocus() {
-    console.log('focus');
     this.showEmojiPicker = false;
   }
 
@@ -193,7 +191,6 @@ export class ChatComponent implements OnInit {
    * Toggles the emoji picker
    */
   toggleEmojiPicker() {
-    console.log(this.showEmojiPicker);
     this.showEmojiPicker = !this.showEmojiPicker;
   }
 
@@ -214,7 +211,6 @@ export class ChatComponent implements OnInit {
 
       if (this.currentChannelId && this.user._id) {
         this.chatService.uploadImage(this.currentChannelId, this.user, file).subscribe((response: any) => {
-          console.log(response.message);
           if (response.message) {
             this.showImageModal = false;
           }

@@ -130,7 +130,6 @@ export class ChannelComponent implements OnInit {
   getAllChannels(): void {
     this.channelService.getChannelsByGroupId(this.groupId).subscribe({
       next: (channels) => {
-        console.log('Channels:', channels);
         this.channels = channels;
         // You can decide whether a superuser can edit all channels or not
         this.channels.forEach((channel) => {
@@ -146,7 +145,6 @@ export class ChannelComponent implements OnInit {
   
   // Function to show the add channel modal
   showModal(): void {
-    console.log('Showing add channel form');
     this.showAddChannelModal = true;
   }
 

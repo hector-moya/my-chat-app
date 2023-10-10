@@ -34,7 +34,6 @@ export class UserDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    console.log('Initial user bio: ', this.user.bio)
   }
 
   onImageSelected(event: Event): void {
@@ -42,21 +41,17 @@ export class UserDetailsComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       this.imageFile = input.files[0];
       this.previewImageUrl = URL.createObjectURL(this.imageFile);
-      console.log("Preview image URL", this.previewImageUrl);
     }
   }
 
   onUpdate(): void {
-    console.log('Updating bio', this.user.bio);
     if (this.password === this.confirmPassword) {
-      console.log('Passwords match');
       const formData = new FormData();
       formData.append('user', JSON.stringify(this.user));
       if (this.imageFile) {
         formData.append('image', this.imageFile);
       }
       this.userService.updateUser(this.user._id, formData).subscribe(response => {
-        console.log('User updated successfully', response);
         this.user = response.user;  // Update the user object with the updated data
         localStorage.setItem('currentUser', JSON.stringify(response.user));  // Update localStorage with the updated data
         this.changeDetector.detectChanges();  // Manually trigger change detection
