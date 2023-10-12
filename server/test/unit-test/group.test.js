@@ -232,7 +232,25 @@ describe('Group Routes', () => {
                 });
         });
     });
+    describe('PUT /assignAdmin/:groupId/:userId', () => {
     
+        it('should return 404 if user or group is not found', (done) => {
+            const groupId = new mongoose.Types.ObjectId();
+            const userId = new mongoose.Types.ObjectId();
+    
+            sinon.stub(UserGroup, 'findOne').resolves(null);
+    
+            request(app)
+                .put(`/api/group/assignAdmin/${groupId}/${userId}`)
+                .expect(404)
+                .end((err, res) => {
+                    expect(res.body).to.be.an('object');
+                    expect(res.body).to.have.property('message', 'User or group not found');
+                    UserGroup.findOne.restore();
+                    done(err);
+                });
+        });
+    });
     
     
     
