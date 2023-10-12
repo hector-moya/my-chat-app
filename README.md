@@ -190,10 +190,10 @@ This checklist aims to guide you through the Angular implementation of the clien
 | Registration Component       | [X]         | Child of Authentication component. Handles user registration                  |
 | Dashboard Component          | [X]         | Parent component post-login                                                   |
 | Group Component              | [X]         | Child of Dashboard component. Displays groups and allows for group management |
-| Group Management Component   | [ ]         | Child of Group component. Allows for user group management                    |
+| Group Management Component   | [X]         | Child of Group component. Allows for user group management                    |
 | Channel Component            | [X]         | Child of Group component. Displays channels and allows for channel management |
 | Channel Management Component | [X]         | Child of Channel component. Allows for user channel management                |
-| Chat Component               | [ ]         | Manages real-time chat                                                        |
+| Chat Component               | [X]         | Manages real-time chat                                                        |
 | User Management Component    | [X]         | Child of Admin component. Manages users                                       |
 | Modal Component              | [X]         | Global component. Reusable modal to display management features               |
 
@@ -206,7 +206,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 | IUser     | [X]         | Defines the user model    |
 | IGroup    | [X]         | Defines the group model   |
 | IChannel  | [x]         | Defines the channel model |
-| IMessage  | [ ]         | Defines the message model |
+| IMessage  | [X]         | Defines the message model |
 
 ### Routes
 
@@ -214,7 +214,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 | -------------------- | ----------- | -------------------------------------------- |
 | Authentication Route | [X]         | For Login and Registration                   |
 | Dashboard Route      | [X]         | For Dashboard, Group, and Channel components |
-| Chat Route           | [ ]         | For the Chat component                       |
+| Chat Route           | [X]         | For the Chat component                       |
 
 ### Guards
 
@@ -223,7 +223,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 | Guard                | Implemented | Notes                          |
 | -------------------- | ----------- | ------------------------------ |
 | Authentication Guard | [X]         | Check if user is authenticated |
-| Role Guard           | [ ]         | Check the user role            |
+| Role Guard           | [X]         | Check the user role            |
 
 ### Services
 
@@ -234,7 +234,7 @@ This checklist aims to guide you through the Angular implementation of the clien
 | Authentication Service  | [X]         | Manages authentication     |
 | Group Service           | [X]         | Manages group operations   |
 | Channel Service         | [X]         | Manages channel operations |
-| Chat Service            | [ ]         | Manages real-time chat     |
+| Chat Service            | [X]         | Manages real-time chat     |
 | User Management Service | [X]         | Manages user model         |
 | Notification Service    | [X]         | Manages notifications      |
 
@@ -319,5 +319,5 @@ This helper function is used for creating a new user.
 | api/user Routes          | [X]         | CRUD operations for User entity                                              |
 | api/group Routes         | [X]         | CRUD operations for Group entity                                             |
 | api/channel Routes       | [X]         | CRUD operations for Channel entity                                           |
-| api/message Routes       | [ ]         | CRUD operations for Message entity, and for handling real-time chat messages |
+| api/message Routes       | [X]         | CRUD operations for Message entity, and for handling real-time chat messages |
 
