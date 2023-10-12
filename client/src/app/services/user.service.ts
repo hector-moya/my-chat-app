@@ -8,7 +8,7 @@ import { Role, UpdateResponse, User } from '../interfaces/user.model';
 })
 export class UserService {
 
-  private apiUrl = 'http://localhost:3000/api/user'; // In the future, this will be in an environment variable
+  public apiUrl = 'http://localhost:3000/api/user'; // In the future, this will be in an environment variable
 
   constructor(private http: HttpClient) { }
 
@@ -88,4 +88,5 @@ export class UserService {
     return this.http.delete(`${this.apiUrl}/removeFromChannel/${userId}/${channelId}`);
   }
 
+  
 }

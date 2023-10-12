@@ -3,7 +3,6 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, inje
 import { FormsModule } from '@angular/forms';
 import { Channel } from 'src/app/interfaces/channel.model';
 import { ChannelService } from 'src/app/services/channel.service';
-import { GroupComponent } from '../group/group.component';
 import { PermissionService } from 'src/app/services/permission.service';
 import { ModalComponent } from 'src/app/modal/modal.component';
 import { ChannelManagementComponent } from './channel-management/channel-management.component';
@@ -15,7 +14,7 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './channel.component.html',
   styles: [
   ],
-  imports: [NgFor, CommonModule, FormsModule, GroupComponent, ModalComponent, ChannelManagementComponent]
+  imports: [NgFor, CommonModule, FormsModule, ModalComponent, ChannelManagementComponent]
 })
 export class ChannelComponent implements OnInit {
   @Input() groupId!: string;

@@ -7,7 +7,7 @@ import { Channel } from '../interfaces/channel.model';
   providedIn: 'root',
 })
 export class ChannelService {
-  private apiUrl = 'http://localhost:3000/api/channel'; // In the future, this will be in an environment variable
+  public apiUrl = 'http://localhost:3000/api/channel'; // In the future, this will be in an environment variable
 
   constructor(private http: HttpClient) {}
 
